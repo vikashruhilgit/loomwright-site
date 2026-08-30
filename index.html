@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loomwright — the mill that weaves a goal into a reviewed PR</title>
+  <meta name="description" content="Plan-first multi-agent development for Cursor and Claude Code. Launch Pad writes the brief. Supervisor weaves it in parallel worktrees. You still merge." />
+  <meta name="theme-color" content="#0C0D11" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <meta property="og:title" content="Loomwright — plan first, never silently merge" />
+  <meta property="og:description" content="14 agents, 21 commands, 41 skills. A mill for shipping work you can actually review." />
+  <meta property="og:image" content="assets/og.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --ink:#0C0D11; --ink-2:#15171F; --ink-3:#1C1F2A;
+      --hair:rgba(240,230,212,.08);
+      --text:#EDE8DC; --dim:#9B9588;
+      --copper:#E8893A; --copper-deep:#7A4310;
+      --indigo:#6B8CFF; --madder:#E24B6A; --chartreuse:#C8E05C;
+      --teal:#3DCFC0; --violet:#9A7BFF; --gold:#E8C547; --linen:#F0E6D4;
+      --display:"Syne",Georgia,serif;
+      --body:"Newsreader",Georgia,serif;
+      --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+    body{
+      margin:0; background:var(--ink); color:var(--text);
+      font-family:var(--body); font-size:1.0625rem; line-height:1.7;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:
+        linear-gradient(var(--hair) 1px, transparent 1px),
+        linear-gradient(90deg, var(--hair) 1px, transparent 1px);
+      background-size:64px 48px;
+      mask-image:radial-gradient(120% 80% at 50% 0%, #000 22%, transparent 78%);
+      -webkit-mask-image:radial-gradient(120% 80% at 50% 0%, #000 22%, transparent 78%);
+    }
+    .skip{
+      position:absolute; left:-999px; top:0; background:var(--copper); color:#14100A;
+      padding:.6rem 1rem; font-family:var(--mono); z-index:20;
+    }
+    .skip:focus{left:1rem; top:1rem}
+    .wrap{position:relative; z-index:1; max-width:68rem; margin:0 auto; padding:0 1.5rem 4.5rem}
+
+    nav{
+      display:flex; align-items:center; justify-content:space-between; gap:1rem;
+      padding:1.15rem 0 1.15rem; position:sticky; top:0; z-index:8;
+      background:rgba(12,13,17,.92); backdrop-filter:blur(10px);
+      margin:0 -1.5rem; padding-left:1.5rem; padding-right:1.5rem;
+    }
+    .brand{display:flex; align-items:center; gap:.7rem; text-decoration:none; color:var(--text)}
+    .brand img{width:2.1rem; height:2.1rem; border-radius:.35rem; object-fit:cover; border:1px solid var(--hair)}
+    .brand span{font-family:var(--mono); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase}
+    .nav-links{display:flex; gap:1.3rem; align-items:center; flex-wrap:wrap}
+    .nav-links a{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--dim); text-decoration:none}
+    .nav-links a:hover,.nav-links a:focus-visible{color:var(--linen)}
+    .nav-links a:focus-visible{outline:2px solid var(--indigo); outline-offset:4px}
+
+    .kicker{font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--copper); display:flex; align-items:center; gap:.6rem; margin:0 0 1.4rem}
+    .kicker::before{content:""; width:1.6rem; height:.55rem; background:var(--copper)}
+    h1{font-family:var(--display); font-weight:800; font-size:clamp(3rem,9vw,6.1rem); line-height:.82;
+      letter-spacing:-.045em; margin:0 0 1.5rem; text-transform:uppercase}
+    h1 span{display:block}
+    h1 .two{color:var(--indigo); margin-left:.06em}
+    .lede{font-size:clamp(1.12rem,2.4vw,1.4rem); line-height:1.55; color:var(--dim);
+      max-width:36ch; margin:0 0 2.2rem}
+    .lede em{font-style:italic; color:var(--text)}
+
+    .hero{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(1.6rem,5vw,3.4rem);
+      align-items:start; margin-bottom:1.4rem; padding-top:.4rem}
+    .hero-frame{position:relative; border:1px solid var(--hair); background:var(--ink-2); min-width:0;
+      box-shadow:10px 10px 0 rgba(232,137,58,.18)}
+    .hero-frame img{display:block; width:100%; height:auto; aspect-ratio:16/10; object-fit:cover}
+    .hero-caption{position:absolute; left:0; right:0; bottom:0; padding:.7rem 1rem;
+      font-family:var(--mono); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--linen); background:linear-gradient(transparent, rgba(12,13,17,.88))}
+
+    .actions{display:flex; flex-wrap:wrap; gap:1rem}
+    .btn{font-family:var(--mono); font-size:.82rem; letter-spacing:.08em; text-transform:uppercase;
+      text-decoration:none; padding:1rem 1.7rem; display:inline-block; border:0; cursor:pointer;
+      transition:transform .16s cubic-bezier(.2,.9,.3,1.2), box-shadow .16s}
+    .btn-solid{background:var(--copper); color:#14100A; box-shadow:6px 6px 0 var(--copper-deep)}
+    .btn-solid:hover,.btn-solid:focus-visible{transform:translate(-3px,-3px); box-shadow:9px 9px 0 var(--copper-deep)}
+    .btn-ghost{color:var(--text); background:transparent; border:1px solid rgba(240,230,212,.22);
+      box-shadow:6px 6px 0 rgba(240,230,212,.07)}
+    .btn-ghost:hover,.btn-ghost:focus-visible{transform:translate(-3px,-3px); border-color:var(--indigo);
+      box-shadow:9px 9px 0 rgba(107,140,255,.18)}
+    .btn:focus-visible{outline:2px solid var(--indigo); outline-offset:4px}
+
+    .stats{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.7rem;
+      margin:0 0 clamp(2.2rem,6vw,3.4rem)}
+    .stats div{background:var(--ink-2); border:1px solid var(--hair); padding:.85rem .95rem}
+    .stats b{display:block; font-family:var(--display); font-size:1.45rem; line-height:1; letter-spacing:-.03em}
+    .stats span{font-family:var(--mono); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:var(--dim)}
+
+    .threads{display:flex; gap:.42rem; margin:0 0 clamp(2.6rem,6vw,4.2rem)}
+    .threads i{height:.85rem; flex:1; border-radius:.2rem}
+
+    h2.sec{font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--dim); margin:0 0 1.8rem; font-weight:500}
+    h3{font-family:var(--display); font-weight:700; letter-spacing:-.02em; text-transform:uppercase; margin:0 0 .4rem}
+
+    .laws{display:grid; gap:1.1rem; margin:0 0 clamp(3.2rem,8vw,5.5rem); padding:0; list-style:none}
+    .laws li{background:var(--ink-2); border:1px solid var(--hair); border-left:6px solid var(--c);
+      padding:1.45rem 1.6rem; display:grid; grid-template-columns:auto 1fr; gap:1.3rem;
+      transition:transform .18s ease}
+    .laws li:hover{transform:translateX(6px)}
+    .laws li:nth-child(even){margin-left:clamp(0rem,4vw,3rem)}
+    .laws .no{font-family:var(--mono); font-size:.75rem; color:var(--c); padding-top:.35rem}
+    .laws p{margin:0; color:var(--dim)}
+
+    .guide{display:grid; gap:0; margin:0 0 clamp(3.2rem,8vw,5.5rem); counter-reset:step}
+    .step{display:grid; grid-template-columns:4.2rem 1fr; gap:1.2rem; padding:1.5rem 0;
+      border-top:1px solid var(--hair); position:relative}
+    .step:last-child{border-bottom:1px solid var(--hair)}
+    .step .n{font-family:var(--mono); color:var(--c, var(--copper)); font-size:.8rem; letter-spacing:.12em; padding-top:.35rem}
+    .step p{margin:.25rem 0 0; color:var(--dim); max-width:62ch}
+    .cmd{
+      font-family:var(--mono); font-size:.82rem; background:var(--ink-3); color:var(--linen);
+      border:1px solid var(--hair); padding:.7rem 1rem; margin:.9rem 0 0; overflow-x:auto;
+      white-space:pre; line-height:1.55;
+    }
+    .cmd .c{color:var(--copper)}
+    .cmd .g{color:var(--chartreuse)}
+    .cmd .d{color:var(--dim)}
+
+    .picks{display:flex; flex-wrap:wrap; gap:.55rem; margin:0 0 1.2rem}
+    .picks button{
+      font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
+      background:transparent; color:var(--text); border:1px solid var(--hair); padding:.65rem .9rem; cursor:pointer;
+    }
+    .picks button[aria-pressed="true"], .picks button:hover, .picks button:focus-visible{
+      border-color:var(--copper); color:var(--copper)
+    }
+    .picks button:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
+    .play-card{background:var(--ink-2); border:1px solid var(--hair); border-left:6px solid var(--copper);
+      padding:1.4rem 1.5rem; margin:0 0 clamp(3.2rem,8vw,5.5rem); min-height:9.5rem}
+    .play-card .tag{font-family:var(--mono); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--copper); margin:0 0 .5rem}
+    .play-card p{margin:.35rem 0 0; color:var(--dim)}
+
+    .plays{display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin:0 0 clamp(3.2rem,8vw,5.5rem)}
+    .plays article{background:var(--ink-2); border:1px solid var(--hair); padding:1.35rem 1.4rem;
+      border-top:3px solid var(--c)}
+    .plays .why{font-family:var(--mono); font-size:.65rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--c); margin:0 0 .55rem}
+    .plays p{margin:.3rem 0 0; color:var(--dim); font-size:.98rem}
+
+    .road{display:grid; gap:0; margin:0 0 1.2rem}
+    .mile{display:grid; grid-template-columns:7.5rem 1.1rem 1fr; gap:1.1rem; align-items:start}
+    .mile .when{font-family:var(--mono); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--dim); padding-top:.35rem}
+    .rail{position:relative; min-height:100%}
+    .rail::before{content:""; position:absolute; left:50%; top:.55rem; bottom:-.2rem; width:2px;
+      background:var(--hair); transform:translateX(-50%)}
+    .mile:last-child .rail::before{bottom:auto; height:0}
+    .dot{width:1.1rem; height:1.1rem; border-radius:50%; background:var(--c); position:relative; z-index:1;
+      box-shadow:0 0 0 4px var(--ink)}
+    .mile .body{background:var(--ink-2); border:1px solid var(--hair); padding:1.2rem 1.35rem; margin-bottom:1rem}
+    .mile .st{font-family:var(--mono); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c); margin:0 0 .35rem}
+    .mile p{margin:.25rem 0 0; color:var(--dim)}
+
+    .install-box{background:var(--ink-2); border:1px solid var(--hair); padding:1.6rem 1.7rem;
+      display:grid; gap:1rem; margin:0 0 2.4rem}
+    .copy-row{display:flex; flex-wrap:wrap; gap:.7rem; align-items:stretch}
+    .copy-row code{flex:1; font-family:var(--mono); font-size:.88rem; background:var(--ink-3);
+      padding:.9rem 1rem; border:1px solid var(--hair); min-width:12rem}
+    .note{color:var(--dim); margin:0; font-size:.98rem}
+
+    footer{border-top:1px solid var(--hair); padding-top:2rem; font-family:var(--mono);
+      font-size:.76rem; line-height:2; color:var(--dim); letter-spacing:.02em}
+    footer a{color:var(--text); text-decoration:none; border-bottom:1px solid rgba(240,230,212,.2)}
+    footer a:hover,footer a:focus-visible{color:var(--copper); border-color:var(--copper)}
+    .fine{display:block; margin-top:1rem; color:#61667E; letter-spacing:0; font-size:.72rem; line-height:1.6}
+
+    @media (max-width:860px){
+      .hero,.plays,.stats{grid-template-columns:1fr}
+      .nav-links a:not(.btn){display:none}
+      .laws li:nth-child(even){margin-left:0}
+      .mile{grid-template-columns:1.1rem 1fr; gap:.9rem}
+      .mile .when{grid-column:2; padding-top:0}
+      .rail{grid-row:span 2}
+    }
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *{animation:none!important; transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#guide">Skip to the guide</a>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="#top">
+        <img src="assets/favicon.png" alt="" width="34" height="34" />
+        <span>Loomwright</span>
+      </a>
+      <div class="nav-links">
+        <a href="#guide">Guide</a>
+        <a href="#plays">Plays</a>
+        <a href="#roadmap">Roadmap</a>
+        <a class="btn btn-solid" href="#install" style="padding:.7rem 1.1rem; font-size:.72rem">Install</a>
+      </div>
+    </nav>
+
+    <header class="hero" id="top">
+      <div>
+        <p class="kicker">v15.14 · Never silently merges</p>
+        <h1>Loom<span class="two">wright</span></h1>
+        <p class="lede">The mill that weaves a raw goal into a <em>reviewed pull request</em>. Plan first. Work in parallel. A human still merges.</p>
+        <div class="actions">
+          <a class="btn btn-solid" href="#install">Install the mill</a>
+          <a class="btn btn-ghost" href="#guide">How to run it</a>
+        </div>
+      </div>
+      <figure class="hero-frame">
+        <img src="assets/hero.jpg" alt="A dark mill loom weaving colored threads into a single cloth." />
+        <figcaption class="hero-caption">Warp = workers · Weft = review · Cloth = the PR</figcaption>
+      </figure>
+    </header>
+    <div class="stats" aria-label="What ships today">
+      <div><b>14</b><span>agent roles</span></div>
+      <div><b>21</b><span>slash commands</span></div>
+      <div><b>41</b><span>skills</span></div>
+      <div><b>22</b><span>quality hooks</span></div>
+    </div>
+
+    <div class="threads" aria-hidden="true">
+      <i style="background:var(--madder)"></i><i style="background:var(--copper)"></i>
+      <i style="background:var(--gold)"></i><i style="background:var(--chartreuse)"></i>
+      <i style="background:var(--teal)"></i><i style="background:var(--indigo)"></i>
+      <i style="background:var(--violet)"></i><i style="background:#FF6BC1"></i>
+    </div>
+
+    <h2 class="sec">Four laws of the mill</h2>
+    <ul class="laws">
+      <li style="--c:var(--madder)">
+        <span class="no">01</span>
+        <div>
+          <h3>Plan before a file moves</h3>
+          <p>Launch Pad turns a messy goal into a reviewed brief — feasibility, file impact, subtasks — before Supervisor touches the repo.</p>
+        </div>
+      </li>
+      <li style="--c:var(--chartreuse)">
+        <span class="no">02</span>
+        <div>
+          <h3>Parallel work, sequential merge</h3>
+          <p>Workers run in git worktrees. Overlapping files wait. Merges are ordered. You do not get a pile of conflicting branches.</p>
+        </div>
+      </li>
+      <li style="--c:var(--indigo)">
+        <span class="no">03</span>
+        <div>
+          <h3>Review, then you merge</h3>
+          <p>Code review, optional red-team, dual-agent QA, and a self-heal pass on the PR. Loomwright never auto-merges unless you opt in on a trusted path.</p>
+        </div>
+      </li>
+      <li style="--c:var(--copper)">
+        <span class="no">04</span>
+        <div>
+          <h3>It gets smarter. It never self-trusts</h3>
+          <p>Lessons, house rules, and the System Twin are advisory and human-gated. CLAUDE.md stays the authority. Memory cannot promote itself.</p>
+        </div>
+      </li>
+    </ul>
+
+    <h2 class="sec" id="guide">Guide — first hour on the mill</h2>
+    <div class="guide">
+      <article class="step" style="--c:var(--copper)">
+        <span class="n">01</span>
+        <div>
+          <h3>Install Loomwright</h3>
+          <p>In Cursor or Claude Code, add the atelier marketplace plugin. Pair it with <code>gh</code> and a repo that already has git.</p>
+          <pre class="cmd"><span class="c">/plugin install loomwright@atelier</span></pre>
+        </div>
+      </article>
+      <article class="step" style="--c:var(--gold)">
+        <span class="n">02</span>
+        <div>
+          <h3>See what is wired</h3>
+          <p><code>/setup</code> is a dashboard, not a wizard that overwrites you. Check observability, notifications, Twin, Beads, then turn on only what you want.</p>
+          <pre class="cmd"><span class="c">/setup</span></pre>
+        </div>
+      </article>
+      <article class="step" style="--c:var(--chartreuse)">
+        <span class="n">03</span>
+        <div>
+          <h3>Pick a lane</h3>
+          <p>One new goal: <code>/autonomous</code>. An existing PR: <code>/review-pr</code>. A pile of stories: <code>/automate</code>. Do not start all three at once.</p>
+          <pre class="cmd"><span class="c">/autonomous</span> <span class="g">"add a daily challenge that resets at midnight UTC"</span></pre>
+        </div>
+      </article>
+      <article class="step" style="--c:var(--teal)">
+        <span class="n">04</span>
+        <div>
+          <h3>Stay for the gates</h3>
+          <p>This is foreground-assisted, not fire-and-forget. Save or refine the brief. Answer rubric gates. Desktop banners fire when the mill needs you.</p>
+        </div>
+      </article>
+      <article class="step" style="--c:var(--indigo)">
+        <span class="n">05</span>
+        <div>
+          <h3>You merge</h3>
+          <p>A healed PR is still an open PR. Read the diff. Merge it. Then run <code>/dreaming</code> after a week so the mill keeps the lessons you actually want.</p>
+          <pre class="cmd"><span class="c">/review-pr</span> <span class="g">https://github.com/you/repo/pull/42</span>
+<span class="d"># bounded review → fix → re-review. Never merges.</span></pre>
+        </div>
+      </article>
+    </div>
+
+    <h2 class="sec">Command mill — say what you want</h2>
+    <div class="picks" role="tablist" aria-label="Choose a job">
+      <button type="button" aria-pressed="true" data-play="new">Ship a feature</button>
+      <button type="button" aria-pressed="false" data-play="pr">Heal an open PR</button>
+      <button type="button" aria-pressed="false" data-play="queue">Clear a backlog</button>
+      <button type="button" aria-pressed="false" data-play="stories">Write stories first</button>
+      <button type="button" aria-pressed="false" data-play="attack">Red-team before prod</button>
+      <button type="button" aria-pressed="false" data-play="qa">Plan then test</button>
+      <button type="button" aria-pressed="false" data-play="lessons">Keep last week</button>
+      <button type="button" aria-pressed="false" data-play="hand">Catch a teammate up</button>
+    </div>
+    <div class="play-card" id="play-card" aria-live="polite">
+      <p class="tag">Recommended first play</p>
+      <h3>Ship one goal, stacked</h3>
+      <p>Use <code>/autonomous</code> when you have one requirement and you want Launch Pad + Supervisor chained, with stacked PRs if it takes more than one pass.</p>
+      <pre class="cmd"><span class="c">/autonomous</span> <span class="g">"players can retry a daily challenge without losing the streak"</span></pre>
+    </div>
+
+    <h2 class="sec" id="plays">What else the mill is for</h2>
+    <p class="lede" style="max-width:46ch;margin-bottom:1.6rem">Highly recommended once the first PR lands. These are the plays that make Loomwright more than a task runner.</p>
+    <div class="plays">
+      <article style="--c:var(--copper)">
+        <p class="why">Overnight a queue</p>
+        <h3>/automate</h3>
+        <p>Turn a prompt, a folder of stories, or a backlog doc into a queue. Each item runs autonomous → review drain. Auto-merge stays off unless you pass a trusted gate.</p>
+      </article>
+      <article style="--c:var(--madder)">
+        <p class="why">Attack the merge</p>
+        <h3>/red-team-reviewer</h3>
+        <p>Adversarial pass on auth, payments, migrations, hooks, and agent prompts. Advisory. It finds the failure class before production does.</p>
+      </article>
+      <article style="--c:var(--teal)">
+        <p class="why">Test like a team</p>
+        <h3>/qa-strategist → /qa-executor</h3>
+        <p>Risk map first, then Playwright generation with a debate loop. Use this on anything a user can click — not on a one-line typo fix.</p>
+      </article>
+      <article style="--c:var(--gold)">
+        <p class="why">Write the problem</p>
+        <h3>/product-owner</h3>
+        <p>Messy idea in, stories with acceptance criteria out. Add <code>--brainstorm</code> when the team is arguing and you need five expert lenses to fight it out.</p>
+      </article>
+      <article style="--c:var(--indigo)">
+        <p class="why">Compound the craft</p>
+        <h3>/dreaming + /rules</h3>
+        <p>Distill session logs into lessons you accept one by one. Encode house rules so workers read them while doing the work, not only on review.</p>
+      </article>
+      <article style="--c:var(--violet)">
+        <p class="why">Inherit the mill</p>
+        <h3>/handoff + /insights</h3>
+        <p>Two-minute catch-up for a teammate. A local scoreboard of heal rate, Twin growth, and whether last week actually got better.</p>
+      </article>
+      <article style="--c:var(--chartreuse)">
+        <p class="why">See the blast radius</p>
+        <h3>System Twin</h3>
+        <p>Per-subsystem contracts, hash-chained provenance, blast-radius at plan time. Advisory today. The north star is a mill that already knows this repo.</p>
+      </article>
+      <article style="--c:#FF6BC1">
+        <p class="why">Keep the graph</p>
+        <h3>/obsidian</h3>
+        <p>One-way projection of runs, Twin contracts, and lessons into a vault you own. Nothing leaves the machine. The vault never becomes the engine.</p>
+      </article>
+    </div>
+
+    <h2 class="sec" id="roadmap">Roadmap — trust is earned, not scheduled</h2>
+    <div class="road">
+      <article class="mile">
+        <span class="when">Now · v15</span>
+        <div class="rail"><i class="dot" style="--c:var(--chartreuse);background:var(--chartreuse)"></i></div>
+        <div class="body">
+          <p class="st" style="--c:var(--chartreuse);color:var(--chartreuse)">Shipped</p>
+          <h3>The mill is live</h3>
+          <p>Plan-first Launch Pad, parallel Supervisor, review-and-heal, stacked autonomous loops, automate queues, advisory Twin, dreaming, insights, house rules. You still merge.</p>
+        </div>
+      </article>
+      <article class="mile">
+        <span class="when">Next</span>
+        <div class="rail"><i class="dot" style="background:var(--gold)"></i></div>
+        <div class="body">
+          <p class="st" style="color:var(--gold)">In the warp</p>
+          <h3>Ground-truth verification</h3>
+          <p>Run the software in the heal pass. Playwright for web apps. Headless loops against a corpus. A hard pass/fail — not a vibes score — before anything is allowed to gate.</p>
+        </div>
+      </article>
+      <article class="mile">
+        <span class="when">Then</span>
+        <div class="rail"><i class="dot" style="background:var(--indigo)"></i></div>
+        <div class="body">
+          <p class="st" style="color:var(--indigo)">Evidence-gated</p>
+          <h3>Twin starts enforcing</h3>
+          <p>Flip advisory conformance to a real gate only after the benchmark has caught real regressions without a false-positive habit. No calendar flip.</p>
+        </div>
+      </article>
+      <article class="mile">
+        <span class="when">Later</span>
+        <div class="rail"><i class="dot" style="background:var(--copper)"></i></div>
+        <div class="body">
+          <p class="st" style="color:var(--copper)">Four guardrails first</p>
+          <h3>A proactive mill</h3>
+          <p>A watcher that can open PRs unprompted — cadence expiry, per-run budget, circuit-breaker, heartbeat. Not started. Highest-risk rung. Intentionally last.</p>
+        </div>
+      </article>
+      <article class="mile">
+        <span class="when">North star</span>
+        <div class="rail"><i class="dot" style="background:var(--violet)"></i></div>
+        <div class="body">
+          <p class="st" style="color:var(--violet)">Director model</p>
+          <h3>Point at the repo. Own this.</h3>
+          <p>You set intent and approve outcomes. Diff-review becomes optional because the mill already proved the behavior. Everyone else rents a coder who starts cold every morning.</p>
+        </div>
+      </article>
+    </div>
+
+    <h2 class="sec" id="install">Install</h2>
+    <div class="install-box">
+      <p class="note">Cursor and Claude Code both speak the same slash commands. Install the plugin, open a git repo, then run the first play above.</p>
+      <div class="copy-row">
+        <code id="install-cmd">/plugin install loomwright@atelier</code>
+        <button class="btn btn-solid" type="button" id="copy-btn">Copy command</button>
+      </div>
+      <p class="note">Optional siblings when you need them: <code>/plugin install stackpack@atelier</code> for stack skills, <code>/plugin install mysql-mcp@atelier</code> for read-only MySQL.</p>
+      <pre class="cmd"><span class="d"># then, in the repo you actually want to ship</span>
+<span class="c">/setup</span>
+<span class="c">/autonomous</span> <span class="g">"the next thing your users can feel"</span></pre>
+    </div>
+
+    <footer>
+      Loomwright is a plan-first mill by Vikash Ruhil · MIT
+      <span class="fine">14 agents · 21 commands · 41 skills · 22 hooks · v15.14.0. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
+    </footer>
+  </div>
+  <script>
+    const plays = {
+      new: {
+        tag: "Recommended first play",
+        title: "Ship one goal, stacked",
+        body: "Use /autonomous when you have one requirement and you want Launch Pad + Supervisor chained, with stacked PRs if it takes more than one pass.",
+        cmd: `<span class="c">/autonomous</span> <span class="g">"players can retry a daily challenge without losing the streak"</span>`
+      },
+      pr: {
+        tag: "Existing work",
+        title: "Heal an open pull request",
+        body: "Point /review-pr at any PR URL. Bounded review → fix → re-review. It pushes fixes. It never merges. Add --until-mergeable to drain bot review until READY.",
+        cmd: `<span class="c">/review-pr</span> <span class="g">https://github.com/you/repo/pull/42</span>`
+      },
+      queue: {
+        tag: "Many goals",
+        title: "Walk a backlog, one cloth at a time",
+        body: "/automate turns a prompt, folder, or _BACKLOG.md into a queue. Default cap is five processed items. Auto-merge is off.",
+        cmd: `<span class="c">/automate</span> <span class="g">"the remaining shop and league tickets"</span>\n<span class="c">/automate --folder</span> .supervisor/requirements`
+      },
+      stories: {
+        tag: "Before code",
+        title: "Write the problem as stories",
+        body: "Product Owner reads CLAUDE.md, checks overlap, and writes acceptance criteria. Use --brainstorm when the idea is still a fight.",
+        cmd: `<span class="c">/product-owner problem:</span> <span class="g">"players bounce after the first loss"</span> <span class="c">--brainstorm</span>`
+      },
+      attack: {
+        tag: "Before production",
+        title: "Red-team the risky surface",
+        body: "Independent adversarial audit. Use it on auth, billing, migrations, and anything that orchestrates other agents. Findings are advisory.",
+        cmd: `<span class="c">/red-team-reviewer</span>`
+      },
+      qa: {
+        tag: "User-visible flows",
+        title: "Strategy, then execution",
+        body: "QA Strategist classifies risk. QA Executor discovers the app, writes Playwright, and debates the gaps. Skip this on a comment-only change.",
+        cmd: `<span class="c">/qa-strategist</span> src/\n<span class="c">/qa-executor</span>`
+      },
+      lessons: {
+        tag: "After a week",
+        title: "Keep only what you accept",
+        body: "/dreaming proposes lessons from session logs. You accept item by item. Nothing auto-writes into CLAUDE.md.",
+        cmd: `<span class="c">/dreaming --sessions</span> 8\n<span class="c">/rules suggest</span>`
+      },
+      hand: {
+        tag: "Handoff",
+        title: "Two minutes to inherit the mill",
+        body: "/handoff is the per-item catch-up. /insights is the scoreboard. /obsidian is the vault you can actually browse.",
+        cmd: `<span class="c">/handoff</span>\n<span class="c">/insights</span>`
+      }
+    };
+
+    const card = document.getElementById("play-card");
+    document.querySelectorAll(".picks button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".picks button").forEach((b) => b.setAttribute("aria-pressed", "false"));
+        btn.setAttribute("aria-pressed", "true");
+        const p = plays[btn.dataset.play];
+        card.innerHTML = `<p class="tag">${p.tag}</p><h3>${p.title}</h3><p>${p.body}</p><pre class="cmd">${p.cmd}</pre>`;
+      });
+    });
+
+    const copyBtn = document.getElementById("copy-btn");
+    copyBtn.addEventListener("click", async () => {
+      const text = document.getElementById("install-cmd").textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "Copied";
+        setTimeout(() => { copyBtn.textContent = "Copy command"; }, 1600);
+      } catch {
+        copyBtn.textContent = "Copy failed";
+      }
+    });
+  </script>
+</body>
+</html>
