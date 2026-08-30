@@ -284,9 +284,9 @@
         <span class="n">01</span>
         <div>
           <h3>Install Loomwright</h3>
-          <p>Add the GitHub repo as a marketplace, then install the plugin. Works in Cursor and Claude Code.</p>
-          <pre class="cmd"><span class="c">/plugin marketplace add vikashruhilgit/loomwright</span>
-<span class="c">/plugin install loomwright@atelier</span></pre>
+          <p>In Terminal. <code>/plugin</code> is a chat slash command — zsh will treat it as a path and fail.</p>
+          <pre class="cmd"><span class="c">claude plugin marketplace add vikashruhilgit/loomwright</span>
+<span class="c">claude plugin install loomwright@atelier</span></pre>
         </div>
       </article>
       <article class="step" style="--c:var(--gold)">
@@ -437,13 +437,13 @@
 
     <h2 class="sec" id="install">Install</h2>
     <div class="install-box">
-      <p class="note">Add it from the GitHub repo. Two commands in Cursor or Claude Code — then open a git project and run the first play above.</p>
+      <p class="note">Add it from GitHub in Terminal. Do not paste <code>/plugin</code> into zsh — that is a Cursor / Claude Code chat command.</p>
       <div class="copy-row">
-        <pre id="install-cmd">/plugin marketplace add vikashruhilgit/loomwright
-/plugin install loomwright@atelier</pre>
+        <pre id="install-cmd">claude plugin marketplace add vikashruhilgit/loomwright
+claude plugin install loomwright@atelier</pre>
         <button class="btn btn-solid" type="button" id="copy-btn">Copy commands</button>
       </div>
-      <p class="note">Source: <a href="https://github.com/vikashruhilgit/loomwright">github.com/vikashruhilgit/loomwright</a></p>
+      <p class="note">Or type the same two lines in a Cursor / Claude Code chat, starting with <code>/plugin</code> instead of <code>claude plugin</code>. Source: <a href="https://github.com/vikashruhilgit/loomwright">github.com/vikashruhilgit/loomwright</a></p>
       <pre class="cmd"><span class="d"># then, in the repo you actually want to ship</span>
 <span class="c">/setup</span>
 <span class="c">/autonomous</span> <span class="g">"the next thing your users can feel"</span></pre>
