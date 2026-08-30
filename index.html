@@ -174,9 +174,12 @@
     .install-box{background:var(--ink-2); border:1px solid var(--hair); padding:1.6rem 1.7rem;
       display:grid; gap:1rem; margin:0 0 2.4rem}
     .copy-row{display:flex; flex-wrap:wrap; gap:.7rem; align-items:stretch}
-    .copy-row code{flex:1; font-family:var(--mono); font-size:.88rem; background:var(--ink-3);
-      padding:.9rem 1rem; border:1px solid var(--hair); min-width:12rem}
+    .copy-row pre{flex:1; font-family:var(--mono); font-size:.88rem; background:var(--ink-3);
+      padding:.9rem 1rem; border:1px solid var(--hair); min-width:12rem; margin:0; white-space:pre-wrap; line-height:1.7}
     .note{color:var(--dim); margin:0; font-size:.98rem}
+    .note a{color:var(--copper); text-decoration:none; border-bottom:1px solid rgba(232,137,58,.4)}
+    .note a:hover,.note a:focus-visible{border-color:var(--copper)}
+    .copy-row .btn{align-self:stretch}
 
     footer{border-top:1px solid var(--hair); padding-top:2rem; font-family:var(--mono);
       font-size:.76rem; line-height:2; color:var(--dim); letter-spacing:.02em}
@@ -281,8 +284,9 @@
         <span class="n">01</span>
         <div>
           <h3>Install Loomwright</h3>
-          <p>In Cursor or Claude Code, add the atelier marketplace plugin. Pair it with <code>gh</code> and a repo that already has git.</p>
-          <pre class="cmd"><span class="c">/plugin install loomwright@atelier</span></pre>
+          <p>Add the GitHub repo as a marketplace, then install the plugin. Works in Cursor and Claude Code.</p>
+          <pre class="cmd"><span class="c">/plugin marketplace add vikashruhilgit/loomwright</span>
+<span class="c">/plugin install loomwright@atelier</span></pre>
         </div>
       </article>
       <article class="step" style="--c:var(--gold)">
@@ -433,12 +437,13 @@
 
     <h2 class="sec" id="install">Install</h2>
     <div class="install-box">
-      <p class="note">Cursor and Claude Code both speak the same slash commands. Install the plugin, open a git repo, then run the first play above.</p>
+      <p class="note">Add it from the GitHub repo. Two commands in Cursor or Claude Code — then open a git project and run the first play above.</p>
       <div class="copy-row">
-        <code id="install-cmd">/plugin install loomwright@atelier</code>
-        <button class="btn btn-solid" type="button" id="copy-btn">Copy command</button>
+        <pre id="install-cmd">/plugin marketplace add vikashruhilgit/loomwright
+/plugin install loomwright@atelier</pre>
+        <button class="btn btn-solid" type="button" id="copy-btn">Copy commands</button>
       </div>
-      <p class="note">Optional siblings when you need them: <code>/plugin install stackpack@atelier</code> for stack skills, <code>/plugin install mysql-mcp@atelier</code> for read-only MySQL.</p>
+      <p class="note">Source: <a href="https://github.com/vikashruhilgit/loomwright">github.com/vikashruhilgit/loomwright</a></p>
       <pre class="cmd"><span class="d"># then, in the repo you actually want to ship</span>
 <span class="c">/setup</span>
 <span class="c">/autonomous</span> <span class="g">"the next thing your users can feel"</span></pre>
@@ -517,7 +522,7 @@
       try {
         await navigator.clipboard.writeText(text);
         copyBtn.textContent = "Copied";
-        setTimeout(() => { copyBtn.textContent = "Copy command"; }, 1600);
+        setTimeout(() => { copyBtn.textContent = "Copy commands"; }, 1600);
       } catch {
         copyBtn.textContent = "Copy failed";
       }
