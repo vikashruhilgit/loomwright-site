@@ -145,10 +145,12 @@
       border-color:var(--copper); color:var(--copper)
     }
     .picks button:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
-    .play-card{background:var(--ink-2); border:1px solid var(--hair); border-left:6px solid var(--copper);
-      padding:1.4rem 1.5rem; margin:0 0 clamp(3.2rem,8vw,5.5rem); min-height:9.5rem}
-    .play-card .tag{font-family:var(--mono); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--copper); margin:0 0 .5rem}
-    .play-card p{margin:.35rem 0 0; color:var(--dim)}
+    .play-card,.install-card{background:var(--ink-2); border:1px solid var(--hair); border-left:6px solid var(--copper);
+      padding:1.4rem 1.5rem; min-height:9.5rem}
+    .play-card{margin:0 0 clamp(3.2rem,8vw,5.5rem)}
+    .play-card .tag,.install-card .tag{font-family:var(--mono); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--copper); margin:0 0 .5rem}
+    .play-card p,.install-card p{margin:.35rem 0 0; color:var(--dim)}
+    .install-card h3{margin:.1rem 0 0}
 
     .plays{display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin:0 0 clamp(3.2rem,8vw,5.5rem)}
     .plays article{background:var(--ink-2); border:1px solid var(--hair); padding:1.35rem 1.4rem;
@@ -177,9 +179,19 @@
     .copy-row pre{flex:1; font-family:var(--mono); font-size:.88rem; background:var(--ink-3);
       padding:.9rem 1rem; border:1px solid var(--hair); min-width:12rem; margin:0; white-space:pre-wrap; line-height:1.7}
     .note{color:var(--dim); margin:0; font-size:.98rem}
-    .note a{color:var(--copper); text-decoration:none; border-bottom:1px solid rgba(232,137,58,.4)}
-    .note a:hover,.note a:focus-visible{border-color:var(--copper)}
+    .note a,.step a,.install-card a{
+      color:var(--copper); text-decoration:none; border-bottom:1px solid rgba(232,137,58,.4)
+    }
+    .note a:hover,.note a:focus-visible,.step a:hover,.step a:focus-visible,
+    .install-card a:hover,.install-card a:focus-visible{border-color:var(--copper)}
     .copy-row .btn{align-self:stretch}
+    .apps{display:flex; flex-wrap:wrap; gap:.55rem; margin:0}
+    .how{margin:.85rem 0 0; padding:0; list-style:none; counter-reset:how}
+    .how li:last-child{margin-bottom:0}
+    .how li::before{content:counter(how, decimal-leading-zero); font-family:var(--mono);
+      font-size:.72rem; letter-spacing:.08em; color:var(--copper); padding-top:.25rem}
+    .warn{font-family:var(--mono); font-size:.72rem; letter-spacing:.04em; color:var(--gold);
+      border:1px solid rgba(232,197,71,.35); padding:.7rem .9rem; margin:0}
 
     footer{border-top:1px solid var(--hair); padding-top:2rem; font-family:var(--mono);
       font-size:.76rem; line-height:2; color:var(--dim); letter-spacing:.02em}
@@ -284,9 +296,7 @@
         <span class="n">01</span>
         <div>
           <h3>Install Loomwright</h3>
-          <p>In Terminal. <code>/plugin</code> is a chat slash command — zsh will treat it as a path and fail.</p>
-          <pre class="cmd"><span class="c">claude plugin marketplace add vikashruhilgit/loomwright</span>
-<span class="c">claude plugin install loomwright@atelier</span></pre>
+          <p>Use the app you actually type in. <a href="#install">Open the install steps</a>. Do not paste <code>/plugin</code> into zsh — that is a chat command, not a file path.</p>
         </div>
       </article>
       <article class="step" style="--c:var(--gold)">
@@ -324,7 +334,7 @@
     </div>
 
     <h2 class="sec">Command mill — say what you want</h2>
-    <div class="picks" role="tablist" aria-label="Choose a job">
+    <div class="picks" id="mill-picks" role="tablist" aria-label="Choose a job">
       <button type="button" aria-pressed="true" data-play="new">Ship a feature</button>
       <button type="button" aria-pressed="false" data-play="pr">Heal an open PR</button>
       <button type="button" aria-pressed="false" data-play="queue">Clear a backlog</button>
@@ -435,18 +445,36 @@
       </article>
     </div>
 
-    <h2 class="sec" id="install">Install</h2>
+    <h2 class="sec" id="install">Install from GitHub</h2>
     <div class="install-box">
-      <p class="note">Add it from GitHub in Terminal. Do not paste <code>/plugin</code> into zsh — that is a Cursor / Claude Code chat command.</p>
+      <p class="warn">Source: github.com/vikashruhilgit/loomwright · marketplace id atelier · plugin id loomwright</p>
+      <p class="note">Loomwright is a Claude Code plugin. Pick the surface you type in. You need a git repo. You need <code>gh</code> authenticated if you want the mill to open pull requests.</p>
+      <div class="apps picks" role="tablist" aria-label="Install for which app">
+        <button type="button" aria-pressed="true" data-app="cli">Claude CLI</button>
+        <button type="button" aria-pressed="false" data-app="code">Claude Code</button>
+        <button type="button" aria-pressed="false" data-app="cursor">Cursor</button>
+        <button type="button" aria-pressed="false" data-app="desktop">Claude Desktop</button>
+      </div>
+      <div class="install-card" id="install-card" aria-live="polite">
+        <p class="tag">macOS, Linux, WSL — Terminal</p>
+        <h3>Claude Code CLI</h3>
+        <p>Use this when you type in Terminal, iTerm, Ghostty, or Cursor’s terminal panel. <code>claude</code> is a shell command. <code>/plugin</code> is not.</p>
+        <ol class="how">
+          <li>Install the Claude Code CLI from <a href="https://code.claude.com/docs/en/quickstart">code.claude.com</a> if <code>which claude</code> prints nothing. Reopen the terminal after install so PATH updates.</li>
+          <li>Paste the two commands below into the shell. First line registers the GitHub marketplace. Second line installs the plugin as <code>loomwright@atelier</code>.</li>
+          <li>Confirm with <code>claude plugin list</code>. You should see loomwright from marketplace atelier.</li>
+          <li><code>cd</code> into a git repo, then start a session with <code>claude</code>. If slash commands are missing, type <code>/reload-plugins</code> in that session.</li>
+        </ol>
+      </div>
       <div class="copy-row">
         <pre id="install-cmd">claude plugin marketplace add vikashruhilgit/loomwright
 claude plugin install loomwright@atelier</pre>
         <button class="btn btn-solid" type="button" id="copy-btn">Copy commands</button>
       </div>
-      <p class="note">Or type the same two lines in a Cursor / Claude Code chat, starting with <code>/plugin</code> instead of <code>claude plugin</code>. Source: <a href="https://github.com/vikashruhilgit/loomwright">github.com/vikashruhilgit/loomwright</a></p>
-      <pre class="cmd"><span class="d"># then, in the repo you actually want to ship</span>
-<span class="c">/setup</span>
+      <p class="note">After it lands, open the git repo you want to ship in, then:</p>
+      <pre class="cmd"><span class="c">/setup</span>
 <span class="c">/autonomous</span> <span class="g">"the next thing your users can feel"</span></pre>
+      <p class="note">Repo: <a href="https://github.com/vikashruhilgit/loomwright">github.com/vikashruhilgit/loomwright</a></p>
     </div>
 
     <footer>
@@ -507,22 +535,96 @@ claude plugin install loomwright@atelier</pre>
     };
 
     const card = document.getElementById("play-card");
-    document.querySelectorAll(".picks button").forEach((btn) => {
+    document.querySelectorAll("#mill-picks button").forEach((btn) => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".picks button").forEach((b) => b.setAttribute("aria-pressed", "false"));
+        document.querySelectorAll("#mill-picks button").forEach((b) => b.setAttribute("aria-pressed", "false"));
         btn.setAttribute("aria-pressed", "true");
         const p = plays[btn.dataset.play];
         card.innerHTML = `<p class="tag">${p.tag}</p><h3>${p.title}</h3><p>${p.body}</p><pre class="cmd">${p.cmd}</pre>`;
       });
     });
 
+    const installs = {
+      cli: {
+        tag: "macOS, Linux, WSL — Terminal",
+        title: "Claude Code CLI",
+        html: `<p>Use this when you type in Terminal, iTerm, Ghostty, or Cursor’s terminal panel. <code>claude</code> is a shell command. <code>/plugin</code> is not.</p>
+          <ol class="how">
+            <li>Install the Claude Code CLI from <a href="https://code.claude.com/docs/en/quickstart">code.claude.com</a> if <code>which claude</code> prints nothing. Reopen the terminal after install so PATH updates.</li>
+            <li>Paste the two commands below into the shell. First line registers the GitHub marketplace. Second line installs the plugin as <code>loomwright@atelier</code>.</li>
+            <li>Confirm with <code>claude plugin list</code>. You should see loomwright from marketplace atelier.</li>
+            <li><code>cd</code> into a git repo, then start a session with <code>claude</code>. If slash commands are missing, type <code>/reload-plugins</code> in that session.</li>
+          </ol>`,
+        copy: "claude plugin marketplace add vikashruhilgit/loomwright\nclaude plugin install loomwright@atelier"
+      },
+      code: {
+        tag: "Interactive session — not zsh",
+        title: "Claude Code chat / TUI",
+        html: `<p>Type these in a Claude Code session: the <code>claude</code> TUI, the Claude Code IDE panel, or VS Code / JetBrains with the Claude Code extension. Do not type them in the system shell.</p>
+          <ol class="how">
+            <li>Open the git project you want to ship in. Start Claude Code there.</li>
+            <li>Type <code>/plugin marketplace add vikashruhilgit/loomwright</code> and submit. That only registers the catalog.</li>
+            <li>Type <code>/plugin install loomwright@atelier</code>. Pick user scope unless this repo should pin the plugin for the team.</li>
+            <li>Optional: type <code>/plugin</code> and open the Installed tab. If this session was already running, type <code>/reload-plugins</code>.</li>
+          </ol>`,
+        copy: "/plugin marketplace add vikashruhilgit/loomwright\n/plugin install loomwright@atelier"
+      },
+      cursor: {
+        tag: "Agent chat or Claude Code in Cursor",
+        title: "Cursor",
+        html: `<p>Loomwright is a Claude Code plugin, not a listing on cursor.com/marketplace. Install it as Claude Code tooling inside Cursor. Never paste <code>/plugin</code> into Cursor’s Terminal panel — zsh treats the leading slash as a path.</p>
+          <ol class="how">
+            <li><strong>Agent chat:</strong> open Agent (not Terminal). Type <code>/plugin marketplace add vikashruhilgit/loomwright</code>, then <code>/plugin install loomwright@atelier</code>.</li>
+            <li><strong>Claude Code in Cursor:</strong> install the Claude Code CLI or the Claude Code extension. In Cursor’s terminal run the two <code>claude plugin</code> commands from the Claude CLI tab, then start <code>claude</code> in the repo.</li>
+            <li>Reload the window or type <code>/reload-plugins</code> in the Claude Code session if <code>/setup</code> does not appear.</li>
+            <li><strong>Teams / Enterprise only:</strong> an admin can open Dashboard → Plugins → Import from Repo and paste <code>https://github.com/vikashruhilgit/loomwright</code>. Individuals should use steps 1 or 2. Native Cursor plugins and Claude Code plugins are different catalogs.</li>
+          </ol>`,
+        copy: "/plugin marketplace add vikashruhilgit/loomwright\n/plugin install loomwright@atelier"
+      },
+      desktop: {
+        tag: "Desktop chat and Cowork — paid plans",
+        title: "Claude Desktop",
+        html: `<p>Paid Claude (Pro, Max, Team, Enterprise). Skills can show up in Desktop chat. Hooks, sub-agents, git worktrees, and <code>/supervisor</code> are mill machinery — use Claude Code for the full mill.</p>
+          <ol class="how">
+            <li>Open Claude Desktop. If you use Cowork, switch to the Cowork tab first.</li>
+            <li>Left sidebar: <strong>Customize</strong> → <strong>Plugins</strong>.</li>
+            <li>Under Personal plugins, click <strong>+</strong> → <strong>Add marketplace</strong> → <strong>Add from a repository</strong>.</li>
+            <li>Enter <code>vikashruhilgit/loomwright</code> (or the full GitHub URL) and sync. If it fails, update the app from Help → Check for updates and retry.</li>
+            <li>Find <strong>loomwright</strong> in the list and click Install. Type <code>/</code> in a conversation to see the skills that loaded.</li>
+            <li>For <code>/setup</code>, stacked PRs, and worktrees, install via Claude CLI or Claude Code and run those commands there.</li>
+          </ol>`,
+        copy: "vikashruhilgit/loomwright"
+      }
+    };
+
+    const installCard = document.getElementById("install-card");
+    const installCmd = document.getElementById("install-cmd");
     const copyBtn = document.getElementById("copy-btn");
+    let copyRestore = "Copy commands";
+
+    function showInstall(key) {
+      const app = installs[key];
+      installCard.innerHTML = `<p class="tag">${app.tag}</p><h3>${app.title}</h3>${app.html}`;
+      installCmd.textContent = app.copy;
+      copyRestore = key === "desktop" ? "Copy repo id" : "Copy commands";
+      copyBtn.textContent = copyRestore;
+    }
+
+    document.querySelectorAll(".apps button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".apps button").forEach((b) => b.setAttribute("aria-pressed", "false"));
+        btn.setAttribute("aria-pressed", "true");
+        showInstall(btn.dataset.app);
+      });
+    });
+    showInstall("cli");
+
     copyBtn.addEventListener("click", async () => {
-      const text = document.getElementById("install-cmd").textContent;
+      const text = installCmd.textContent;
       try {
         await navigator.clipboard.writeText(text);
         copyBtn.textContent = "Copied";
-        setTimeout(() => { copyBtn.textContent = "Copy commands"; }, 1600);
+        setTimeout(() => { copyBtn.textContent = copyRestore; }, 1600);
       } catch {
         copyBtn.textContent = "Copy failed";
       }
