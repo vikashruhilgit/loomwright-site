@@ -101,8 +101,41 @@
     .btn-ghost:hover,.btn-ghost:focus-visible{transform:translateY(-2px); border-color:var(--indigo)}
     .btn:focus-visible{outline:2px solid var(--indigo); outline-offset:4px}
 
-    .lanes{display:flex; gap:.4rem; margin:0 0 clamp(2.4rem,6vw,3.8rem)}
-    .lanes i{height:.7rem; flex:1; border-radius:99px}
+    .lanes{display:flex; gap:.4rem; margin:0 0 clamp(2.4rem,6vw,3.8rem); align-items:center}
+    .lanes button{
+      height:1.5rem; flex:1; border:0; padding:0; cursor:pointer; appearance:none;
+      background:transparent; display:flex; align-items:center; border-radius:0
+    }
+    .lanes button > span{
+      display:block; height:.7rem; width:100%; border-radius:99px; background:var(--c);
+      position:relative; overflow:hidden;
+      transition:transform .28s cubic-bezier(.16,1,.3,1), box-shadow .28s cubic-bezier(.16,1,.3,1)
+    }
+    .lanes button > span::after{
+      content:""; position:absolute; inset:0 auto 0 -50%; width:46%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.78), transparent);
+      animation:flow-x 1.8s cubic-bezier(.16,1,.3,1) 2 both
+    }
+    .laws .no::after{
+      content:""; position:absolute; inset:-45% 0 auto; height:42%; width:100%;
+      background:linear-gradient(180deg, transparent, rgba(255,255,255,.82), transparent);
+      animation:flow-y 2.2s cubic-bezier(.16,1,.3,1) 2 both
+    }
+    .lanes button:nth-child(2) > span::after, .laws li:nth-child(2) .no::after{animation-delay:-.55s}
+    .lanes button:nth-child(3) > span::after, .laws li:nth-child(3) .no::after{animation-delay:-1.1s}
+    .lanes button:nth-child(4) > span::after, .laws li:nth-child(4) .no::after{animation-delay:-1.65s}
+    .lanes button:hover > span, .lanes button:focus-visible > span, .lanes button[aria-pressed="true"] > span,
+    .wrap:has(.laws li:nth-child(1) .law:is(:hover,:focus-visible,[aria-pressed="true"])) .lanes button:nth-child(1) > span,
+    .wrap:has(.laws li:nth-child(2) .law:is(:hover,:focus-visible,[aria-pressed="true"])) .lanes button:nth-child(2) > span,
+    .wrap:has(.laws li:nth-child(3) .law:is(:hover,:focus-visible,[aria-pressed="true"])) .lanes button:nth-child(3) > span,
+    .wrap:has(.laws li:nth-child(4) .law:is(:hover,:focus-visible,[aria-pressed="true"])) .lanes button:nth-child(4) > span{
+      transform:scaleY(1.55); box-shadow:0 6px 16px color-mix(in srgb, var(--c) 45%, transparent)
+    }
+    .lanes button:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
+    .lanes.off-stage button > span::after, .laws.off-stage .no::after,
+    .road.off-stage .dot::after{animation-play-state:paused}
+    @keyframes flow-x{to{transform:translateX(220px)}}
+    @keyframes flow-y{to{transform:translateY(90px)}}
 
     h2.sec{font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
       color:var(--dim); margin:2.6rem 0 1.1rem; font-weight:500}
@@ -110,13 +143,45 @@
     h3{font-family:var(--display); font-weight:800; letter-spacing:-.02em; text-transform:uppercase; margin:0 0 .4rem}
 
     .laws{display:grid; gap:1rem; margin:0 0 clamp(3.2rem,8vw,5.5rem); padding:0; list-style:none}
-    .laws li{background:var(--ink-2); border:1px solid var(--hair); padding:1.35rem 1.5rem 1.35rem 1.2rem;
-      display:grid; grid-template-columns:auto 1fr; gap:1.1rem;
-      box-shadow:0 10px 24px rgba(44,36,24,.06)}
+    .laws li{margin:0}
     .laws li:nth-child(even){margin-left:clamp(0rem,4vw,3rem)}
-    .laws .no{width:1.15rem; height:4.2rem; border-radius:99px; background:var(--c); color:transparent;
-      overflow:hidden; font-size:0}
-    .laws p{margin:0; color:var(--dim)}
+    .law{
+      width:100%; display:grid; grid-template-columns:auto 1fr; gap:1.1rem; text-align:left;
+      background:var(--ink-2); border:1px solid var(--hair); padding:1.35rem 1.5rem 1.35rem 1.2rem;
+      box-shadow:0 10px 24px rgba(44,36,24,.06); cursor:pointer; color:inherit; font:inherit;
+      appearance:none; border-radius:0;
+      transition:translate .28s cubic-bezier(.16,1,.3,1), box-shadow .28s cubic-bezier(.16,1,.3,1),
+        border-color .28s cubic-bezier(.16,1,.3,1), opacity .28s cubic-bezier(.16,1,.3,1);
+      animation:law-in .7s cubic-bezier(.16,1,.3,1) backwards
+    }
+    .laws li:nth-child(2) .law{animation-delay:.08s}
+    .laws li:nth-child(3) .law{animation-delay:.16s}
+    .laws li:nth-child(4) .law{animation-delay:.24s}
+    .law:hover, .law:focus-visible, .law[aria-pressed="true"],
+    .lanes:has(button:nth-child(1):is(:hover,:focus-visible,[aria-pressed="true"])) ~ .laws li:nth-child(1) .law,
+    .lanes:has(button:nth-child(2):is(:hover,:focus-visible,[aria-pressed="true"])) ~ .laws li:nth-child(2) .law,
+    .lanes:has(button:nth-child(3):is(:hover,:focus-visible,[aria-pressed="true"])) ~ .laws li:nth-child(3) .law,
+    .lanes:has(button:nth-child(4):is(:hover,:focus-visible,[aria-pressed="true"])) ~ .laws li:nth-child(4) .law{
+      translate:0 -4px;
+      border-color:color-mix(in srgb, var(--c) 50%, var(--hair));
+      box-shadow:0 18px 36px color-mix(in srgb, var(--c) 22%, rgba(44,36,24,.08))
+    }
+    .law:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
+    .laws:has(.law[aria-pressed="true"]) .law:not([aria-pressed="true"]){opacity:.62}
+    .laws .no{width:1.15rem; height:4.2rem; border-radius:99px; background:var(--c);
+      position:relative; overflow:hidden; display:block}
+    .lanes button:hover > span::after, .lanes button:focus-visible > span::after,
+    .lanes button[aria-pressed="true"] > span::after{animation:flow-x 1.6s cubic-bezier(.16,1,.3,1) infinite}
+    .law:hover .no::after, .law:focus-visible .no::after, .law[aria-pressed="true"] .no::after{
+      animation:flow-y 1.4s cubic-bezier(.16,1,.3,1) infinite
+    }
+    .law-title{display:block; font-family:var(--display); font-weight:800; letter-spacing:-.02em;
+      text-transform:uppercase; margin:0 0 .4rem}
+    .law-copy{margin:0; color:var(--dim); display:block}
+    @keyframes law-in{
+      from{opacity:0; filter:blur(5px); translate:0 14px}
+      to{opacity:1; filter:none; translate:0 0}
+    }
 
     .guide{display:grid; gap:0; margin:0 0 clamp(3.2rem,8vw,5.5rem)}
     .step{display:grid; grid-template-columns:4.2rem 1fr; gap:1.2rem; padding:1.5rem 0;
@@ -167,7 +232,24 @@
       background:var(--hair); transform:translateX(-50%)}
     .mile:last-child .rail::before{bottom:auto; height:0}
     .dot{display:block; width:1.1rem; height:1.1rem; border-radius:50%; background:var(--c); position:relative; z-index:1;
-      box-shadow:0 0 0 4px var(--ink)}
+      box-shadow:0 0 0 4px var(--ink);
+      transition:scale .28s cubic-bezier(.16,1,.3,1)}
+    .mile:hover .dot, .mile:focus-within .dot{scale:1.18}
+    .dot::after{
+      content:""; position:absolute; inset:-5px; border-radius:50%;
+      border:1.5px solid var(--c); opacity:0; animation:ripple 1.8s cubic-bezier(.16,1,.3,1) 3 both
+    }
+    .mile:hover .dot::after, .mile:focus-within .dot::after{
+      animation:ripple 1.6s cubic-bezier(.16,1,.3,1) infinite
+    }
+    .mile:nth-child(2) .dot::after{animation-delay:.4s}
+    .mile:nth-child(3) .dot::after{animation-delay:.8s}
+    .mile:nth-child(4) .dot::after{animation-delay:1.2s}
+    .mile:nth-child(5) .dot::after{animation-delay:1.6s}
+    @keyframes ripple{
+      0%{transform:scale(.7); opacity:.55}
+      100%{transform:scale(1.55); opacity:0}
+    }
     .mile .body{background:var(--ink-2); border:1px solid var(--hair); padding:1.2rem 1.35rem; margin-bottom:1rem}
     .mile .st{font-family:var(--mono); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c); margin:0 0 .35rem}
     .mile p{margin:.25rem 0 0; color:var(--dim)}
@@ -269,6 +351,7 @@
     @media (prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
       *{animation:none!important; transition:none!important}
+      .laws:has(.law[aria-pressed="true"]) .law:not([aria-pressed="true"]){opacity:1}
     }
   </style>
 </head>
@@ -321,40 +404,50 @@
   </header>
 
   <div class="wrap">
-    <div class="lanes" aria-hidden="true">
-      <i style="background:var(--copper)"></i><i style="background:var(--chartreuse)"></i>
-      <i style="background:var(--teal)"></i><i style="background:var(--violet)"></i>
+    <div class="lanes" role="group" aria-label="Four mill lanes, one for each law">
+      <button type="button" style="--c:var(--madder)" aria-pressed="false" aria-label="Highlight law 1: Plan before a file moves"><span></span></button>
+      <button type="button" style="--c:var(--chartreuse)" aria-pressed="false" aria-label="Highlight law 2: Parallel work, sequential merge"><span></span></button>
+      <button type="button" style="--c:var(--indigo)" aria-pressed="false" aria-label="Highlight law 3: Review, then you merge"><span></span></button>
+      <button type="button" style="--c:var(--copper)" aria-pressed="false" aria-label="Highlight law 4: It gets smarter. It never self-trusts"><span></span></button>
     </div>
 
     <h2 class="sec">Four laws of the mill</h2>
     <ul class="laws">
-      <li style="--c:var(--madder)">
-        <span class="no">01</span>
-        <div>
-          <h3>Plan before a file moves</h3>
-          <p>Launch Pad turns a messy goal into a reviewed brief — feasibility, file impact, subtasks — before Supervisor touches the repo.</p>
-        </div>
+      <li>
+        <button type="button" class="law" style="--c:var(--madder)" aria-pressed="false" aria-labelledby="law-1-title" aria-describedby="law-1-copy">
+          <span class="no" aria-hidden="true"></span>
+          <span>
+            <span class="law-title" id="law-1-title">Plan before a file moves</span>
+            <span class="law-copy" id="law-1-copy">Launch Pad turns a messy goal into a reviewed brief — feasibility, file impact, subtasks — before Supervisor touches the repo.</span>
+          </span>
+        </button>
       </li>
-      <li style="--c:var(--chartreuse)">
-        <span class="no">02</span>
-        <div>
-          <h3>Parallel work, sequential merge</h3>
-          <p>Workers run in git worktrees. Overlapping files wait. Merges are ordered. You do not get a pile of conflicting branches.</p>
-        </div>
+      <li>
+        <button type="button" class="law" style="--c:var(--chartreuse)" aria-pressed="false" aria-labelledby="law-2-title" aria-describedby="law-2-copy">
+          <span class="no" aria-hidden="true"></span>
+          <span>
+            <span class="law-title" id="law-2-title">Parallel work, sequential merge</span>
+            <span class="law-copy" id="law-2-copy">Workers run in git worktrees. Overlapping files wait. Merges are ordered. You do not get a pile of conflicting branches.</span>
+          </span>
+        </button>
       </li>
-      <li style="--c:var(--indigo)">
-        <span class="no">03</span>
-        <div>
-          <h3>Review, then you merge</h3>
-          <p>Code review, optional red-team, dual-agent QA, and a self-heal pass on the PR. Loomwright never auto-merges unless you opt in on a trusted path.</p>
-        </div>
+      <li>
+        <button type="button" class="law" style="--c:var(--indigo)" aria-pressed="false" aria-labelledby="law-3-title" aria-describedby="law-3-copy">
+          <span class="no" aria-hidden="true"></span>
+          <span>
+            <span class="law-title" id="law-3-title">Review, then you merge</span>
+            <span class="law-copy" id="law-3-copy">Code review, optional red-team, dual-agent QA, and a self-heal pass on the PR. Loomwright never auto-merges unless you opt in on a trusted path.</span>
+          </span>
+        </button>
       </li>
-      <li style="--c:var(--copper)">
-        <span class="no">04</span>
-        <div>
-          <h3>It gets smarter. It never self-trusts</h3>
-          <p>Lessons, house rules, and the System Twin are advisory and human-gated. CLAUDE.md stays the authority. Memory cannot promote itself.</p>
-        </div>
+      <li>
+        <button type="button" class="law" style="--c:var(--copper)" aria-pressed="false" aria-labelledby="law-4-title" aria-describedby="law-4-copy">
+          <span class="no" aria-hidden="true"></span>
+          <span>
+            <span class="law-title" id="law-4-title">It gets smarter. It never self-trusts</span>
+            <span class="law-copy" id="law-4-copy">Lessons, house rules, and the System Twin are advisory and human-gated. CLAUDE.md stays the authority. Memory cannot promote itself.</span>
+          </span>
+        </button>
       </li>
     </ul>
 
@@ -598,7 +691,7 @@
       <div class="road">
         <article class="mile">
           <span class="when">Week 1 · one person</span>
-          <div class="rail"><i class="dot" style="background:var(--copper)"></i></div>
+          <div class="rail"><i class="dot" style="--c:var(--copper)"></i></div>
           <div class="body">
             <p class="st" style="color:var(--copper)">Prove it on your own branch</p>
             <h3>One goal, watched end to end</h3>
@@ -607,7 +700,7 @@
         </article>
         <article class="mile">
           <span class="when">Week 2 · the repo</span>
-          <div class="rail"><i class="dot" style="background:var(--gold)"></i></div>
+          <div class="rail"><i class="dot" style="--c:var(--gold)"></i></div>
           <div class="body">
             <p class="st" style="color:var(--gold)">Commit the policy</p>
             <h3>Rules and config, in the repo</h3>
@@ -616,7 +709,7 @@
         </article>
         <article class="mile">
           <span class="when">Month 2 · the team</span>
-          <div class="rail"><i class="dot" style="background:var(--teal)"></i></div>
+          <div class="rail"><i class="dot" style="--c:var(--teal)"></i></div>
           <div class="body">
             <p class="st" style="color:var(--teal)">Make the trunk defensible</p>
             <h3>Protection, review, and a scoreboard</h3>
@@ -625,7 +718,7 @@
         </article>
         <article class="mile">
           <span class="when">Only then</span>
-          <div class="rail"><i class="dot" style="background:var(--madder)"></i></div>
+          <div class="rail"><i class="dot" style="--c:var(--madder)"></i></div>
           <div class="body">
             <p class="st" style="color:var(--madder)">And only where it is boring</p>
             <h3>Queues, and maybe a trusted merge</h3>
@@ -666,7 +759,7 @@
     <div class="road">
       <article class="mile">
         <span class="when">Now · v15</span>
-        <div class="rail"><i class="dot" style="--c:var(--chartreuse);background:var(--chartreuse)"></i></div>
+        <div class="rail"><i class="dot" style="--c:var(--chartreuse)"></i></div>
         <div class="body">
           <p class="st" style="--c:var(--chartreuse);color:var(--chartreuse)">Shipped</p>
           <h3>The mill is live</h3>
@@ -675,7 +768,7 @@
       </article>
       <article class="mile">
         <span class="when">Next</span>
-        <div class="rail"><i class="dot" style="background:var(--gold)"></i></div>
+        <div class="rail"><i class="dot" style="--c:var(--gold)"></i></div>
         <div class="body">
           <p class="st" style="color:var(--gold)">In the warp</p>
           <h3>Ground-truth verification</h3>
@@ -684,7 +777,7 @@
       </article>
       <article class="mile">
         <span class="when">Then</span>
-        <div class="rail"><i class="dot" style="background:var(--indigo)"></i></div>
+        <div class="rail"><i class="dot" style="--c:var(--indigo)"></i></div>
         <div class="body">
           <p class="st" style="color:var(--indigo)">Evidence-gated</p>
           <h3>Twin starts enforcing</h3>
@@ -693,7 +786,7 @@
       </article>
       <article class="mile">
         <span class="when">Later</span>
-        <div class="rail"><i class="dot" style="background:var(--copper)"></i></div>
+        <div class="rail"><i class="dot" style="--c:var(--copper)"></i></div>
         <div class="body">
           <p class="st" style="color:var(--copper)">Four guardrails first</p>
           <h3>A proactive mill</h3>
@@ -702,7 +795,7 @@
       </article>
       <article class="mile">
         <span class="when">North star</span>
-        <div class="rail"><i class="dot" style="background:var(--violet)"></i></div>
+        <div class="rail"><i class="dot" style="--c:var(--violet)"></i></div>
         <div class="body">
           <p class="st" style="color:var(--violet)">Director model</p>
           <h3>Point at the repo. Own this.</h3>
@@ -751,6 +844,24 @@ claude plugin install loomwright@atelier</pre>
     </footer>
   </div>
   <script>
+    (function millMotion() {
+      const laws = [...document.querySelectorAll(".laws .law")];
+      const lanes = [...document.querySelectorAll(".lanes button")];
+      const pin = (index) => {
+        const on = laws[index].getAttribute("aria-pressed") !== "true";
+        laws.forEach((el, i) => el.setAttribute("aria-pressed", i === index && on ? "true" : "false"));
+        lanes.forEach((el, i) => el.setAttribute("aria-pressed", i === index && on ? "true" : "false"));
+      };
+      laws.forEach((el, i) => el.addEventListener("click", () => pin(i)));
+      lanes.forEach((el, i) => el.addEventListener("click", () => pin(i)));
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (!("IntersectionObserver" in window)) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => entry.target.classList.toggle("off-stage", !entry.isIntersecting));
+      }, { threshold: 0.12 });
+      document.querySelectorAll(".lanes, .laws, .road").forEach((el) => io.observe(el));
+    })();
+
     const plays = {
       new: {
         tag: "Recommended first play",
