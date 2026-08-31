@@ -5,29 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Loomwright — the mill that weaves a goal into a reviewed PR</title>
   <meta name="description" content="Plan-first multi-agent development for Cursor and Claude Code. Launch Pad writes the brief. Supervisor weaves it in parallel worktrees. You still merge." />
-  <meta name="theme-color" content="#0C0D11" />
+  <meta name="theme-color" content="#F4EBDC" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
   <meta property="og:title" content="Loomwright — plan first, never silently merge" />
-  <meta property="og:description" content="14 agents, 21 commands, 41 skills. A mill for shipping work you can actually review." />
+  <meta property="og:description" content="14 agents, 21 commands, 41 skills, 24 hooks. A mill for shipping work you can actually review." />
   <meta property="og:image" content="https://vikashruhilgit.github.io/loomwright-site/assets/og.jpg" />
   <meta property="og:url" content="https://vikashruhilgit.github.io/loomwright-site/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Big+Shoulders+Display:wght@700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet" />
   <style>
     :root{
-      --ink:#0C0D11; --ink-2:#15171F; --ink-3:#1C1F2A;
-      --hair:rgba(240,230,212,.08);
-      --text:#EDE8DC; --dim:#9B9588;
-      --copper:#E8893A; --copper-deep:#7A4310;
-      --indigo:#6B8CFF; --madder:#E24B6A; --chartreuse:#C8E05C;
-      --teal:#3DCFC0; --violet:#9A7BFF; --gold:#E8C547; --linen:#F0E6D4;
-      --display:"Syne",Georgia,serif;
-      --body:"Newsreader",Georgia,serif;
-      --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+      --ink:#F4EBDC; --ink-2:#FFF8EE; --ink-3:#EFE4D2;
+      --hair:rgba(44,36,24,.14);
+      --text:#2C2418; --dim:#6B6154;
+      --copper:#E8893A; --copper-deep:#8A4E12;
+      --indigo:#4F6FE8; --madder:#D63D5C; --chartreuse:#C8E05C;
+      --teal:#1A9A8E; --violet:#7A5AE0; --gold:#C9A227; --linen:#FFF8EE;
+      --display:"Big Shoulders Display",Impact,sans-serif;
+      --body:"Literata",Georgia,serif;
+      --mono:"Azeret Mono",ui-monospace,Menlo,monospace;
+      --brass:#C47A2C;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
@@ -36,127 +37,125 @@
       font-family:var(--body); font-size:1.0625rem; line-height:1.7;
       overflow-x:hidden;
     }
-    body::before{
-      content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
-      background-image:
-        linear-gradient(var(--hair) 1px, transparent 1px),
-        linear-gradient(90deg, var(--hair) 1px, transparent 1px);
-      background-size:64px 48px;
-      mask-image:radial-gradient(120% 80% at 50% 0%, #000 22%, transparent 78%);
-      -webkit-mask-image:radial-gradient(120% 80% at 50% 0%, #000 22%, transparent 78%);
-    }
     .skip{
-      position:absolute; left:-999px; top:0; background:var(--copper); color:#14100A;
+      position:absolute; left:-999px; top:0; background:var(--copper); color:#2C2418;
       padding:.6rem 1rem; font-family:var(--mono); z-index:20;
     }
     .skip:focus{left:1rem; top:1rem}
     .wrap{position:relative; z-index:1; max-width:68rem; margin:0 auto; padding:0 1.5rem 4.5rem}
 
     nav{
-      display:flex; align-items:center; justify-content:space-between; gap:1rem;
-      padding:1.15rem 0 1.15rem; position:sticky; top:0; z-index:8;
-      background:rgba(12,13,17,.92); backdrop-filter:blur(10px);
-      margin:0 -1.5rem; padding-left:1.5rem; padding-right:1.5rem;
+      position:sticky; top:0; z-index:8;
+      background:rgba(244,235,220,.92); backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--hair);
     }
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:1rem;
+      max-width:68rem; margin:0 auto; padding:1rem 1.5rem}
     .brand{display:flex; align-items:center; gap:.7rem; text-decoration:none; color:var(--text)}
-    .brand img{width:2.1rem; height:2.1rem; border-radius:.35rem; object-fit:cover; border:1px solid var(--hair)}
-    .brand span{font-family:var(--mono); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase}
+    .brand img{width:2.1rem; height:2.1rem; border-radius:.4rem; object-fit:cover; border:1px solid var(--hair);
+      box-shadow:0 4px 10px rgba(44,36,24,.12)}
+    .brand span{font-family:var(--display); font-size:1.15rem; letter-spacing:.04em; text-transform:uppercase; font-weight:800}
     .nav-links{display:flex; gap:1.3rem; align-items:center; flex-wrap:wrap}
     .nav-links a{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
       color:var(--dim); text-decoration:none}
-    .nav-links a:hover,.nav-links a:focus-visible{color:var(--linen)}
+    .nav-links a:hover,.nav-links a:focus-visible{color:var(--copper-deep)}
     .nav-links a:focus-visible{outline:2px solid var(--indigo); outline-offset:4px}
 
-    .kicker{font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
-      color:var(--copper); display:flex; align-items:center; gap:.6rem; margin:0 0 1.4rem}
-    .kicker::before{content:""; width:1.6rem; height:.55rem; background:var(--copper)}
-    h1{font-family:var(--display); font-weight:800; font-size:clamp(3rem,9vw,6.1rem); line-height:.82;
-      letter-spacing:-.045em; margin:0 0 1.5rem; text-transform:uppercase}
-    h1 span{display:block}
-    h1 .two{color:var(--indigo); margin-left:.06em}
+    h1{font-family:var(--display); font-weight:800; font-size:clamp(3.2rem,10vw,7rem); line-height:.82;
+      letter-spacing:-.03em; margin:0 0 1.1rem; text-transform:uppercase}
+    h1 .two{color:var(--indigo)}
     .lede{font-size:clamp(1.12rem,2.4vw,1.4rem); line-height:1.55; color:var(--dim);
-      max-width:36ch; margin:0 0 2.2rem}
+      max-width:38ch; margin:0 0 1.8rem}
     .lede em{font-style:italic; color:var(--text)}
 
-    .hero{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(1.6rem,5vw,3.4rem);
-      align-items:start; margin-bottom:1.4rem; padding-top:.4rem}
+    .invention{position:relative; z-index:1; margin:0 0 2.4rem}
+    .invention-shot{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover;
+      object-position:center 42%; background:#F7F1E4}
+    .plaque{
+      position:relative; z-index:2; margin:-5.5rem auto 0; max-width:68rem; padding:0 1.5rem;
+    }
+    .plaque-card{
+      background:var(--ink-2); border:1px solid var(--hair); padding:1.6rem 1.8rem 1.5rem;
+      box-shadow:0 18px 40px rgba(44,36,24,.12);
+    }
+    .stamps{display:flex; flex-wrap:wrap; gap:.55rem; margin:1.2rem 0 0; padding:0; list-style:none}
+    .stamps li{font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase;
+      border:1px solid var(--hair); padding:.45rem .7rem; background:var(--ink); color:var(--dim)}
+    .stamps b{color:var(--text); font-weight:600}
+
     .hero-frame{position:relative; border:1px solid var(--hair); background:var(--ink-2); min-width:0;
-      box-shadow:10px 10px 0 rgba(232,137,58,.18)}
+      box-shadow:0 14px 32px rgba(44,36,24,.1)}
     .hero-frame img{display:block; width:100%; height:auto; aspect-ratio:16/10; object-fit:cover}
     .hero-caption{position:absolute; left:0; right:0; bottom:0; padding:.7rem 1rem;
       font-family:var(--mono); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
-      color:var(--linen); background:linear-gradient(transparent, rgba(12,13,17,.88))}
+      color:var(--text); background:linear-gradient(transparent, rgba(244,235,220,.94))}
 
     .actions{display:flex; flex-wrap:wrap; gap:1rem}
     .btn{font-family:var(--mono); font-size:.82rem; letter-spacing:.08em; text-transform:uppercase;
       text-decoration:none; padding:1rem 1.7rem; display:inline-block; border:0; cursor:pointer;
-      transition:transform .16s cubic-bezier(.2,.9,.3,1.2), box-shadow .16s}
-    .btn-solid{background:var(--copper); color:#14100A; box-shadow:6px 6px 0 var(--copper-deep)}
-    .btn-solid:hover,.btn-solid:focus-visible{transform:translate(-3px,-3px); box-shadow:9px 9px 0 var(--copper-deep)}
-    .btn-ghost{color:var(--text); background:transparent; border:1px solid rgba(240,230,212,.22);
-      box-shadow:6px 6px 0 rgba(240,230,212,.07)}
-    .btn-ghost:hover,.btn-ghost:focus-visible{transform:translate(-3px,-3px); border-color:var(--indigo);
-      box-shadow:9px 9px 0 rgba(107,140,255,.18)}
+      transition:transform .16s cubic-bezier(.16,1,.3,1), box-shadow .16s}
+    .btn-solid{background:var(--copper); color:#2C2418; box-shadow:0 8px 18px rgba(138,78,18,.28)}
+    .btn-solid:hover,.btn-solid:focus-visible{transform:translateY(-2px); box-shadow:0 12px 24px rgba(138,78,18,.34)}
+    .btn-ghost{color:var(--text); background:var(--ink-2); border:1px solid var(--hair);
+      box-shadow:0 6px 14px rgba(44,36,24,.08)}
+    .btn-ghost:hover,.btn-ghost:focus-visible{transform:translateY(-2px); border-color:var(--indigo)}
     .btn:focus-visible{outline:2px solid var(--indigo); outline-offset:4px}
 
-    .stats{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.7rem;
-      margin:0 0 clamp(2.2rem,6vw,3.4rem)}
-    .stats div{background:var(--ink-2); border:1px solid var(--hair); padding:.85rem .95rem}
-    .stats b{display:block; font-family:var(--display); font-size:1.45rem; line-height:1; letter-spacing:-.03em}
-    .stats span{font-family:var(--mono); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:var(--dim)}
-
-    .threads{display:flex; gap:.42rem; margin:0 0 clamp(2.6rem,6vw,4.2rem)}
-    .threads i{height:.85rem; flex:1; border-radius:.2rem}
+    .lanes{display:flex; gap:.4rem; margin:0 0 clamp(2.4rem,6vw,3.8rem)}
+    .lanes i{height:.7rem; flex:1; border-radius:99px}
 
     h2.sec{font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
-      color:var(--dim); margin:0 0 1.8rem; font-weight:500}
-    h3{font-family:var(--display); font-weight:700; letter-spacing:-.02em; text-transform:uppercase; margin:0 0 .4rem}
+      color:var(--dim); margin:2.6rem 0 1.1rem; font-weight:500}
+    h2.sec[id], .invention[id]{scroll-margin-top:5.5rem}
+    h3{font-family:var(--display); font-weight:800; letter-spacing:-.02em; text-transform:uppercase; margin:0 0 .4rem}
 
-    .laws{display:grid; gap:1.1rem; margin:0 0 clamp(3.2rem,8vw,5.5rem); padding:0; list-style:none}
-    .laws li{background:var(--ink-2); border:1px solid var(--hair); border-left:6px solid var(--c);
-      padding:1.45rem 1.6rem; display:grid; grid-template-columns:auto 1fr; gap:1.3rem;
-      transition:transform .18s ease}
-    .laws li:hover{transform:translateX(6px)}
+    .laws{display:grid; gap:1rem; margin:0 0 clamp(3.2rem,8vw,5.5rem); padding:0; list-style:none}
+    .laws li{background:var(--ink-2); border:1px solid var(--hair); padding:1.35rem 1.5rem 1.35rem 1.2rem;
+      display:grid; grid-template-columns:auto 1fr; gap:1.1rem;
+      box-shadow:0 10px 24px rgba(44,36,24,.06)}
     .laws li:nth-child(even){margin-left:clamp(0rem,4vw,3rem)}
-    .laws .no{font-family:var(--mono); font-size:.75rem; color:var(--c); padding-top:.35rem}
+    .laws .no{width:1.15rem; height:4.2rem; border-radius:99px; background:var(--c); color:transparent;
+      overflow:hidden; font-size:0}
     .laws p{margin:0; color:var(--dim)}
 
-    .guide{display:grid; gap:0; margin:0 0 clamp(3.2rem,8vw,5.5rem); counter-reset:step}
+    .guide{display:grid; gap:0; margin:0 0 clamp(3.2rem,8vw,5.5rem)}
     .step{display:grid; grid-template-columns:4.2rem 1fr; gap:1.2rem; padding:1.5rem 0;
-      border-top:1px solid var(--hair); position:relative}
+      border-top:1px solid var(--hair)}
     .step:last-child{border-bottom:1px solid var(--hair)}
+    .step > div{min-width:0}
     .step .n{font-family:var(--mono); color:var(--c, var(--copper)); font-size:.8rem; letter-spacing:.12em; padding-top:.35rem}
     .step p{margin:.25rem 0 0; color:var(--dim); max-width:62ch}
     .cmd{
-      font-family:var(--mono); font-size:.82rem; background:var(--ink-3); color:var(--linen);
+      font-family:var(--mono); font-size:.82rem; background:var(--ink-3); color:var(--text);
       border:1px solid var(--hair); padding:.7rem 1rem; margin:.9rem 0 0; overflow-x:auto;
       white-space:pre; line-height:1.55;
     }
-    .cmd .c{color:var(--copper)}
-    .cmd .g{color:var(--chartreuse)}
+    .cmd .c{color:var(--copper-deep)}
+    .cmd .g{color:var(--teal)}
     .cmd .d{color:var(--dim)}
 
     .picks{display:flex; flex-wrap:wrap; gap:.55rem; margin:0 0 1.2rem}
     .picks button{
       font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
-      background:transparent; color:var(--text); border:1px solid var(--hair); padding:.65rem .9rem; cursor:pointer;
+      background:var(--ink-2); color:var(--text); border:1px solid var(--hair); padding:.65rem .9rem; cursor:pointer;
     }
     .picks button[aria-pressed="true"], .picks button:hover, .picks button:focus-visible{
-      border-color:var(--copper); color:var(--copper)
+      border-color:var(--copper); color:var(--copper-deep); background:#FFF3E4
     }
     .picks button:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
-    .play-card,.install-card{background:var(--ink-2); border:1px solid var(--hair); border-left:6px solid var(--copper);
-      padding:1.4rem 1.5rem; min-height:9.5rem}
+    .play-card,.install-card{background:var(--ink-2); border:1px solid var(--hair);
+      border-top:3px solid var(--copper); padding:1.4rem 1.5rem; min-height:9.5rem}
     .play-card{margin:0 0 clamp(3.2rem,8vw,5.5rem)}
-    .play-card .tag,.install-card .tag{font-family:var(--mono); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--copper); margin:0 0 .5rem}
+    .play-card .tag,.install-card .tag{font-family:var(--mono); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--copper-deep); margin:0 0 .5rem}
     .play-card p,.install-card p{margin:.35rem 0 0; color:var(--dim)}
     .install-card h3{margin:.1rem 0 0}
 
     .plays{display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin:0 0 clamp(3.2rem,8vw,5.5rem)}
     .plays article{background:var(--ink-2); border:1px solid var(--hair); padding:1.35rem 1.4rem;
-      border-top:3px solid var(--c)}
+      border-top:3px solid var(--c); box-shadow:0 8px 20px rgba(44,36,24,.05)}
     .plays .why{font-family:var(--mono); font-size:.65rem; letter-spacing:.14em; text-transform:uppercase;
-      color:var(--c); margin:0 0 .55rem}
+      margin:0 0 .55rem}
+    .plays .why, .mile .st{color:color-mix(in srgb, var(--c) 62%, #2C2418)}
     .plays p{margin:.3rem 0 0; color:var(--dim); font-size:.98rem}
 
     .road{display:grid; gap:0; margin:0 0 1.2rem}
@@ -167,7 +166,7 @@
     .rail::before{content:""; position:absolute; left:50%; top:.55rem; bottom:-.2rem; width:2px;
       background:var(--hair); transform:translateX(-50%)}
     .mile:last-child .rail::before{bottom:auto; height:0}
-    .dot{width:1.1rem; height:1.1rem; border-radius:50%; background:var(--c); position:relative; z-index:1;
+    .dot{display:block; width:1.1rem; height:1.1rem; border-radius:50%; background:var(--c); position:relative; z-index:1;
       box-shadow:0 0 0 4px var(--ink)}
     .mile .body{background:var(--ink-2); border:1px solid var(--hair); padding:1.2rem 1.35rem; margin-bottom:1rem}
     .mile .st{font-family:var(--mono); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c); margin:0 0 .35rem}
@@ -177,32 +176,92 @@
       display:grid; gap:1rem; margin:0 0 2.4rem}
     .copy-row{display:flex; flex-wrap:wrap; gap:.7rem; align-items:stretch}
     .copy-row pre{flex:1; font-family:var(--mono); font-size:.88rem; background:var(--ink-3);
-      padding:.9rem 1rem; border:1px solid var(--hair); min-width:12rem; margin:0; white-space:pre-wrap; line-height:1.7}
+      padding:.9rem 1rem; border:1px solid var(--hair); min-width:12rem; margin:0; white-space:pre-wrap; line-height:1.7; color:var(--text)}
     .note{color:var(--dim); margin:0; font-size:.98rem}
     .note a,.step a,.install-card a{
-      color:var(--copper); text-decoration:none; border-bottom:1px solid rgba(232,137,58,.4)
+      color:var(--copper-deep); text-decoration:none; border-bottom:1px solid rgba(196,122,44,.45)
     }
     .note a:hover,.note a:focus-visible,.step a:hover,.step a:focus-visible,
-    .install-card a:hover,.install-card a:focus-visible{border-color:var(--copper)}
+    .install-card a:hover,.install-card a:focus-visible{border-color:var(--copper-deep)}
     .copy-row .btn{align-self:stretch}
     .apps{display:flex; flex-wrap:wrap; gap:.55rem; margin:0}
     .how{margin:.85rem 0 0; padding:0; list-style:none; counter-reset:how}
+    .how li{counter-increment:how; position:relative; padding-left:2.4rem; margin:0 0 .7rem}
     .how li:last-child{margin-bottom:0}
     .how li::before{content:counter(how, decimal-leading-zero); font-family:var(--mono);
-      font-size:.72rem; letter-spacing:.08em; color:var(--copper); padding-top:.25rem}
-    .warn{font-family:var(--mono); font-size:.72rem; letter-spacing:.04em; color:var(--gold);
-      border:1px solid rgba(232,197,71,.35); padding:.7rem .9rem; margin:0}
+      font-size:.72rem; letter-spacing:.08em; color:var(--copper-deep);
+      position:absolute; left:0; top:.28rem}
+    .warn{font-family:var(--mono); font-size:.72rem; letter-spacing:.04em; color:var(--copper-deep);
+      border:1px solid rgba(196,122,44,.4); background:#FFF3E4; padding:.7rem .9rem; margin:0}
+
+    .band{margin:0 0 clamp(2rem,5vw,2.8rem)}
+    .band img{aspect-ratio:4/1}
+    .mile .shot{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover;
+      margin:1.15rem 0 0; border:1px solid var(--hair)}
+
+    .fig{margin:0 0 clamp(2.4rem,6vw,3.6rem); border:1px solid var(--hair); background:var(--ink-2)}
+    .fig img{display:block; width:100%; height:auto}
+    .fig figcaption{font-family:var(--mono); font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--dim); padding:.85rem 1rem; border-top:1px solid var(--hair); line-height:1.8;
+      background:var(--ink)}
+    .fig figcaption b{color:var(--text); font-weight:600}
+
+    .pipe-art{position:relative; background:#F7F1E4}
+    .pipe-art img{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; object-position:center 38%}
+    .pipe-labels{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
+    .pipe-legend{display:none; margin:0; padding:.9rem 1rem 1.05rem; list-style:none; gap:.7rem;
+      border-top:1px solid var(--hair); background:var(--ink)}
+    .pipe-legend li{display:grid; grid-template-columns:2.1rem 1fr; gap:.55rem; color:var(--dim); font-size:.92rem}
+    .pipe-legend b{font-family:var(--mono); font-size:.68rem; letter-spacing:.14em; color:var(--copper-deep); padding-top:.28rem}
+    .pipe-legend strong{display:block; font-family:var(--display); font-size:.92rem; letter-spacing:-.02em;
+      text-transform:uppercase; color:var(--text); font-weight:800}
+    .pipe-legend span{display:block; font-size:.88rem; color:var(--dim)}
+    .pipe-legend .g{font-family:var(--mono); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--gold)}
+
+    .blk{margin:0 0 clamp(2.4rem,6vw,3.6rem)}
+    .blk > p.note{margin:.45rem 0 1.2rem; max-width:68ch}
+
+    .policy{display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr); gap:1rem; align-items:start}
+    .policy > *{min-width:0}
+    .knobs{display:grid; gap:.5rem}
+    .knob{display:flex; align-items:center; justify-content:space-between; gap:1rem; width:100%; text-align:left;
+      background:var(--ink-2); border:1px solid var(--hair);
+      padding:.75rem .9rem; cursor:pointer; color:var(--text); font:inherit;
+      box-shadow:inset 0 2px 0 transparent; transition:box-shadow .16s ease, border-color .16s}
+    .knob:hover{border-color:var(--copper)}
+    .knob:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
+    .knob b{display:block; font-family:var(--mono); font-size:.75rem; letter-spacing:.03em; color:var(--text)}
+    .knob em{display:block; font-style:normal; font-size:.88rem; line-height:1.45; color:var(--dim); margin-top:.22rem}
+    .knob i{font-family:var(--mono); font-style:normal; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--dim); border:1px solid var(--hair); padding:.35rem .6rem; white-space:nowrap}
+    .knob[data-active="true"]{box-shadow:inset 0 3px 0 var(--teal)}
+    .knob[data-active="true"] i{color:var(--teal); border-color:rgba(26,154,142,.4)}
+    .policy-out{background:var(--ink-2); border:1px solid var(--hair); padding:1.25rem 1.35rem;
+      display:grid; gap:.35rem; position:sticky; top:5.2rem}
+    .policy-out .tag{font-family:var(--mono); font-size:.64rem; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--copper-deep); margin:.4rem 0 0}
+    .policy-out pre{font-family:var(--mono); font-size:.79rem; background:var(--ink-3); color:var(--text);
+      border:1px solid var(--hair); padding:.85rem 1rem; margin:.15rem 0 0; overflow-x:auto;
+      white-space:pre; line-height:1.65}
+    .policy-out .btn{justify-self:start; margin-top:.9rem}
 
     footer{border-top:1px solid var(--hair); padding-top:2rem; font-family:var(--mono);
       font-size:.76rem; line-height:2; color:var(--dim); letter-spacing:.02em}
-    footer a{color:var(--text); text-decoration:none; border-bottom:1px solid rgba(240,230,212,.2)}
-    footer a:hover,footer a:focus-visible{color:var(--copper); border-color:var(--copper)}
-    .fine{display:block; margin-top:1rem; color:#61667E; letter-spacing:0; font-size:.72rem; line-height:1.6}
+    footer a{color:var(--text); text-decoration:none; border-bottom:1px solid rgba(44,36,24,.2)}
+    footer a:hover,footer a:focus-visible{color:var(--copper-deep); border-color:var(--copper-deep)}
+    .fine{display:block; margin-top:1rem; color:#8A7F70; letter-spacing:0; font-size:.72rem; line-height:1.6}
 
     @media (max-width:860px){
-      .hero,.plays,.stats{grid-template-columns:1fr}
+      .plays,.stamps{grid-template-columns:1fr}
+      .pipe-labels{display:none}
+      .pipe-legend{display:grid}
+      .band img{aspect-ratio:2/1; object-position:center}
+      .policy{grid-template-columns:1fr}
+      .policy-out{position:static}
       .nav-links a:not(.btn){display:none}
       .laws li:nth-child(even){margin-left:0}
+      .plaque{margin-top:-2.4rem}
       .mile{grid-template-columns:1.1rem 1fr; gap:.9rem}
       .mile .when{grid-column:2; padding-top:0}
       .rail{grid-row:span 2}
@@ -214,48 +273,57 @@
   </style>
 </head>
 <body>
+  <!--
+  THESIS: The mill is a sunlit invention you walk up to, not a dark dashboard. First viewport is the machine doing the job.
+  OWN-WORLD: Plaster and brass, glass energy lanes in copper/chartreuse/teal/violet, tiny visored millwrights. Big Shoulders Display, Literata, Azeret Mono.
+  STORY: Messy goal in, reviewed PR waiting, a human still merges. Visitor installs.
+  FIRST VIEWPORT: Full-bleed approved pipeline. Brass plaque over the cream gutter with the name, offer, and Install.
+  FORM: Inventor's loft / patent-come-to-life. User-pinned still. Seed: user-pinned-bright-millwrights.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+  -->
   <a class="skip" href="#guide">Skip to the guide</a>
-  <div class="wrap">
-    <nav>
+  <nav>
+    <div class="nav-inner">
       <a class="brand" href="#top">
-        <img src="assets/favicon.png" alt="" width="34" height="34" />
+        <img src="assets/icon-180.png" alt="" width="34" height="34" decoding="async" />
         <span>Loomwright</span>
       </a>
       <div class="nav-links">
         <a href="#guide">Guide</a>
         <a href="#plays">Plays</a>
+        <a href="#teams">Teams</a>
         <a href="#roadmap">Roadmap</a>
         <a class="btn btn-solid" href="#install" style="padding:.7rem 1.1rem; font-size:.72rem">Install</a>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <header class="hero" id="top">
-      <div>
-        <p class="kicker">v15.14 · Never silently merges</p>
+  <header class="invention" id="top">
+    <img class="invention-shot" src="assets/pipeline.jpg" width="1600" height="900" decoding="async"
+      alt="Tiny alien millwrights run a bright brass-and-glass mill: they untangle a request, align it into a brief, ride four worktree lanes, merge in order, scan at a review gate, and stop at an open pull request." />
+    <div class="plaque">
+      <div class="plaque-card">
         <h1>Loom<span class="two">wright</span></h1>
-        <p class="lede">The mill that weaves a raw goal into a <em>reviewed pull request</em>. Plan first. Work in parallel. A human still merges.</p>
+        <p class="lede">An out-of-the-box mill that weaves a raw goal into a <em>reviewed pull request</em>. Plan first. Work in parallel. A human still merges.</p>
         <div class="actions">
           <a class="btn btn-solid" href="#install">Install the mill</a>
           <a class="btn btn-ghost" href="#guide">How to run it</a>
         </div>
+        <ul class="stamps" aria-label="What ships today">
+          <li><b>14</b> agent roles</li>
+          <li><b>21</b> slash commands</li>
+          <li><b>41</b> skills</li>
+          <li><b>24</b> quality hooks</li>
+          <li>v15.37 · never silently merges</li>
+        </ul>
       </div>
-      <figure class="hero-frame">
-        <img src="assets/hero.jpg" alt="A dark mill loom weaving colored threads into a single cloth." />
-        <figcaption class="hero-caption">Warp = workers · Weft = review · Cloth = the PR</figcaption>
-      </figure>
-    </header>
-    <div class="stats" aria-label="What ships today">
-      <div><b>14</b><span>agent roles</span></div>
-      <div><b>21</b><span>slash commands</span></div>
-      <div><b>41</b><span>skills</span></div>
-      <div><b>22</b><span>quality hooks</span></div>
     </div>
+  </header>
 
-    <div class="threads" aria-hidden="true">
-      <i style="background:var(--madder)"></i><i style="background:var(--copper)"></i>
-      <i style="background:var(--gold)"></i><i style="background:var(--chartreuse)"></i>
-      <i style="background:var(--teal)"></i><i style="background:var(--indigo)"></i>
-      <i style="background:var(--violet)"></i><i style="background:#FF6BC1"></i>
+  <div class="wrap">
+    <div class="lanes" aria-hidden="true">
+      <i style="background:var(--copper)"></i><i style="background:var(--chartreuse)"></i>
+      <i style="background:var(--teal)"></i><i style="background:var(--violet)"></i>
     </div>
 
     <h2 class="sec">Four laws of the mill</h2>
@@ -289,6 +357,56 @@
         </div>
       </li>
     </ul>
+
+    <h2 class="sec">One goal, five stations, three human gates</h2>
+    <figure class="fig">
+      <div class="pipe-art">
+        <img src="assets/pipeline.jpg" width="1600" height="900" loading="lazy" decoding="async"
+          alt="Tiny alien millwrights run a bright invention left to right: they untangle a request, align it into a brief, ride four isolated worktree lanes, merge in order, scan at a review gate, and stop at an open pull request." />
+        <svg class="pipe-labels" viewBox="0 0 1600 900" aria-hidden="true" font-family="'Azeret Mono',ui-monospace,Menlo,monospace">
+          <g fill="none" stroke="rgba(28,31,42,.18)" stroke-width="1">
+            <path d="M155 718 v28"/><path d="M430 718 v28"/><path d="M790 718 v28"/><path d="M1165 718 v28"/><path d="M1448 718 v28"/>
+          </g>
+          <g letter-spacing=".18em" font-size="12">
+            <text x="155" y="774" text-anchor="middle" fill="#7A4310">00</text>
+            <text x="430" y="774" text-anchor="middle" fill="#E8893A">01</text>
+            <text x="790" y="774" text-anchor="middle" fill="#3A7A14">02</text>
+            <text x="1165" y="774" text-anchor="middle" fill="#1A8A82">03</text>
+            <text x="1448" y="774" text-anchor="middle" fill="#3D5FCC">04</text>
+          </g>
+          <g fill="#1C1F2A" font-size="20" font-weight="600" letter-spacing=".02em">
+            <text x="155" y="804" text-anchor="middle">A raw goal</text>
+            <text x="430" y="804" text-anchor="middle">Launch Pad</text>
+            <text x="790" y="804" text-anchor="middle">Supervisor</text>
+            <text x="1165" y="804" text-anchor="middle">Review &amp; heal</text>
+            <text x="1448" y="804" text-anchor="middle">An open PR</text>
+          </g>
+          <g fill="#5C574C" font-size="13" letter-spacing=".03em">
+            <text x="155" y="828" text-anchor="middle">One sentence. Messy is fine.</text>
+            <text x="430" y="828" text-anchor="middle">Feasibility → a reviewed brief.</text>
+            <text x="790" y="828" text-anchor="middle">Four worktrees. Ordered merge.</text>
+            <text x="1165" y="828" text-anchor="middle">Findings get flicked upstream.</text>
+            <text x="1448" y="828" text-anchor="middle">Healed is still open.</text>
+          </g>
+          <g fill="#A67C12">
+            <path d="M404 848 l9 9 -9 9 -9 -9 z"/>
+            <text x="422" y="862" font-size="11" letter-spacing=".14em">HUMAN GATE · approve the brief</text>
+            <path d="M1090 848 l9 9 -9 9 -9 -9 z"/>
+            <text x="1108" y="862" font-size="11" letter-spacing=".14em">HUMAN GATE · answer the rubric</text>
+            <path d="M1378 848 l9 9 -9 9 -9 -9 z"/>
+            <text x="1396" y="862" font-size="11" letter-spacing=".14em">HUMAN GATE · you merge</text>
+          </g>
+        </svg>
+      </div>
+      <ol class="pipe-legend">
+        <li><b>00</b><div><strong>A raw goal</strong><span>One sentence. Messy is fine.</span></div></li>
+        <li><b>01</b><div><strong>Launch Pad</strong><span>Feasibility → a reviewed brief.</span><span class="g">Human gate · approve the brief</span></div></li>
+        <li><b>02</b><div><strong>Supervisor</strong><span>Four worktrees. Ordered merge.</span></div></li>
+        <li><b>03</b><div><strong>Review &amp; heal</strong><span>Findings get flicked upstream.</span><span class="g">Human gate · answer the rubric</span></div></li>
+        <li><b>04</b><div><strong>An open PR</strong><span>Healed is still open.</span><span class="g">Human gate · you merge</span></div></li>
+      </ol>
+      <figcaption>Read left to right. The <b>gold markers are the three places the mill stops and waits for a person</b> — approving the brief, answering the rubric, and merging.</figcaption>
+    </figure>
 
     <h2 class="sec" id="guide">Guide — first hour on the mill</h2>
     <div class="guide">
@@ -396,6 +514,154 @@
       </article>
     </div>
 
+    <h2 class="sec" id="teams">Run it across a team</h2>
+    <figure class="hero-frame band">
+      <img src="assets/mill-row.jpg" width="2000" height="500" loading="lazy" decoding="async"
+        alt="Four brass-and-glass mills in a sunlit loft, each run by tiny millwrights, all driven by one overhead shaft." />
+      <figcaption class="hero-caption">Four machines · one drive shaft · one committed policy</figcaption>
+    </figure>
+    <p class="lede" style="max-width:50ch;margin-bottom:2rem">One person can hold a mill in their head. Four cannot. So the settings that matter are <em>committed</em>, the dangerous ones are <em>off</em>, and the ones that cost money are <em>a flag you passed on purpose</em>.</p>
+
+    <figure class="fig">
+      <img src="assets/control-plane.svg" width="1200" height="448" loading="lazy" decoding="async"
+        alt="Three planes of authority. Human authority — CLAUDE.md, approving the brief, the merge, every promotion — always wins. Committed policy — supervisor config, house rules, branch protection, base branch — binds every run and travels with the repo. Advisory signals — System Twin, lessons, red-team, project memory — can only propose upward through a human gate and never gate a merge." />
+      <figcaption>The rule that makes this safe to hand to a team: <b>advisory can propose, only a human can promote</b>, and only committed policy binds an unattended run.</figcaption>
+    </figure>
+
+    <div class="blk">
+      <h3>Write your policy down</h3>
+      <p class="note">Flags live in one person’s shell history. <code>.supervisor/config.json</code> is committed, reviewed, and applies to every run in the repo, including the unattended ones. Toggle the knobs to build yours.</p>
+      <div class="policy">
+        <div class="knobs" id="knobs">
+          <button class="knob" type="button" data-scope="cfg" data-key="auto_review" data-value="true" data-default="true" data-active="true" aria-pressed="true">
+            <span><b>auto_review</b><em>Drain bot review on the PR after a finished run. On by default; turning it off means no review pass runs at all.</em></span>
+            <i>true</i>
+          </button>
+          <button class="knob" type="button" data-scope="cfg" data-key="auto_until_mergeable" data-value="true" data-default="true" data-active="true" aria-pressed="true">
+            <span><b>auto_until_mergeable</b><em>Keep draining until the PR reads ready, instead of a single diff-only pass. Ready still means open.</em></span>
+            <i>true</i>
+          </button>
+          <button class="knob" type="button" data-scope="cfg" data-key="red_team_high_risk" data-value="false" data-default="false" data-active="false" aria-pressed="false">
+            <span><b>red_team_high_risk</b><em>Add an adversarial lens on high-risk diffs: auth, payments, migrations, workflows, agent prompts. Advisory: it never blocks the PR.</em></span>
+            <i>false</i>
+          </button>
+          <button class="knob" type="button" data-scope="cfg" data-key="multi_voter_heal" data-value="false" data-default="false" data-active="false" aria-pressed="false">
+            <span><b>multi_voter_heal</b><em>A second independent reviewer votes on which blocking findings actually get fixed. Costs more. Worth it on a shared trunk.</em></span>
+            <i>false</i>
+          </button>
+          <button class="knob" type="button" data-scope="run" data-key="cost" data-value="default" data-default="default" data-cycle="default,cheap" data-active="false" aria-pressed="false">
+            <span><b>--cheap</b><em>Cost profile for the whole chain. Use it on chores and long queues; leave it off on the diff you actually care about.</em></span>
+            <i>default</i>
+          </button>
+          <button class="knob" type="button" data-scope="run" data-key="workers" data-value="2" data-default="2" data-cycle="2,4,1,sequential" data-active="false" aria-pressed="false">
+            <span><b>--max-workers</b><em>Parallel worktrees. More is not faster once subtasks overlap on the same files; they queue behind each other anyway.</em></span>
+            <i>2</i>
+          </button>
+          <button class="knob" type="button" data-scope="run" data-key="base" data-value="main" data-default="main" data-cycle="main,development,trunk" data-active="false" aria-pressed="false">
+            <span><b>--base-branch</b><em>Your team’s real trunk. Get this wrong and the PR opens against a branch nobody merges.</em></span>
+            <i>main</i>
+          </button>
+        </div>
+        <div class="policy-out">
+          <p class="tag" style="margin-top:0">Commit this · .supervisor/config.json</p>
+          <pre id="policy-json">{}</pre>
+          <p class="tag">Pass this · per run</p>
+          <pre id="policy-cmd">/autonomous "…"</pre>
+          <button class="btn btn-ghost" type="button" id="policy-copy">Copy config</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <h3>The one place a merge can happen</h3>
+      <p class="note">Every other surface — <code>/supervisor</code>, <code>/review-pr</code>, the heal loop — terminates with the PR still open. Auto-merge exists in exactly one place, is off unless you pass <code>--auto-merge</code>, and needs all five of these to hold. Anything it cannot read counts as a failure.</p>
+      <figure class="fig" style="margin-bottom:0">
+        <img src="assets/merge-gate.svg" width="1200" height="430" loading="lazy" decoding="async"
+          alt="The five-condition trusted auto-merge gate: the review drain returned READY and not under the severity floor; the head SHA is unchanged and the base is still main; review decision is not blocking and no human thread is unresolved; the branch has enforceable protection; required checks are green and the rubric is satisfied. Any false or unreadable condition parks the PR and notifies instead of merging." />
+        <figcaption>Condition four is the one teams forget: <b>a branch with no enforceable protection will not auto-merge</b> unless you explicitly say you trust it.</figcaption>
+      </figure>
+    </div>
+
+    <div class="blk">
+      <h3>What leaves the building</h3>
+      <p class="note">The usual first question from anyone who has to sign off on this. The mill reads your repo, your history, and your logs from where they already are. Three things can go outward, and all three are off until someone turns them on.</p>
+      <figure class="fig" style="margin-bottom:0">
+        <img src="assets/data-boundary.svg" width="1200" height="448" loading="lazy" decoding="async"
+          alt="Boundary diagram. Staying local: session logs and supervisor state, project memory and System Twin, the insights dashboard, the Obsidian vault, and the Langfuse and OTel observability stack running in Docker on your machine. Crossing by default: branches, commits and pull requests to your own git remote, and prompts to Claude exactly as any Claude Code session sends them. Opt-in only: GitHub-issue telemetry, gate webhooks to a URL you set, and version-controlling memory stores behind a consent step." />
+        <figcaption>The observability module points Claude Code’s own OpenTelemetry at <b>a collector running on your machine</b>. The plugin emits no spans of its own.</figcaption>
+      </figure>
+    </div>
+
+    <div class="blk">
+      <h3>A rollout that survives contact</h3>
+      <p class="note">Do not hand a team <code>/automate --auto-merge</code> in week one. Earn each rung.</p>
+      <div class="road">
+        <article class="mile">
+          <span class="when">Week 1 · one person</span>
+          <div class="rail"><i class="dot" style="background:var(--copper)"></i></div>
+          <div class="body">
+            <p class="st" style="color:var(--copper)">Prove it on your own branch</p>
+            <h3>One goal, watched end to end</h3>
+            <p>Run <code>/setup</code>, then one <code>/autonomous</code> on real but unglamorous work. Sit through every gate. You are calibrating how good the brief has to be, not measuring throughput.</p>
+          </div>
+        </article>
+        <article class="mile">
+          <span class="when">Week 2 · the repo</span>
+          <div class="rail"><i class="dot" style="background:var(--gold)"></i></div>
+          <div class="body">
+            <p class="st" style="color:var(--gold)">Commit the policy</p>
+            <h3>Rules and config, in the repo</h3>
+            <p>Seed <code>/rules</code> so a worker reads your conventions while writing, not after review catches them. Commit <code>.supervisor/config.json</code>. Set the real <code>--base-branch</code>. Now a second person gets your setup by cloning.</p>
+          </div>
+        </article>
+        <article class="mile">
+          <span class="when">Month 2 · the team</span>
+          <div class="rail"><i class="dot" style="background:var(--teal)"></i></div>
+          <div class="body">
+            <p class="st" style="color:var(--teal)">Make the trunk defensible</p>
+            <h3>Protection, review, and a scoreboard</h3>
+            <p>Turn on branch protection with a required check. Turn on <code>red_team_high_risk</code> if you touch auth, money, or migrations. Run <code>/insights</code> weekly and <code>/pr-postmortem</code> on the PRs that took four review rounds.</p>
+          </div>
+        </article>
+        <article class="mile">
+          <span class="when">Only then</span>
+          <div class="rail"><i class="dot" style="background:var(--madder)"></i></div>
+          <div class="body">
+            <p class="st" style="color:var(--madder)">And only where it is boring</p>
+            <h3>Queues, and maybe a trusted merge</h3>
+            <p><code>/automate</code> on a backlog, parked at the gate for a human. Add <code>--auto-merge</code> only on a path where a wrong merge is cheap to revert: dependency bumps, copy changes, generated files. Never on the surface you would not let a new hire merge alone.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="blk">
+      <h3>Managing it once it is running</h3>
+      <p class="note">A mill nobody inspects turns into a mill nobody trusts. These four are the operating loop.</p>
+      <div class="plays" style="margin-bottom:0">
+        <article style="--c:var(--indigo)">
+          <p class="why">Weekly · is it getting better</p>
+          <h3>/insights</h3>
+          <p>Local scoreboard: heal rate, review rounds, where sessions burn time. Rendered from your own logs, on your own machine. If the trend is flat, the brief is usually the problem, not the model.</p>
+        </article>
+        <article style="--c:var(--madder)">
+          <p class="why">When a PR churns</p>
+          <h3>/pr-postmortem</h3>
+          <p>Sorts every review round into a root cause and attributes it to a stage. Four rounds of the same nit means a missing house rule, not a bad reviewer.</p>
+        </article>
+        <article style="--c:var(--violet)">
+          <p class="why">When someone new arrives</p>
+          <h3>/handoff</h3>
+          <p>Decision, why, what was tried and rejected, current state, provenance, each with its own freshness. Two minutes to inherit context that would otherwise live in one person’s head.</p>
+        </article>
+        <article style="--c:var(--chartreuse)">
+          <p class="why">Monthly · keep what worked</p>
+          <h3>/dreaming + /rules</h3>
+          <p>Distil sessions into proposed lessons and harvested conventions, delivered as a pull request your team reviews like any other. Accept item by item. Nothing writes itself in.</p>
+        </article>
+      </div>
+    </div>
+
     <h2 class="sec" id="roadmap">Roadmap — trust is earned, not scheduled</h2>
     <div class="road">
       <article class="mile">
@@ -441,6 +707,8 @@
           <p class="st" style="color:var(--violet)">Director model</p>
           <h3>Point at the repo. Own this.</h3>
           <p>You set intent and approve outcomes. Diff-review becomes optional because the mill already proved the behavior. Everyone else rents a coder who starts cold every morning.</p>
+          <img class="shot" src="assets/north-star.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="Tiny millwrights sitting with a finished glowing orb on a workbench, the mill behind them standing empty." />
         </div>
       </article>
     </div>
@@ -479,7 +747,7 @@ claude plugin install loomwright@atelier</pre>
 
     <footer>
       Loomwright is a plan-first mill by Vikash Ruhil · MIT
-      <span class="fine">14 agents · 21 commands · 41 skills · 22 hooks · v15.14.0. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
+      <span class="fine">14 agents · 21 commands · 41 skills · 24 hooks · v15.37.0. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
     </footer>
   </div>
   <script>
@@ -618,6 +886,60 @@ claude plugin install loomwright@atelier</pre>
       });
     });
     showInstall("cli");
+
+    // ---- policy builder ----
+    const knobs = [...document.querySelectorAll("#knobs .knob")];
+    const policyJson = document.getElementById("policy-json");
+    const policyCmd = document.getElementById("policy-cmd");
+    const policyCopy = document.getElementById("policy-copy");
+
+    function renderPolicy() {
+      const cfg = {};
+      knobs.filter((k) => k.dataset.scope === "cfg")
+        .forEach((k) => { cfg[k.dataset.key] = k.dataset.value === "true"; });
+      policyJson.textContent = JSON.stringify(cfg, null, 2);
+
+      const val = (key) => knobs.find((k) => k.dataset.key === key).dataset.value;
+      const flags = [];
+      if (val("cost") === "cheap") flags.push("--cheap");
+      const w = val("workers");
+      if (w === "sequential") flags.push("--sequential");
+      else if (w !== "2") flags.push("--max-workers " + w);
+      const b = val("base");
+      if (b !== "main") flags.push("--base-branch " + b);
+      policyCmd.textContent = '/autonomous "the next thing your users can feel"'
+        + (flags.length ? " \\\n  " + flags.join(" ") : "");
+
+      knobs.forEach((k) => {
+        const on = k.dataset.value !== k.dataset.default;
+        k.dataset.active = String(k.dataset.scope === "cfg" ? k.dataset.value === "true" : on);
+        k.setAttribute("aria-pressed", String(k.dataset.active === "true"));
+        k.querySelector("i").textContent = k.dataset.value;
+      });
+    }
+
+    knobs.forEach((k) => {
+      k.addEventListener("click", () => {
+        if (k.dataset.cycle) {
+          const opts = k.dataset.cycle.split(",");
+          k.dataset.value = opts[(opts.indexOf(k.dataset.value) + 1) % opts.length];
+        } else {
+          k.dataset.value = k.dataset.value === "true" ? "false" : "true";
+        }
+        renderPolicy();
+      });
+    });
+    renderPolicy();
+
+    policyCopy.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(policyJson.textContent);
+        policyCopy.textContent = "Copied";
+        setTimeout(() => { policyCopy.textContent = "Copy config"; }, 1600);
+      } catch {
+        policyCopy.textContent = "Copy failed";
+      }
+    });
 
     copyBtn.addEventListener("click", async () => {
       const text = installCmd.textContent;

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 448" width="1200" height="448" role="img" aria-labelledby="cpT cpD" font-family="'Azeret Mono',ui-monospace,Menlo,monospace">
+  <title id="cpT">Three planes of authority: human, committed policy, advisory</title>
+  <desc id="cpD">Human authority sits on top — CLAUDE.md, approving the brief, and merging. Committed policy binds every run: supervisor config, house rules, branch protection, base branch. Advisory signals sit at the bottom — System Twin, lessons, red-team, memory. Advisory can only propose upward through a human gate; it never gates a merge and never promotes itself.</desc>
+  <style>
+    .hd{font-size:12px;letter-spacing:.20em;fill:#6B6154}
+    .plane{font-size:14px;font-weight:600;letter-spacing:.12em}
+    .role{font-size:10.5px;letter-spacing:.14em;fill:#6B6154}
+    .chip{fill:#F3E6D4;stroke:rgba(44,36,24,.12)}
+    .ct{font-size:11.5px;fill:#2C2418}
+    .cs{font-size:10.5px;fill:#6B6154}
+    .arrow{font-size:10.5px;letter-spacing:.12em}
+  </style>
+  <rect id="bg" x="0" y="0" width="1200" height="448" fill="#F6EFE4"/>
+
+  <text class="hd" x="32" y="32">WHO IS ALLOWED TO DECIDE WHAT</text>
+  <line x1="32" y1="46" x2="1168" y2="46" stroke="rgba(44,36,24,.12)"/>
+
+  <!-- plane 1 -->
+  <rect x="32" y="66" width="1136" height="104" fill="#FFF8EE" stroke="rgba(232,137,58,.35)"/>
+  <rect x="32" y="66" width="5" height="104" fill="#E8893A"/>
+  <text class="plane" x="56" y="96" fill="#E8893A">HUMAN AUTHORITY</text>
+  <text class="role" x="56" y="116">ALWAYS WINS</text>
+  <g>
+    <rect class="chip" x="330" y="82" width="196" height="72"/>
+    <text class="ct" x="348" y="108">CLAUDE.md</text><text class="cs" x="348" y="128">The standing authority. No</text><text class="cs" x="348" y="143">agent edits it unasked.</text>
+    <rect class="chip" x="542" y="82" width="196" height="72"/>
+    <text class="ct" x="560" y="108">The brief</text><text class="cs" x="560" y="128">You approve or refine it</text><text class="cs" x="560" y="143">before any file moves.</text>
+    <rect class="chip" x="754" y="82" width="196" height="72"/>
+    <text class="ct" x="772" y="108">The merge</text><text class="cs" x="772" y="128">A healed PR is still an</text><text class="cs" x="772" y="143">open PR until you say so.</text>
+    <rect class="chip" x="966" y="82" width="186" height="72"/>
+    <text class="ct" x="984" y="108">Every promotion</text><text class="cs" x="984" y="128">Lessons and rules land</text><text class="cs" x="984" y="143">one item at a time.</text>
+  </g>
+
+  <!-- binds down -->
+  <path d="M120 170 V 200" stroke="rgba(232,137,58,.6)" stroke-width="1.5" fill="none"/>
+  <path d="M120 208 l -5 -10 h10 z" fill="rgba(232,137,58,.8)"/>
+  <text class="arrow" x="138" y="196" fill="#E8893A">BINDS ↓ every run, unattended or not</text>
+
+  <!-- plane 2 -->
+  <rect x="32" y="208" width="1136" height="104" fill="#FFF8EE" stroke="rgba(107,140,255,.35)"/>
+  <rect x="32" y="208" width="5" height="104" fill="#6B8CFF"/>
+  <text class="plane" x="56" y="238" fill="#6B8CFF">COMMITTED POLICY</text>
+  <text class="role" x="56" y="258">TRAVELS WITH THE REPO</text>
+  <g>
+    <rect class="chip" x="330" y="224" width="196" height="72"/>
+    <text class="ct" x="348" y="250">.supervisor/config.json</text><text class="cs" x="348" y="270">Review drain, red-team,</text><text class="cs" x="348" y="285">workers, cost profile.</text>
+    <rect class="chip" x="542" y="224" width="196" height="72"/>
+    <text class="ct" x="560" y="250">.agent/rules/</text><text class="cs" x="560" y="270">House rules an implementer</text><text class="cs" x="560" y="285">reads while doing the work.</text>
+    <rect class="chip" x="754" y="224" width="196" height="72"/>
+    <text class="ct" x="772" y="250">Branch protection</text><text class="cs" x="772" y="270">GitHub's own gate. The mill</text><text class="cs" x="772" y="285">reads it, never edits it.</text>
+    <rect class="chip" x="966" y="224" width="186" height="72"/>
+    <text class="ct" x="984" y="250">--base-branch</text><text class="cs" x="984" y="270">Your team's trunk, not an</text><text class="cs" x="984" y="285">assumed main.</text>
+  </g>
+
+  <!-- proposes up -->
+  <path d="M120 350 V 320" stroke="rgba(154,123,255,.6)" stroke-width="1.5" fill="none"/>
+  <path d="M120 312 l -5 10 h10 z" fill="rgba(154,123,255,.85)"/>
+  <text class="arrow" x="138" y="338" fill="#9A7BFF">PROPOSES ↑ only through a human gate</text>
+
+  <!-- plane 3 -->
+  <rect x="32" y="350" width="1136" height="80" fill="#FFF8EE" stroke="rgba(44,36,24,.12)"/>
+  <rect x="32" y="350" width="5" height="80" fill="#9A7BFF"/>
+  <text class="plane" x="56" y="380" fill="#9A7BFF">ADVISORY</text>
+  <text class="role" x="56" y="400">NEVER GATES</text>
+  <g>
+    <rect class="chip" x="330" y="366" width="196" height="48"/><text class="ct" x="348" y="388">System Twin</text><text class="cs" x="348" y="404">Contracts, blast radius.</text>
+    <rect class="chip" x="542" y="366" width="196" height="48"/><text class="ct" x="560" y="388">/dreaming lessons</text><text class="cs" x="560" y="404">Proposed, never written.</text>
+    <rect class="chip" x="754" y="366" width="196" height="48"/><text class="ct" x="772" y="388">Red-team lens</text><text class="cs" x="772" y="404">Opt-in, non-blocking.</text>
+    <rect class="chip" x="966" y="366" width="186" height="48"/><text class="ct" x="984" y="388">Project memory</text><text class="cs" x="984" y="404">Cannot promote itself.</text>
+  </g>
+</svg>

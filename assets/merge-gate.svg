@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" width="1200" height="430" role="img" aria-labelledby="mgT mgD" font-family="'Azeret Mono',ui-monospace,Menlo,monospace">
+  <title id="mgT">The five-condition trusted auto-merge gate</title>
+  <desc id="mgD">Auto-merge is opt-in and off by default. When enabled, all five conditions must hold: the owned review drain returned READY and did not terminate under the severity floor; the head SHA is unchanged and the base is main; review decision is not blocking and no human review thread is unresolved; the branch has enforceable protection; required checks are green and the rubric is satisfied. Any false or unreadable condition parks the pull request and notifies instead of merging.</desc>
+  <style>
+    .hd{font-size:12px;letter-spacing:.20em;fill:#6B6154}
+    .n{font-size:10.5px;letter-spacing:.18em;fill:#E8893A}
+    .t{font-size:13.5px;font-weight:600;fill:#2C2418}
+    .s{font-size:11px;fill:#6B6154}
+    .box{fill:#FFF8EE;stroke:rgba(44,36,24,.12)}
+    .m{font-size:11px;letter-spacing:.06em}
+  </style>
+  <rect id="bg" x="0" y="0" width="1200" height="430" fill="#F6EFE4"/>
+
+  <text class="hd" x="32" y="34">TRUSTED AUTO-MERGE GATE · /automate --auto-merge · OPT-IN, DEFAULT OFF</text>
+  <text class="hd" x="1168" y="34" text-anchor="end" fill="#E24B6A">FAILS CLOSED</text>
+  <line x1="32" y1="48" x2="1168" y2="48" stroke="rgba(44,36,24,.12)"/>
+
+  <g>
+    <rect class="box" x="32" y="86" width="210" height="150" rx="2"/><rect x="32" y="86" width="210" height="3" fill="#E8893A"/>
+    <text class="n" x="50" y="112">CONDITION 01</text>
+    <text class="t" x="50" y="138">Drain says READY</text>
+    <text class="s" x="50" y="164">The owned review-and-heal</text>
+    <text class="s" x="50" y="182">loop converged — not</text>
+    <text class="s" x="50" y="200">ESCALATED, and not under</text>
+    <text class="s" x="50" y="218">the severity floor.</text>
+  </g>
+  <g>
+    <rect class="box" x="264" y="86" width="210" height="150" rx="2"/><rect x="264" y="86" width="210" height="3" fill="#E8C547"/>
+    <text class="n" x="282" y="112" fill="#E8C547">CONDITION 02</text>
+    <text class="t" x="282" y="138">Nothing moved</text>
+    <text class="s" x="282" y="164">Head SHA still equals the</text>
+    <text class="s" x="282" y="182">reviewed SHA, and the base</text>
+    <text class="s" x="282" y="200">is still main. A new commit</text>
+    <text class="s" x="282" y="218">invalidates approval.</text>
+  </g>
+  <g>
+    <rect class="box" x="496" y="86" width="210" height="150" rx="2"/><rect x="496" y="86" width="210" height="3" fill="#C8E05C"/>
+    <text class="n" x="514" y="112" fill="#C8E05C">CONDITION 03</text>
+    <text class="t" x="514" y="138">Humans are done</text>
+    <text class="s" x="514" y="164">Review decision is not</text>
+    <text class="s" x="514" y="182">blocking, and no unresolved</text>
+    <text class="s" x="514" y="200">human-authored thread. Bot</text>
+    <text class="s" x="514" y="218">threads do not block.</text>
+  </g>
+  <g>
+    <rect class="box" x="728" y="86" width="210" height="150" rx="2"/><rect x="728" y="86" width="210" height="3" fill="#3DCFC0"/>
+    <text class="n" x="746" y="112" fill="#3DCFC0">CONDITION 04</text>
+    <text class="t" x="746" y="138">The branch is real</text>
+    <text class="s" x="746" y="164">Enforceable protection: an</text>
+    <text class="s" x="746" y="182">approving review or a</text>
+    <text class="s" x="746" y="200">required check. Toothless</text>
+    <text class="s" x="746" y="218">protection counts as none.</text>
+  </g>
+  <g>
+    <rect class="box" x="960" y="86" width="210" height="150" rx="2"/><rect x="960" y="86" width="210" height="3" fill="#6B8CFF"/>
+    <text class="n" x="978" y="112" fill="#6B8CFF">CONDITION 05</text>
+    <text class="t" x="978" y="138">Proof is green</text>
+    <text class="s" x="978" y="164">Required checks all green,</text>
+    <text class="s" x="978" y="182">and the Phase 4.5 rubric</text>
+    <text class="s" x="978" y="200">satisfied. An item with no</text>
+    <text class="s" x="978" y="218">rubric counts as N/A.</text>
+  </g>
+
+  <!-- evaluation bus -->
+  <g stroke="rgba(240,230,212,.28)" stroke-width="1.5" fill="none">
+    <path d="M137 236 V 280"/><path d="M369 236 V 280"/><path d="M601 236 V 280"/><path d="M833 236 V 280"/><path d="M1065 236 V 280"/>
+  </g>
+  <rect x="112" y="280" width="978" height="26" fill="#F3E6D4" stroke="rgba(240,230,212,.14)"/>
+  <text class="m" x="601" y="297" text-anchor="middle" fill="#6B6154" letter-spacing=".16em">GATE-EVAL · ONE IMPLEMENTATION · UNREADABLE IS TREATED AS FALSE</text>
+
+  <path d="M137 306 V 340" stroke="#E24B6A" stroke-width="1.5" fill="none"/>
+  <path d="M137 348 l -5 -10 h10 z" fill="#E24B6A"/>
+  <path d="M1065 306 V 340" stroke="#C8E05C" stroke-width="1.5" fill="none"/>
+  <path d="M1065 348 l -5 -10 h10 z" fill="#C8E05C"/>
+
+  <rect x="32" y="348" width="530" height="68" fill="#FFF8EE" stroke="rgba(226,75,106,.4)"/>
+  <rect x="32" y="348" width="5" height="68" fill="#E24B6A"/>
+  <text class="t" x="54" y="378" fill="#E24B6A">ANY ONE FAILS → PARK + notify</text>
+  <text class="s" x="54" y="402">The PR stays open, the queue stops, and it waits for you.</text>
+
+  <rect x="640" y="348" width="529" height="68" fill="#FFF8EE" stroke="rgba(200,224,92,.4)"/>
+  <rect x="640" y="348" width="5" height="68" fill="#C8E05C"/>
+  <text class="t" x="662" y="378" fill="#C8E05C">ALL FIVE HOLD → gh pr merge --squash</text>
+  <text class="s" x="662" y="402">The only place in the whole mill allowed to run a merge command.</text>
+</svg>

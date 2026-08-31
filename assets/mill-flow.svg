@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" width="1200" height="470" role="img" aria-labelledby="mfT mfD" font-family="'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace">
+  <title id="mfT">How Loomwright weaves a goal into a reviewed pull request</title>
+  <desc id="mfD">A raw goal enters Launch Pad, which writes a brief you approve. Supervisor runs workers in parallel git worktrees and merges them sequentially. A review-and-heal pass fixes findings. The result is an open pull request that a human merges.</desc>
+  <style>
+    .lbl{font-size:11px;letter-spacing:.16em;fill:#9B9588}
+    .ttl{font-size:17px;font-weight:600;letter-spacing:.02em;fill:#EDE8DC}
+    .sub{font-size:11.5px;fill:#9B9588;letter-spacing:.02em}
+    .num{font-size:10.5px;letter-spacing:.18em}
+    .gate{font-size:10.5px;letter-spacing:.14em;fill:#E8C547}
+    .box{fill:#15171F;stroke:rgba(240,230,212,.10)}
+    .thread{fill:none;stroke-width:2.4;stroke-linecap:round}
+    .flow{stroke-dasharray:10 14;animation:march 2.6s linear infinite}
+    @keyframes march{to{stroke-dashoffset:-48}}
+    @media (prefers-reduced-motion:reduce){.flow{animation:none}}
+  </style>
+  <rect id="bg" x="0" y="0" width="1200" height="470" fill="#0C0D11"/>
+
+  <!-- warp threads: separate at left, woven at right -->
+  <g class="thread">
+    <path class="flow" d="M32 40 C 240 40, 300 34, 520 46 S 900 62, 1168 62" stroke="#E24B6A"/>
+    <path class="flow" d="M32 54 C 240 54, 300 50, 520 58 S 900 70, 1168 70" stroke="#E8893A" style="animation-delay:-.3s"/>
+    <path class="flow" d="M32 68 C 240 68, 300 66, 520 70 S 900 78, 1168 78" stroke="#E8C547" style="animation-delay:-.6s"/>
+    <path class="flow" d="M32 82 C 240 82, 300 82, 520 82 S 900 86, 1168 86" stroke="#C8E05C" style="animation-delay:-.9s"/>
+    <path class="flow" d="M32 96 C 240 96, 300 98, 520 94 S 900 94, 1168 94" stroke="#3DCFC0" style="animation-delay:-1.2s"/>
+    <path class="flow" d="M32 110 C 240 110, 300 114, 520 106 S 900 102, 1168 102" stroke="#6B8CFF" style="animation-delay:-1.5s"/>
+    <path class="flow" d="M32 124 C 240 124, 300 130, 520 118 S 900 110, 1168 110" stroke="#9A7BFF" style="animation-delay:-1.8s"/>
+  </g>
+  <!-- weft: the review pass crossing the warp -->
+  <g stroke="rgba(240,230,212,.22)" stroke-width="1">
+    <path d="M1010 34 V116"/><path d="M1050 34 V116"/><path d="M1090 34 V116"/><path d="M1130 34 V116"/>
+  </g>
+  <text class="lbl" x="32" y="150">WARP · WORKERS</text>
+  <text class="lbl" x="1168" y="150" text-anchor="end">WEFT · REVIEW → CLOTH · THE PR</text>
+
+  <!-- connectors -->
+  <g stroke="rgba(240,230,212,.18)" stroke-width="1.5" fill="none">
+    <path d="M241 250 H 268"/><path d="M473 250 H 500"/><path d="M705 250 H 732"/><path d="M937 250 H 964"/>
+  </g>
+  <g fill="rgba(240,230,212,.35)">
+    <path d="M268 250 l -9 -5 v10 z"/><path d="M500 250 l -9 -5 v10 z"/><path d="M732 250 l -9 -5 v10 z"/><path d="M964 250 l -9 -5 v10 z"/>
+  </g>
+
+  <!-- stations -->
+  <g>
+    <rect class="box" x="32" y="186" width="209" height="128" rx="2"/>
+    <rect x="32" y="186" width="4" height="128" fill="#9B9588"/>
+    <text class="num" x="52" y="212" fill="#9B9588">00</text>
+    <text class="ttl" x="52" y="242">A raw goal</text>
+    <text class="sub" x="52" y="266">One sentence. Messy is fine.</text>
+    <text class="sub" x="52" y="284">No files have moved yet.</text>
+  </g>
+  <g>
+    <rect class="box" x="264" y="186" width="209" height="128" rx="2"/>
+    <rect x="264" y="186" width="4" height="128" fill="#E8893A"/>
+    <text class="num" x="284" y="212" fill="#E8893A">01</text>
+    <text class="ttl" x="284" y="242">Launch Pad</text>
+    <text class="sub" x="284" y="266">Feasibility, file impact,</text>
+    <text class="sub" x="284" y="284">subtasks → a reviewed brief.</text>
+  </g>
+  <g>
+    <rect class="box" x="496" y="186" width="209" height="128" rx="2"/>
+    <rect x="496" y="186" width="4" height="128" fill="#C8E05C"/>
+    <text class="num" x="516" y="212" fill="#C8E05C">02</text>
+    <text class="ttl" x="516" y="242">Supervisor</text>
+    <text class="sub" x="516" y="266">Workers in git worktrees.</text>
+    <text class="sub" x="516" y="284">Parallel work, ordered merge.</text>
+  </g>
+  <g>
+    <rect class="box" x="728" y="186" width="209" height="128" rx="2"/>
+    <rect x="728" y="186" width="4" height="128" fill="#3DCFC0"/>
+    <text class="num" x="748" y="212" fill="#3DCFC0">03</text>
+    <text class="ttl" x="748" y="242">Review &amp; heal</text>
+    <text class="sub" x="748" y="266">Code review, rubric, QA,</text>
+    <text class="sub" x="748" y="284">optional red-team. Bounded.</text>
+  </g>
+  <g>
+    <rect class="box" x="960" y="186" width="209" height="128" rx="2"/>
+    <rect x="960" y="186" width="4" height="128" fill="#6B8CFF"/>
+    <text class="num" x="980" y="212" fill="#6B8CFF">04</text>
+    <text class="ttl" x="980" y="242">An open PR</text>
+    <text class="sub" x="980" y="266">Healed is still open.</text>
+    <text class="sub" x="980" y="284">You read it. You merge it.</text>
+  </g>
+
+  <!-- worktree fan under station 02 -->
+  <g stroke="rgba(200,224,92,.5)" stroke-width="1.5" fill="none">
+    <path d="M600 314 V 334 H 520 V 350"/><path d="M600 314 V 350"/><path d="M600 314 V 334 H 680 V 350"/>
+  </g>
+  <g fill="#15171F" stroke="rgba(200,224,92,.45)">
+    <rect x="492" y="350" width="56" height="22" rx="2"/><rect x="572" y="350" width="56" height="22" rx="2"/><rect x="652" y="350" width="56" height="22" rx="2"/>
+  </g>
+  <g font-size="10" fill="#C8E05C" letter-spacing=".08em" text-anchor="middle">
+    <text x="520" y="365">wt/1</text><text x="600" y="365">wt/2</text><text x="680" y="365">wt/3</text>
+  </g>
+
+  <!-- human gates, each under its own station -->
+  <g>
+    <path d="M290 328 l 11 11 -11 11 -11 -11 z" fill="#E8C547"/>
+    <text class="gate" x="312" y="336">HUMAN GATE</text>
+    <text class="gate" x="312" y="354" fill="#EDE8DC">approve the brief</text>
+  </g>
+  <g>
+    <path d="M754 328 l 11 11 -11 11 -11 -11 z" fill="#E8C547"/>
+    <text class="gate" x="776" y="336">HUMAN GATE</text>
+    <text class="gate" x="776" y="354" fill="#EDE8DC">answer the rubric</text>
+  </g>
+  <g>
+    <path d="M986 328 l 11 11 -11 11 -11 -11 z" fill="#E8C547"/>
+    <text class="gate" x="1008" y="336">HUMAN GATE</text>
+    <text class="gate" x="1008" y="354" fill="#EDE8DC">you merge</text>
+  </g>
+
+  <rect x="32" y="410" width="1137" height="34" fill="#1C1F2A" stroke="rgba(240,230,212,.08)"/>
+  <text x="48" y="432" font-size="11.5" letter-spacing=".10em" fill="#9B9588">NEVER SILENTLY MERGES — the only sanctioned auto-merge is the 5-condition trusted gate in <tspan fill="#E8893A">/automate --auto-merge</tspan>, opt-in and off by default.</text>
+</svg>
