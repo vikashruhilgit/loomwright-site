@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Loomwright — the mill that weaves a goal into a reviewed PR</title>
-  <meta name="description" content="Plan-first multi-agent development for Cursor and Claude Code. Launch Pad writes the brief. Supervisor weaves it in parallel worktrees. You still merge." />
+  <title>Loomwright — a messy goal in, a reviewed PR out</title>
+  <meta name="description" content="Queue it. It runs. It parks and informs you when a human is required. Trusted auto-merge only on an opt-in path. Plan first. Parallel worktrees. Never silent." />
   <meta name="theme-color" content="#F4EBDC" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
-  <meta property="og:title" content="Loomwright — plan first, never silently merge" />
-  <meta property="og:description" content="14 agents, 21 commands, 41 skills, 24 hooks. A mill for shipping work you can actually review." />
+  <meta property="og:title" content="Loomwright — you only show up when it needs you" />
+  <meta property="og:description" content="Four problems coding agents keep repeating. One mill that plans, isolates work, parks at the gate, and learns only what you accept." />
   <meta property="og:image" content="https://vikashruhilgit.github.io/loomwright-site/assets/og.jpg" />
   <meta property="og:url" content="https://vikashruhilgit.github.io/loomwright-site/" />
   <meta property="og:type" content="website" />
@@ -17,1051 +17,134 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Big+Shoulders+Display:wght@700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet" />
-  <style>
-    :root{
-      --ink:#F4EBDC; --ink-2:#FFF8EE; --ink-3:#EFE4D2;
-      --hair:rgba(44,36,24,.14);
-      --text:#2C2418; --dim:#6B6154;
-      --copper:#E8893A; --copper-deep:#8A4E12;
-      --indigo:#4F6FE8; --madder:#D63D5C; --chartreuse:#C8E05C;
-      --teal:#1A9A8E; --violet:#7A5AE0; --gold:#C9A227; --linen:#FFF8EE;
-      --display:"Big Shoulders Display",Impact,sans-serif;
-      --body:"Literata",Georgia,serif;
-      --mono:"Azeret Mono",ui-monospace,Menlo,monospace;
-      --brass:#C47A2C;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
-    body{
-      margin:0; background:var(--ink); color:var(--text);
-      font-family:var(--body); font-size:1.0625rem; line-height:1.7;
-      overflow-x:hidden;
-    }
-    .skip{
-      position:absolute; left:-999px; top:0; background:var(--copper); color:#2C2418;
-      padding:.6rem 1rem; font-family:var(--mono); z-index:20;
-    }
-    .skip:focus{left:1rem; top:1rem}
-    .wrap{position:relative; z-index:1; max-width:68rem; margin:0 auto; padding:0 1.5rem 4.5rem}
-
-    nav{
-      position:sticky; top:0; z-index:8;
-      background:rgba(244,235,220,.92); backdrop-filter:blur(12px);
-      border-bottom:1px solid var(--hair);
-    }
-    .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:1rem;
-      max-width:68rem; margin:0 auto; padding:1rem 1.5rem}
-    .brand{display:flex; align-items:center; gap:.7rem; text-decoration:none; color:var(--text)}
-    .brand img{width:2.1rem; height:2.1rem; border-radius:.4rem; object-fit:cover; border:1px solid var(--hair);
-      box-shadow:0 4px 10px rgba(44,36,24,.12)}
-    .brand span{font-family:var(--display); font-size:1.15rem; letter-spacing:.04em; text-transform:uppercase; font-weight:800}
-    .nav-links{display:flex; gap:1.3rem; align-items:center; flex-wrap:wrap}
-    .nav-links a{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
-      color:var(--dim); text-decoration:none}
-    .nav-links a:hover,.nav-links a:focus-visible{color:var(--copper-deep)}
-    .nav-links a:focus-visible{outline:2px solid var(--indigo); outline-offset:4px}
-
-    h1{font-family:var(--display); font-weight:800; font-size:clamp(3.2rem,10vw,7rem); line-height:.82;
-      letter-spacing:-.03em; margin:0 0 1.1rem; text-transform:uppercase}
-    h1 .two{color:var(--indigo)}
-    .lede{font-size:clamp(1.12rem,2.4vw,1.4rem); line-height:1.55; color:var(--dim);
-      max-width:38ch; margin:0 0 1.8rem}
-    .lede em{font-style:italic; color:var(--text)}
-
-    .invention{position:relative; z-index:1; margin:0 0 2.4rem}
-    .invention-shot{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover;
-      object-position:center 42%; background:#F7F1E4}
-    .plaque{
-      position:relative; z-index:2; margin:-5.5rem auto 0; max-width:68rem; padding:0 1.5rem;
-    }
-    .plaque-card{
-      background:var(--ink-2); border:1px solid var(--hair); padding:1.6rem 1.8rem 1.5rem;
-      box-shadow:0 18px 40px rgba(44,36,24,.12);
-    }
-    .stamps{display:flex; flex-wrap:wrap; gap:.55rem; margin:1.2rem 0 0; padding:0; list-style:none}
-    .stamps li{font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase;
-      border:1px solid var(--hair); padding:.45rem .7rem; background:var(--ink); color:var(--dim)}
-    .stamps b{color:var(--text); font-weight:600}
-
-    .hero-frame{position:relative; border:1px solid var(--hair); background:var(--ink-2); min-width:0;
-      box-shadow:0 14px 32px rgba(44,36,24,.1)}
-    .hero-frame img{display:block; width:100%; height:auto; aspect-ratio:16/10; object-fit:cover}
-    .hero-caption{position:absolute; left:0; right:0; bottom:0; padding:.7rem 1rem;
-      font-family:var(--mono); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
-      color:var(--text); background:linear-gradient(transparent, rgba(244,235,220,.94))}
-
-    .actions{display:flex; flex-wrap:wrap; gap:1rem}
-    .btn{font-family:var(--mono); font-size:.82rem; letter-spacing:.08em; text-transform:uppercase;
-      text-decoration:none; padding:1rem 1.7rem; display:inline-block; border:0; cursor:pointer;
-      transition:transform .16s cubic-bezier(.16,1,.3,1), box-shadow .16s}
-    .btn-solid{background:var(--copper); color:#2C2418; box-shadow:0 8px 18px rgba(138,78,18,.28)}
-    .btn-solid:hover,.btn-solid:focus-visible{transform:translateY(-2px); box-shadow:0 12px 24px rgba(138,78,18,.34)}
-    .btn-ghost{color:var(--text); background:var(--ink-2); border:1px solid var(--hair);
-      box-shadow:0 6px 14px rgba(44,36,24,.08)}
-    .btn-ghost:hover,.btn-ghost:focus-visible{transform:translateY(-2px); border-color:var(--indigo)}
-    .btn:focus-visible{outline:2px solid var(--indigo); outline-offset:4px}
-
-    .lanes{display:flex; gap:.4rem; margin:0 0 clamp(2.4rem,6vw,3.8rem); align-items:center}
-    .lanes button{
-      height:1.5rem; flex:1; border:0; padding:0; cursor:pointer; appearance:none;
-      background:transparent; display:flex; align-items:center; border-radius:0
-    }
-    .lanes button > span{
-      display:block; height:.7rem; width:100%; border-radius:99px; background:var(--c);
-      position:relative; overflow:hidden;
-      transition:transform .28s cubic-bezier(.16,1,.3,1), box-shadow .28s cubic-bezier(.16,1,.3,1)
-    }
-    .lanes button > span::after{
-      content:""; position:absolute; inset:0 auto 0 -50%; width:46%;
-      background:linear-gradient(90deg, transparent, rgba(255,255,255,.78), transparent);
-      animation:flow-x 1.8s cubic-bezier(.16,1,.3,1) 2 both
-    }
-    .laws .no::after{
-      content:""; position:absolute; inset:-45% 0 auto; height:42%; width:100%;
-      background:linear-gradient(180deg, transparent, rgba(255,255,255,.82), transparent);
-      animation:flow-y 2.2s cubic-bezier(.16,1,.3,1) 2 both
-    }
-    .lanes button:nth-child(2) > span::after, .laws li:nth-child(2) .no::after{animation-delay:-.55s}
-    .lanes button:nth-child(3) > span::after, .laws li:nth-child(3) .no::after{animation-delay:-1.1s}
-    .lanes button:nth-child(4) > span::after, .laws li:nth-child(4) .no::after{animation-delay:-1.65s}
-    .lanes button:hover > span, .lanes button:focus-visible > span, .lanes button[aria-pressed="true"] > span,
-    .wrap:has(.laws li:nth-child(1) .law:is(:hover,:focus-visible,[aria-pressed="true"])) .lanes button:nth-child(1) > span,
-    .wrap:has(.laws li:nth-child(2) .law:is(:hover,:focus-visible,[aria-pressed="true"])) .lanes button:nth-child(2) > span,
-    .wrap:has(.laws li:nth-child(3) .law:is(:hover,:focus-visible,[aria-pressed="true"])) .lanes button:nth-child(3) > span,
-    .wrap:has(.laws li:nth-child(4) .law:is(:hover,:focus-visible,[aria-pressed="true"])) .lanes button:nth-child(4) > span{
-      transform:scaleY(1.55); box-shadow:0 6px 16px color-mix(in srgb, var(--c) 45%, transparent)
-    }
-    .lanes button:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
-    .lanes.off-stage button > span::after, .laws.off-stage .no::after,
-    .road.off-stage .dot::after{animation-play-state:paused}
-    @keyframes flow-x{to{transform:translateX(220px)}}
-    @keyframes flow-y{to{transform:translateY(90px)}}
-
-    h2.sec{font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
-      color:var(--dim); margin:2.6rem 0 1.1rem; font-weight:500}
-    h2.sec[id], .invention[id]{scroll-margin-top:5.5rem}
-    h3{font-family:var(--display); font-weight:800; letter-spacing:-.02em; text-transform:uppercase; margin:0 0 .4rem}
-
-    .laws{display:grid; gap:1rem; margin:0 0 clamp(3.2rem,8vw,5.5rem); padding:0; list-style:none}
-    .laws li{margin:0}
-    .laws li:nth-child(even){margin-left:clamp(0rem,4vw,3rem)}
-    .law{
-      width:100%; display:grid; grid-template-columns:auto 1fr; gap:1.1rem; text-align:left;
-      background:var(--ink-2); border:1px solid var(--hair); padding:1.35rem 1.5rem 1.35rem 1.2rem;
-      box-shadow:0 10px 24px rgba(44,36,24,.06); cursor:pointer; color:inherit; font:inherit;
-      appearance:none; border-radius:0;
-      transition:translate .28s cubic-bezier(.16,1,.3,1), box-shadow .28s cubic-bezier(.16,1,.3,1),
-        border-color .28s cubic-bezier(.16,1,.3,1), opacity .28s cubic-bezier(.16,1,.3,1);
-      animation:law-in .7s cubic-bezier(.16,1,.3,1) backwards
-    }
-    .laws li:nth-child(2) .law{animation-delay:.08s}
-    .laws li:nth-child(3) .law{animation-delay:.16s}
-    .laws li:nth-child(4) .law{animation-delay:.24s}
-    .law:hover, .law:focus-visible, .law[aria-pressed="true"],
-    .lanes:has(button:nth-child(1):is(:hover,:focus-visible,[aria-pressed="true"])) ~ .laws li:nth-child(1) .law,
-    .lanes:has(button:nth-child(2):is(:hover,:focus-visible,[aria-pressed="true"])) ~ .laws li:nth-child(2) .law,
-    .lanes:has(button:nth-child(3):is(:hover,:focus-visible,[aria-pressed="true"])) ~ .laws li:nth-child(3) .law,
-    .lanes:has(button:nth-child(4):is(:hover,:focus-visible,[aria-pressed="true"])) ~ .laws li:nth-child(4) .law{
-      translate:0 -4px;
-      border-color:color-mix(in srgb, var(--c) 50%, var(--hair));
-      box-shadow:0 18px 36px color-mix(in srgb, var(--c) 22%, rgba(44,36,24,.08))
-    }
-    .law:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
-    .laws:has(.law[aria-pressed="true"]) .law:not([aria-pressed="true"]){opacity:.62}
-    .laws .no{width:1.15rem; height:4.2rem; border-radius:99px; background:var(--c);
-      position:relative; overflow:hidden; display:block}
-    .lanes button:hover > span::after, .lanes button:focus-visible > span::after,
-    .lanes button[aria-pressed="true"] > span::after{animation:flow-x 1.6s cubic-bezier(.16,1,.3,1) infinite}
-    .law:hover .no::after, .law:focus-visible .no::after, .law[aria-pressed="true"] .no::after{
-      animation:flow-y 1.4s cubic-bezier(.16,1,.3,1) infinite
-    }
-    .law-title{display:block; font-family:var(--display); font-weight:800; letter-spacing:-.02em;
-      text-transform:uppercase; margin:0 0 .4rem}
-    .law-copy{margin:0; color:var(--dim); display:block}
-    @keyframes law-in{
-      from{opacity:0; filter:blur(5px); translate:0 14px}
-      to{opacity:1; filter:none; translate:0 0}
-    }
-
-    .guide{display:grid; gap:0; margin:0 0 clamp(3.2rem,8vw,5.5rem)}
-    .step{display:grid; grid-template-columns:4.2rem 1fr; gap:1.2rem; padding:1.5rem 0;
-      border-top:1px solid var(--hair)}
-    .step:last-child{border-bottom:1px solid var(--hair)}
-    .step > div{min-width:0}
-    .step .n{font-family:var(--mono); color:var(--c, var(--copper)); font-size:.8rem; letter-spacing:.12em; padding-top:.35rem}
-    .step p{margin:.25rem 0 0; color:var(--dim); max-width:62ch}
-    .cmd{
-      font-family:var(--mono); font-size:.82rem; background:var(--ink-3); color:var(--text);
-      border:1px solid var(--hair); padding:.7rem 1rem; margin:.9rem 0 0; overflow-x:auto;
-      white-space:pre; line-height:1.55;
-    }
-    .cmd .c{color:var(--copper-deep)}
-    .cmd .g{color:var(--teal)}
-    .cmd .d{color:var(--dim)}
-
-    .picks{display:flex; flex-wrap:wrap; gap:.55rem; margin:0 0 1.2rem}
-    .picks button{
-      font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
-      background:var(--ink-2); color:var(--text); border:1px solid var(--hair); padding:.65rem .9rem; cursor:pointer;
-    }
-    .picks button[aria-pressed="true"], .picks button:hover, .picks button:focus-visible{
-      border-color:var(--copper); color:var(--copper-deep); background:#FFF3E4
-    }
-    .picks button:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
-    .play-card,.install-card{background:var(--ink-2); border:1px solid var(--hair);
-      border-top:3px solid var(--copper); padding:1.4rem 1.5rem; min-height:9.5rem}
-    .play-card{margin:0 0 clamp(3.2rem,8vw,5.5rem)}
-    .play-card .tag,.install-card .tag{font-family:var(--mono); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--copper-deep); margin:0 0 .5rem}
-    .play-card p,.install-card p{margin:.35rem 0 0; color:var(--dim)}
-    .install-card h3{margin:.1rem 0 0}
-
-    .plays{display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin:0 0 clamp(3.2rem,8vw,5.5rem)}
-    .plays article{background:var(--ink-2); border:1px solid var(--hair); padding:1.35rem 1.4rem;
-      border-top:3px solid var(--c); box-shadow:0 8px 20px rgba(44,36,24,.05)}
-    .plays .why{font-family:var(--mono); font-size:.65rem; letter-spacing:.14em; text-transform:uppercase;
-      margin:0 0 .55rem}
-    .plays .why, .mile .st{color:color-mix(in srgb, var(--c) 62%, #2C2418)}
-    .plays p{margin:.3rem 0 0; color:var(--dim); font-size:.98rem}
-
-    .road{display:grid; gap:0; margin:0 0 1.2rem}
-    .mile{display:grid; grid-template-columns:7.5rem 1.1rem 1fr; gap:1.1rem; align-items:start}
-    .mile .when{font-family:var(--mono); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
-      color:var(--dim); padding-top:.35rem}
-    .rail{position:relative; min-height:100%}
-    .rail::before{content:""; position:absolute; left:50%; top:.55rem; bottom:-.2rem; width:2px;
-      background:var(--hair); transform:translateX(-50%)}
-    .mile:last-child .rail::before{bottom:auto; height:0}
-    .dot{display:block; width:1.1rem; height:1.1rem; border-radius:50%; background:var(--c); position:relative; z-index:1;
-      box-shadow:0 0 0 4px var(--ink);
-      transition:scale .28s cubic-bezier(.16,1,.3,1)}
-    .mile:hover .dot, .mile:focus-within .dot{scale:1.18}
-    .dot::after{
-      content:""; position:absolute; inset:-5px; border-radius:50%;
-      border:1.5px solid var(--c); opacity:0; animation:ripple 1.8s cubic-bezier(.16,1,.3,1) 3 both
-    }
-    .mile:hover .dot::after, .mile:focus-within .dot::after{
-      animation:ripple 1.6s cubic-bezier(.16,1,.3,1) infinite
-    }
-    .mile:nth-child(2) .dot::after{animation-delay:.4s}
-    .mile:nth-child(3) .dot::after{animation-delay:.8s}
-    .mile:nth-child(4) .dot::after{animation-delay:1.2s}
-    .mile:nth-child(5) .dot::after{animation-delay:1.6s}
-    @keyframes ripple{
-      0%{transform:scale(.7); opacity:.55}
-      100%{transform:scale(1.55); opacity:0}
-    }
-    .mile .body{background:var(--ink-2); border:1px solid var(--hair); padding:1.2rem 1.35rem; margin-bottom:1rem}
-    .mile .st{font-family:var(--mono); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c); margin:0 0 .35rem}
-    .mile p{margin:.25rem 0 0; color:var(--dim)}
-
-    .install-box{background:var(--ink-2); border:1px solid var(--hair); padding:1.6rem 1.7rem;
-      display:grid; gap:1rem; margin:0 0 2.4rem}
-    .copy-row{display:flex; flex-wrap:wrap; gap:.7rem; align-items:stretch}
-    .copy-row pre{flex:1; font-family:var(--mono); font-size:.88rem; background:var(--ink-3);
-      padding:.9rem 1rem; border:1px solid var(--hair); min-width:12rem; margin:0; white-space:pre-wrap; line-height:1.7; color:var(--text)}
-    .note{color:var(--dim); margin:0; font-size:.98rem}
-    .note a,.step a,.install-card a{
-      color:var(--copper-deep); text-decoration:none; border-bottom:1px solid rgba(196,122,44,.45)
-    }
-    .note a:hover,.note a:focus-visible,.step a:hover,.step a:focus-visible,
-    .install-card a:hover,.install-card a:focus-visible{border-color:var(--copper-deep)}
-    .copy-row .btn{align-self:stretch}
-    .apps{display:flex; flex-wrap:wrap; gap:.55rem; margin:0}
-    .how{margin:.85rem 0 0; padding:0; list-style:none; counter-reset:how}
-    .how li{counter-increment:how; position:relative; padding-left:2.4rem; margin:0 0 .7rem}
-    .how li:last-child{margin-bottom:0}
-    .how li::before{content:counter(how, decimal-leading-zero); font-family:var(--mono);
-      font-size:.72rem; letter-spacing:.08em; color:var(--copper-deep);
-      position:absolute; left:0; top:.28rem}
-    .warn{font-family:var(--mono); font-size:.72rem; letter-spacing:.04em; color:var(--copper-deep);
-      border:1px solid rgba(196,122,44,.4); background:#FFF3E4; padding:.7rem .9rem; margin:0}
-
-    .band{margin:0 0 clamp(2rem,5vw,2.8rem)}
-    .band img{aspect-ratio:4/1}
-    .mile .shot{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover;
-      margin:1.15rem 0 0; border:1px solid var(--hair)}
-
-    .fig{margin:0 0 clamp(2.4rem,6vw,3.6rem); border:1px solid var(--hair); background:var(--ink-2)}
-    .fig img{display:block; width:100%; height:auto}
-    .fig figcaption{font-family:var(--mono); font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
-      color:var(--dim); padding:.85rem 1rem; border-top:1px solid var(--hair); line-height:1.8;
-      background:var(--ink)}
-    .fig figcaption b{color:var(--text); font-weight:600}
-
-    .pipe-art{position:relative; background:#F7F1E4}
-    .pipe-art img{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; object-position:center 38%}
-    .pipe-labels{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
-    .pipe-legend{display:none; margin:0; padding:.9rem 1rem 1.05rem; list-style:none; gap:.7rem;
-      border-top:1px solid var(--hair); background:var(--ink)}
-    .pipe-legend li{display:grid; grid-template-columns:2.1rem 1fr; gap:.55rem; color:var(--dim); font-size:.92rem}
-    .pipe-legend b{font-family:var(--mono); font-size:.68rem; letter-spacing:.14em; color:var(--copper-deep); padding-top:.28rem}
-    .pipe-legend strong{display:block; font-family:var(--display); font-size:.92rem; letter-spacing:-.02em;
-      text-transform:uppercase; color:var(--text); font-weight:800}
-    .pipe-legend span{display:block; font-size:.88rem; color:var(--dim)}
-    .pipe-legend .g{font-family:var(--mono); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
-      color:var(--gold)}
-
-    .blk{margin:0 0 clamp(2.4rem,6vw,3.6rem)}
-    .blk > p.note{margin:.45rem 0 1.2rem; max-width:68ch}
-
-    .policy{display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr); gap:1rem; align-items:start}
-    .policy > *{min-width:0}
-    .knobs{display:grid; gap:.5rem}
-    .knob{display:flex; align-items:center; justify-content:space-between; gap:1rem; width:100%; text-align:left;
-      background:var(--ink-2); border:1px solid var(--hair);
-      padding:.75rem .9rem; cursor:pointer; color:var(--text); font:inherit;
-      box-shadow:inset 0 2px 0 transparent; transition:box-shadow .16s ease, border-color .16s}
-    .knob:hover{border-color:var(--copper)}
-    .knob:focus-visible{outline:2px solid var(--indigo); outline-offset:3px}
-    .knob b{display:block; font-family:var(--mono); font-size:.75rem; letter-spacing:.03em; color:var(--text)}
-    .knob em{display:block; font-style:normal; font-size:.88rem; line-height:1.45; color:var(--dim); margin-top:.22rem}
-    .knob i{font-family:var(--mono); font-style:normal; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase;
-      color:var(--dim); border:1px solid var(--hair); padding:.35rem .6rem; white-space:nowrap}
-    .knob[data-active="true"]{box-shadow:inset 0 3px 0 var(--teal)}
-    .knob[data-active="true"] i{color:var(--teal); border-color:rgba(26,154,142,.4)}
-    .policy-out{background:var(--ink-2); border:1px solid var(--hair); padding:1.25rem 1.35rem;
-      display:grid; gap:.35rem; position:sticky; top:5.2rem}
-    .policy-out .tag{font-family:var(--mono); font-size:.64rem; letter-spacing:.16em; text-transform:uppercase;
-      color:var(--copper-deep); margin:.4rem 0 0}
-    .policy-out pre{font-family:var(--mono); font-size:.79rem; background:var(--ink-3); color:var(--text);
-      border:1px solid var(--hair); padding:.85rem 1rem; margin:.15rem 0 0; overflow-x:auto;
-      white-space:pre; line-height:1.65}
-    .policy-out .btn{justify-self:start; margin-top:.9rem}
-
-    footer{border-top:1px solid var(--hair); padding-top:2rem; font-family:var(--mono);
-      font-size:.76rem; line-height:2; color:var(--dim); letter-spacing:.02em}
-    footer a{color:var(--text); text-decoration:none; border-bottom:1px solid rgba(44,36,24,.2)}
-    footer a:hover,footer a:focus-visible{color:var(--copper-deep); border-color:var(--copper-deep)}
-    .fine{display:block; margin-top:1rem; color:#8A7F70; letter-spacing:0; font-size:.72rem; line-height:1.6}
-
-    @media (max-width:860px){
-      .plays,.stamps{grid-template-columns:1fr}
-      .pipe-labels{display:none}
-      .pipe-legend{display:grid}
-      .band img{aspect-ratio:2/1; object-position:center}
-      .policy{grid-template-columns:1fr}
-      .policy-out{position:static}
-      .nav-links a:not(.btn){display:none}
-      .laws li:nth-child(even){margin-left:0}
-      .plaque{margin-top:-2.4rem}
-      .mile{grid-template-columns:1.1rem 1fr; gap:.9rem}
-      .mile .when{grid-column:2; padding-top:0}
-      .rail{grid-row:span 2}
-    }
-    @media (prefers-reduced-motion:reduce){
-      html{scroll-behavior:auto}
-      *{animation:none!important; transition:none!important}
-      .laws:has(.law[aria-pressed="true"]) .law:not([aria-pressed="true"]){opacity:1}
-    }
-  </style>
+  <link rel="stylesheet" href="site.css" />
 </head>
 <body>
   <!--
-  THESIS: The mill is a sunlit invention you walk up to, not a dark dashboard. First viewport is the machine doing the job.
-  OWN-WORLD: Plaster and brass, glass energy lanes in copper/chartreuse/teal/violet, tiny visored millwrights. Big Shoulders Display, Literata, Azeret Mono.
-  STORY: Messy goal in, reviewed PR waiting, a human still merges. Visitor installs.
-  FIRST VIEWPORT: Full-bleed approved pipeline. Brass plaque over the cream gutter with the name, offer, and Install.
-  FORM: Inventor's loft / patent-come-to-life. User-pinned still. Seed: user-pinned-bright-millwrights.
+  THESIS: Four pains of chat-coding, each a full-bleed mill still. Not a feature list, not a dashboard.
+  OWN-WORLD: Sunlit plaster loft, brass, glass lanes copper/chartreuse/teal/violet, visored millwrights. Big Shoulders Display, Literata, Azeret Mono.
+  STORY: Messy goal in, reviewed PR out. Queue it; it runs; it taps you only when a human is required.
+  FIRST VIEWPORT: Approved pipeline still, plaque with the offer and Install.
+  FORM: Inventor's loft / patent-come-to-life. Seed: user-pinned-bright-millwrights.
   FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
   -->
-  <a class="skip" href="#guide">Skip to the guide</a>
+  <a class="skip" href="#problems">Skip to the problems</a>
   <nav>
     <div class="nav-inner">
-      <a class="brand" href="#top">
+      <a class="brand" href="index.html">
         <img src="assets/icon-180.png" alt="" width="34" height="34" decoding="async" />
         <span>Loomwright</span>
       </a>
       <div class="nav-links">
-        <a href="#guide">Guide</a>
-        <a href="#plays">Plays</a>
-        <a href="#teams">Teams</a>
-        <a href="#roadmap">Roadmap</a>
-        <a class="btn btn-solid" href="#install" style="padding:.7rem 1.1rem; font-size:.72rem">Install</a>
+        <a href="index.html" aria-current="page">Problems</a>
+        <a href="mill.html">The mill</a>
+        <a href="guide.html">Guide</a>
+        <a class="btn btn-solid" href="install.html" style="padding:.7rem 1.1rem; font-size:.72rem">Install</a>
       </div>
     </div>
   </nav>
 
   <header class="invention" id="top">
     <img class="invention-shot" src="assets/pipeline.jpg" width="1600" height="900" decoding="async"
-      alt="Tiny alien millwrights run a bright brass-and-glass mill: they untangle a request, align it into a brief, ride four worktree lanes, merge in order, scan at a review gate, and stop at an open pull request." />
+      alt="Tiny visored millwrights run a bright brass-and-glass mill: they untangle a request, align it into a brief, ride four worktree lanes, merge in order, scan at a review gate, and stop at an open pull request." />
     <div class="plaque">
       <div class="plaque-card">
         <h1>Loom<span class="two">wright</span></h1>
-        <p class="lede">An out-of-the-box mill that weaves a raw goal into a <em>reviewed pull request</em>. Plan first. Work in parallel. A human still merges.</p>
+        <p class="lede">A messy goal in. A reviewed pull request out. <em>You only show up when it actually needs you.</em></p>
         <div class="actions">
-          <a class="btn btn-solid" href="#install">Install the mill</a>
-          <a class="btn btn-ghost" href="#guide">How to run it</a>
+          <a class="btn btn-solid" href="install.html">Install the mill</a>
+          <a class="btn btn-ghost" href="mill.html">See the mill</a>
         </div>
         <ul class="stamps" aria-label="What ships today">
           <li><b>14</b> agent roles</li>
           <li><b>21</b> slash commands</li>
           <li><b>41</b> skills</li>
           <li><b>24</b> quality hooks</li>
-          <li>v15.37 · never silently merges</li>
+          <li>v15.41 · never silently merges</li>
         </ul>
       </div>
     </div>
   </header>
 
-  <div class="wrap">
-    <div class="lanes" role="group" aria-label="Four mill lanes, one for each law">
-      <button type="button" style="--c:var(--madder)" aria-pressed="false" aria-label="Highlight law 1: Plan before a file moves"><span></span></button>
-      <button type="button" style="--c:var(--chartreuse)" aria-pressed="false" aria-label="Highlight law 2: Parallel work, sequential merge"><span></span></button>
-      <button type="button" style="--c:var(--indigo)" aria-pressed="false" aria-label="Highlight law 3: Review, then you merge"><span></span></button>
-      <button type="button" style="--c:var(--copper)" aria-pressed="false" aria-label="Highlight law 4: It gets smarter. It never self-trusts"><span></span></button>
-    </div>
+  <div class="wrap" id="problems">
+    <nav class="lanes story" aria-label="Four problems the mill solves">
+      <a class="lane" href="#problem-plan" style="--c:var(--madder)"><span></span>Plan first</a>
+      <a class="lane" href="#problem-lanes" style="--c:var(--chartreuse)"><span></span>Isolate work</a>
+      <a class="lane" href="#problem-gate" style="--c:var(--indigo)"><span></span>Park and ping</a>
+      <a class="lane" href="#problem-learn" style="--c:var(--copper)"><span></span>Learn on accept</a>
+    </nav>
 
-    <h2 class="sec">Four laws of the mill</h2>
-    <ul class="laws">
-      <li>
-        <button type="button" class="law" style="--c:var(--madder)" aria-pressed="false" aria-labelledby="law-1-title" aria-describedby="law-1-copy">
-          <span class="no" aria-hidden="true"></span>
-          <span>
-            <span class="law-title" id="law-1-title">Plan before a file moves</span>
-            <span class="law-copy" id="law-1-copy">Launch Pad turns a messy goal into a reviewed brief — feasibility, file impact, subtasks — before Supervisor touches the repo.</span>
-          </span>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="law" style="--c:var(--chartreuse)" aria-pressed="false" aria-labelledby="law-2-title" aria-describedby="law-2-copy">
-          <span class="no" aria-hidden="true"></span>
-          <span>
-            <span class="law-title" id="law-2-title">Parallel work, sequential merge</span>
-            <span class="law-copy" id="law-2-copy">Workers run in git worktrees. Overlapping files wait. Merges are ordered. You do not get a pile of conflicting branches.</span>
-          </span>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="law" style="--c:var(--indigo)" aria-pressed="false" aria-labelledby="law-3-title" aria-describedby="law-3-copy">
-          <span class="no" aria-hidden="true"></span>
-          <span>
-            <span class="law-title" id="law-3-title">Review, then you merge</span>
-            <span class="law-copy" id="law-3-copy">Code review, optional red-team, dual-agent QA, and a self-heal pass on the PR. Loomwright never auto-merges unless you opt in on a trusted path.</span>
-          </span>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="law" style="--c:var(--copper)" aria-pressed="false" aria-labelledby="law-4-title" aria-describedby="law-4-copy">
-          <span class="no" aria-hidden="true"></span>
-          <span>
-            <span class="law-title" id="law-4-title">It gets smarter. It never self-trusts</span>
-            <span class="law-copy" id="law-4-copy">Lessons, house rules, and the System Twin are advisory and human-gated. CLAUDE.md stays the authority. Memory cannot promote itself.</span>
-          </span>
-        </button>
-      </li>
-    </ul>
+    <div class="chapters">
+      <article class="chapter" id="problem-plan" style="--c:var(--madder)">
+        <figure>
+          <img src="assets/problem-plan.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="Tiny millwrights untangle a nest of glowing blue fibers on the left, then pin the same work onto a blank brass clipboard on the right, while file drawers behind them stay closed." />
+          <span class="gleam" aria-hidden="true"></span>
+        </figure>
+        <div class="copy">
+          <h2>The agent starts coding before anyone agrees what done is</h2>
+          <p>Chat-coding jumps into files. You get a pile of edits and a shrug. Launch Pad writes a brief (feasibility, file impact, subtasks) before Supervisor touches the repo.</p>
+          <pre class="cmd"><span class="c">/autonomous</span> <span class="g">"the next thing your users can feel"</span></pre>
+        </div>
+      </article>
 
-    <h2 class="sec">One goal, five stations, three human gates</h2>
-    <figure class="fig">
-      <div class="pipe-art">
-        <img src="assets/pipeline.jpg" width="1600" height="900" loading="lazy" decoding="async"
-          alt="Tiny alien millwrights run a bright invention left to right: they untangle a request, align it into a brief, ride four isolated worktree lanes, merge in order, scan at a review gate, and stop at an open pull request." />
-        <svg class="pipe-labels" viewBox="0 0 1600 900" aria-hidden="true" font-family="'Azeret Mono',ui-monospace,Menlo,monospace">
-          <g fill="none" stroke="rgba(28,31,42,.18)" stroke-width="1">
-            <path d="M155 718 v28"/><path d="M430 718 v28"/><path d="M790 718 v28"/><path d="M1165 718 v28"/><path d="M1448 718 v28"/>
-          </g>
-          <g letter-spacing=".18em" font-size="12">
-            <text x="155" y="774" text-anchor="middle" fill="#7A4310">00</text>
-            <text x="430" y="774" text-anchor="middle" fill="#E8893A">01</text>
-            <text x="790" y="774" text-anchor="middle" fill="#3A7A14">02</text>
-            <text x="1165" y="774" text-anchor="middle" fill="#1A8A82">03</text>
-            <text x="1448" y="774" text-anchor="middle" fill="#3D5FCC">04</text>
-          </g>
-          <g fill="#1C1F2A" font-size="20" font-weight="600" letter-spacing=".02em">
-            <text x="155" y="804" text-anchor="middle">A raw goal</text>
-            <text x="430" y="804" text-anchor="middle">Launch Pad</text>
-            <text x="790" y="804" text-anchor="middle">Supervisor</text>
-            <text x="1165" y="804" text-anchor="middle">Review &amp; heal</text>
-            <text x="1448" y="804" text-anchor="middle">An open PR</text>
-          </g>
-          <g fill="#5C574C" font-size="13" letter-spacing=".03em">
-            <text x="155" y="828" text-anchor="middle">One sentence. Messy is fine.</text>
-            <text x="430" y="828" text-anchor="middle">Feasibility → a reviewed brief.</text>
-            <text x="790" y="828" text-anchor="middle">Four worktrees. Ordered merge.</text>
-            <text x="1165" y="828" text-anchor="middle">Findings get flicked upstream.</text>
-            <text x="1448" y="828" text-anchor="middle">Healed is still open.</text>
-          </g>
-          <g fill="#A67C12">
-            <path d="M404 848 l9 9 -9 9 -9 -9 z"/>
-            <text x="422" y="862" font-size="11" letter-spacing=".14em">HUMAN GATE · approve the brief</text>
-            <path d="M1090 848 l9 9 -9 9 -9 -9 z"/>
-            <text x="1108" y="862" font-size="11" letter-spacing=".14em">HUMAN GATE · answer the rubric</text>
-            <path d="M1378 848 l9 9 -9 9 -9 -9 z"/>
-            <text x="1396" y="862" font-size="11" letter-spacing=".14em">HUMAN GATE · you merge</text>
-          </g>
-        </svg>
-      </div>
-      <ol class="pipe-legend">
-        <li><b>00</b><div><strong>A raw goal</strong><span>One sentence. Messy is fine.</span></div></li>
-        <li><b>01</b><div><strong>Launch Pad</strong><span>Feasibility → a reviewed brief.</span><span class="g">Human gate · approve the brief</span></div></li>
-        <li><b>02</b><div><strong>Supervisor</strong><span>Four worktrees. Ordered merge.</span></div></li>
-        <li><b>03</b><div><strong>Review &amp; heal</strong><span>Findings get flicked upstream.</span><span class="g">Human gate · answer the rubric</span></div></li>
-        <li><b>04</b><div><strong>An open PR</strong><span>Healed is still open.</span><span class="g">Human gate · you merge</span></div></li>
-      </ol>
-      <figcaption>Read left to right. The <b>gold markers are the three places the mill stops and waits for a person</b> — approving the brief, answering the rubric, and merging.</figcaption>
-    </figure>
+      <article class="chapter" id="problem-lanes" style="--c:var(--chartreuse)">
+        <figure>
+          <img src="assets/problem-lanes.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="Four isolated glass energy lanes in copper, chartreuse, teal, and violet, each tended by millwrights, merging in order into one golden stream." />
+          <span class="gleam" aria-hidden="true"></span>
+        </figure>
+        <div class="copy">
+          <h2>Two agents, one repo, a merge mess</h2>
+          <p>Parallel chats overwrite each other. Workers run in git worktrees. Overlapping files wait. Merges are ordered. You get one pull request, not five conflicting branches.</p>
+        </div>
+      </article>
 
-    <h2 class="sec" id="guide">Guide — first hour on the mill</h2>
-    <div class="guide">
-      <article class="step" style="--c:var(--copper)">
-        <span class="n">01</span>
-        <div>
-          <h3>Install Loomwright</h3>
-          <p>Use the app you actually type in. <a href="#install">Open the install steps</a>. Do not paste <code>/plugin</code> into zsh — that is a chat command, not a file path.</p>
+      <article class="chapter" id="problem-gate" style="--c:var(--indigo)">
+        <figure>
+          <img src="assets/problem-gate.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="A brass review gate holds a glowing orb. A millwright rings a small bell. An empty stool and hanging helmet show the human has stepped away while the mill still runs." />
+          <span class="gleam" aria-hidden="true"></span>
+        </figure>
+        <div class="copy">
+          <h2>You cannot walk away, and you also cannot trust auto-merge</h2>
+          <p>Queue the work with <code>/automate</code>. Default: it parks a reviewed PR and tells you if a human is required. Desktop banners are on; <code>--notify</code> adds webhooks. Pass <code>--auto-merge</code> and it squash-merges only when the five-condition trusted gate holds. <code>--trust-unprotected</code> is the explicit escape hatch. Anything unreadable parks. It does not silently ship.</p>
+          <pre class="cmd"><span class="c">/automate</span> <span class="g">"the remaining shop tickets"</span> <span class="c">--auto-merge</span></pre>
         </div>
       </article>
-      <article class="step" style="--c:var(--gold)">
-        <span class="n">02</span>
-        <div>
-          <h3>See what is wired</h3>
-          <p><code>/setup</code> is a dashboard, not a wizard that overwrites you. Check observability, notifications, Twin, Beads, then turn on only what you want.</p>
-          <pre class="cmd"><span class="c">/setup</span></pre>
-        </div>
-      </article>
-      <article class="step" style="--c:var(--chartreuse)">
-        <span class="n">03</span>
-        <div>
-          <h3>Pick a lane</h3>
-          <p>One new goal: <code>/autonomous</code>. An existing PR: <code>/review-pr</code>. A pile of stories: <code>/automate</code>. Do not start all three at once.</p>
-          <pre class="cmd"><span class="c">/autonomous</span> <span class="g">"add a daily challenge that resets at midnight UTC"</span></pre>
-        </div>
-      </article>
-      <article class="step" style="--c:var(--teal)">
-        <span class="n">04</span>
-        <div>
-          <h3>Stay for the gates</h3>
-          <p>This is foreground-assisted, not fire-and-forget. Save or refine the brief. Answer rubric gates. Desktop banners fire when the mill needs you.</p>
-        </div>
-      </article>
-      <article class="step" style="--c:var(--indigo)">
-        <span class="n">05</span>
-        <div>
-          <h3>You merge</h3>
-          <p>A healed PR is still an open PR. Read the diff. Merge it. Then run <code>/dreaming</code> after a week so the mill keeps the lessons you actually want.</p>
-          <pre class="cmd"><span class="c">/review-pr</span> <span class="g">https://github.com/you/repo/pull/42</span>
-<span class="d"># bounded review → fix → re-review. Never merges.</span></pre>
+
+      <article class="chapter" id="problem-learn" style="--c:var(--copper)">
+        <figure>
+          <img src="assets/problem-learn.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="Millwrights pin blank paper cards to a brass rail and sort lesson sheets, while a large unused brass stamp and sealing wax wait on the table for a human." />
+          <span class="gleam" aria-hidden="true"></span>
+        </figure>
+        <div class="copy">
+          <h2>The mill forgets your house. Every run starts cold</h2>
+          <p>Write rules once with <code>/rules</code>. <code>/setup</code> and committed <code>.supervisor/config.json</code> make the mill behave the same on a clone. <code>/dreaming</code> proposes lessons; you accept item by item. Harvested rules go out as a pull request. It gets smarter. It never self-trusts.</p>
         </div>
       </article>
     </div>
 
-    <h2 class="sec">Command mill — say what you want</h2>
-    <div class="picks" id="mill-picks" role="tablist" aria-label="Choose a job">
-      <button type="button" aria-pressed="true" data-play="new">Ship a feature</button>
-      <button type="button" aria-pressed="false" data-play="pr">Heal an open PR</button>
-      <button type="button" aria-pressed="false" data-play="queue">Clear a backlog</button>
-      <button type="button" aria-pressed="false" data-play="stories">Write stories first</button>
-      <button type="button" aria-pressed="false" data-play="attack">Red-team before prod</button>
-      <button type="button" aria-pressed="false" data-play="qa">Plan then test</button>
-      <button type="button" aria-pressed="false" data-play="lessons">Keep last week</button>
-      <button type="button" aria-pressed="false" data-play="hand">Catch a teammate up</button>
-    </div>
-    <div class="play-card" id="play-card" aria-live="polite">
-      <p class="tag">Recommended first play</p>
-      <h3>Ship one goal, stacked</h3>
-      <p>Use <code>/autonomous</code> when you have one requirement and you want Launch Pad + Supervisor chained, with stacked PRs if it takes more than one pass.</p>
-      <pre class="cmd"><span class="c">/autonomous</span> <span class="g">"players can retry a daily challenge without losing the streak"</span></pre>
-    </div>
-
-    <h2 class="sec" id="plays">What else the mill is for</h2>
-    <p class="lede" style="max-width:46ch;margin-bottom:1.6rem">Highly recommended once the first PR lands. These are the plays that make Loomwright more than a task runner.</p>
-    <div class="plays">
-      <article style="--c:var(--copper)">
-        <p class="why">Overnight a queue</p>
-        <h3>/automate</h3>
-        <p>Turn a prompt, a folder of stories, or a backlog doc into a queue. Each item runs autonomous → review drain. Auto-merge stays off unless you pass a trusted gate.</p>
-      </article>
-      <article style="--c:var(--madder)">
-        <p class="why">Attack the merge</p>
-        <h3>/red-team-reviewer</h3>
-        <p>Adversarial pass on auth, payments, migrations, hooks, and agent prompts. Advisory. It finds the failure class before production does.</p>
-      </article>
-      <article style="--c:var(--teal)">
-        <p class="why">Test like a team</p>
-        <h3>/qa-strategist → /qa-executor</h3>
-        <p>Risk map first, then Playwright generation with a debate loop. Use this on anything a user can click — not on a one-line typo fix.</p>
-      </article>
-      <article style="--c:var(--gold)">
-        <p class="why">Write the problem</p>
-        <h3>/product-owner</h3>
-        <p>Messy idea in, stories with acceptance criteria out. Add <code>--brainstorm</code> when the team is arguing and you need five expert lenses to fight it out.</p>
-      </article>
-      <article style="--c:var(--indigo)">
-        <p class="why">Compound the craft</p>
-        <h3>/dreaming + /rules</h3>
-        <p>Distill session logs into lessons you accept one by one. Encode house rules so workers read them while doing the work, not only on review.</p>
-      </article>
-      <article style="--c:var(--violet)">
-        <p class="why">Inherit the mill</p>
-        <h3>/handoff + /insights</h3>
-        <p>Two-minute catch-up for a teammate. A local scoreboard of heal rate, Twin growth, and whether last week actually got better.</p>
-      </article>
-      <article style="--c:var(--chartreuse)">
-        <p class="why">See the blast radius</p>
-        <h3>System Twin</h3>
-        <p>Per-subsystem contracts, hash-chained provenance, blast-radius at plan time. Advisory today. The north star is a mill that already knows this repo.</p>
-      </article>
-      <article style="--c:#FF6BC1">
-        <p class="why">Keep the graph</p>
-        <h3>/obsidian</h3>
-        <p>One-way projection of runs, Twin contracts, and lessons into a vault you own. Nothing leaves the machine. The vault never becomes the engine.</p>
-      </article>
-    </div>
-
-    <h2 class="sec" id="teams">Run it across a team</h2>
     <figure class="hero-frame band">
       <img src="assets/mill-row.jpg" width="2000" height="500" loading="lazy" decoding="async"
         alt="Four brass-and-glass mills in a sunlit loft, each run by tiny millwrights, all driven by one overhead shaft." />
       <figcaption class="hero-caption">Four machines · one drive shaft · one committed policy</figcaption>
     </figure>
-    <p class="lede" style="max-width:50ch;margin-bottom:2rem">One person can hold a mill in their head. Four cannot. So the settings that matter are <em>committed</em>, the dangerous ones are <em>off</em>, and the ones that cost money are <em>a flag you passed on purpose</em>.</p>
 
-    <figure class="fig">
-      <img src="assets/control-plane.svg" width="1200" height="448" loading="lazy" decoding="async"
-        alt="Three planes of authority. Human authority — CLAUDE.md, approving the brief, the merge, every promotion — always wins. Committed policy — supervisor config, house rules, branch protection, base branch — binds every run and travels with the repo. Advisory signals — System Twin, lessons, red-team, project memory — can only propose upward through a human gate and never gate a merge." />
-      <figcaption>The rule that makes this safe to hand to a team: <b>advisory can propose, only a human can promote</b>, and only committed policy binds an unattended run.</figcaption>
-    </figure>
-
-    <div class="blk">
-      <h3>Write your policy down</h3>
-      <p class="note">Flags live in one person’s shell history. <code>.supervisor/config.json</code> is committed, reviewed, and applies to every run in the repo, including the unattended ones. Toggle the knobs to build yours.</p>
-      <div class="policy">
-        <div class="knobs" id="knobs">
-          <button class="knob" type="button" data-scope="cfg" data-key="auto_review" data-value="true" data-default="true" data-active="true" aria-pressed="true">
-            <span><b>auto_review</b><em>Drain bot review on the PR after a finished run. On by default; turning it off means no review pass runs at all.</em></span>
-            <i>true</i>
-          </button>
-          <button class="knob" type="button" data-scope="cfg" data-key="auto_until_mergeable" data-value="true" data-default="true" data-active="true" aria-pressed="true">
-            <span><b>auto_until_mergeable</b><em>Keep draining until the PR reads ready, instead of a single diff-only pass. Ready still means open.</em></span>
-            <i>true</i>
-          </button>
-          <button class="knob" type="button" data-scope="cfg" data-key="red_team_high_risk" data-value="false" data-default="false" data-active="false" aria-pressed="false">
-            <span><b>red_team_high_risk</b><em>Add an adversarial lens on high-risk diffs: auth, payments, migrations, workflows, agent prompts. Advisory: it never blocks the PR.</em></span>
-            <i>false</i>
-          </button>
-          <button class="knob" type="button" data-scope="cfg" data-key="multi_voter_heal" data-value="false" data-default="false" data-active="false" aria-pressed="false">
-            <span><b>multi_voter_heal</b><em>A second independent reviewer votes on which blocking findings actually get fixed. Costs more. Worth it on a shared trunk.</em></span>
-            <i>false</i>
-          </button>
-          <button class="knob" type="button" data-scope="run" data-key="cost" data-value="default" data-default="default" data-cycle="default,cheap" data-active="false" aria-pressed="false">
-            <span><b>--cheap</b><em>Cost profile for the whole chain. Use it on chores and long queues; leave it off on the diff you actually care about.</em></span>
-            <i>default</i>
-          </button>
-          <button class="knob" type="button" data-scope="run" data-key="workers" data-value="2" data-default="2" data-cycle="2,4,1,sequential" data-active="false" aria-pressed="false">
-            <span><b>--max-workers</b><em>Parallel worktrees. More is not faster once subtasks overlap on the same files; they queue behind each other anyway.</em></span>
-            <i>2</i>
-          </button>
-          <button class="knob" type="button" data-scope="run" data-key="base" data-value="main" data-default="main" data-cycle="main,development,trunk" data-active="false" aria-pressed="false">
-            <span><b>--base-branch</b><em>Your team’s real trunk. Get this wrong and the PR opens against a branch nobody merges.</em></span>
-            <i>main</i>
-          </button>
-        </div>
-        <div class="policy-out">
-          <p class="tag" style="margin-top:0">Commit this · .supervisor/config.json</p>
-          <pre id="policy-json">{}</pre>
-          <p class="tag">Pass this · per run</p>
-          <pre id="policy-cmd">/autonomous "…"</pre>
-          <button class="btn btn-ghost" type="button" id="policy-copy">Copy config</button>
-        </div>
+    <div class="closer">
+      <p>Throughput without babysitting, and without a silent merge.</p>
+      <div class="actions">
+        <a class="btn btn-solid" href="install.html">Install from GitHub</a>
+        <a class="btn btn-ghost" href="guide.html">First hour on the mill</a>
       </div>
-    </div>
-
-    <div class="blk">
-      <h3>The one place a merge can happen</h3>
-      <p class="note">Every other surface — <code>/supervisor</code>, <code>/review-pr</code>, the heal loop — terminates with the PR still open. Auto-merge exists in exactly one place, is off unless you pass <code>--auto-merge</code>, and needs all five of these to hold. Anything it cannot read counts as a failure.</p>
-      <figure class="fig" style="margin-bottom:0">
-        <img src="assets/merge-gate.svg" width="1200" height="430" loading="lazy" decoding="async"
-          alt="The five-condition trusted auto-merge gate: the review drain returned READY and not under the severity floor; the head SHA is unchanged and the base is still main; review decision is not blocking and no human thread is unresolved; the branch has enforceable protection; required checks are green and the rubric is satisfied. Any false or unreadable condition parks the PR and notifies instead of merging." />
-        <figcaption>Condition four is the one teams forget: <b>a branch with no enforceable protection will not auto-merge</b> unless you explicitly say you trust it.</figcaption>
-      </figure>
-    </div>
-
-    <div class="blk">
-      <h3>What leaves the building</h3>
-      <p class="note">The usual first question from anyone who has to sign off on this. The mill reads your repo, your history, and your logs from where they already are. Three things can go outward, and all three are off until someone turns them on.</p>
-      <figure class="fig" style="margin-bottom:0">
-        <img src="assets/data-boundary.svg" width="1200" height="448" loading="lazy" decoding="async"
-          alt="Boundary diagram. Staying local: session logs and supervisor state, project memory and System Twin, the insights dashboard, the Obsidian vault, and the Langfuse and OTel observability stack running in Docker on your machine. Crossing by default: branches, commits and pull requests to your own git remote, and prompts to Claude exactly as any Claude Code session sends them. Opt-in only: GitHub-issue telemetry, gate webhooks to a URL you set, and version-controlling memory stores behind a consent step." />
-        <figcaption>The observability module points Claude Code’s own OpenTelemetry at <b>a collector running on your machine</b>. The plugin emits no spans of its own.</figcaption>
-      </figure>
-    </div>
-
-    <div class="blk">
-      <h3>A rollout that survives contact</h3>
-      <p class="note">Do not hand a team <code>/automate --auto-merge</code> in week one. Earn each rung.</p>
-      <div class="road">
-        <article class="mile">
-          <span class="when">Week 1 · one person</span>
-          <div class="rail"><i class="dot" style="--c:var(--copper)"></i></div>
-          <div class="body">
-            <p class="st" style="color:var(--copper)">Prove it on your own branch</p>
-            <h3>One goal, watched end to end</h3>
-            <p>Run <code>/setup</code>, then one <code>/autonomous</code> on real but unglamorous work. Sit through every gate. You are calibrating how good the brief has to be, not measuring throughput.</p>
-          </div>
-        </article>
-        <article class="mile">
-          <span class="when">Week 2 · the repo</span>
-          <div class="rail"><i class="dot" style="--c:var(--gold)"></i></div>
-          <div class="body">
-            <p class="st" style="color:var(--gold)">Commit the policy</p>
-            <h3>Rules and config, in the repo</h3>
-            <p>Seed <code>/rules</code> so a worker reads your conventions while writing, not after review catches them. Commit <code>.supervisor/config.json</code>. Set the real <code>--base-branch</code>. Now a second person gets your setup by cloning.</p>
-          </div>
-        </article>
-        <article class="mile">
-          <span class="when">Month 2 · the team</span>
-          <div class="rail"><i class="dot" style="--c:var(--teal)"></i></div>
-          <div class="body">
-            <p class="st" style="color:var(--teal)">Make the trunk defensible</p>
-            <h3>Protection, review, and a scoreboard</h3>
-            <p>Turn on branch protection with a required check. Turn on <code>red_team_high_risk</code> if you touch auth, money, or migrations. Run <code>/insights</code> weekly and <code>/pr-postmortem</code> on the PRs that took four review rounds.</p>
-          </div>
-        </article>
-        <article class="mile">
-          <span class="when">Only then</span>
-          <div class="rail"><i class="dot" style="--c:var(--madder)"></i></div>
-          <div class="body">
-            <p class="st" style="color:var(--madder)">And only where it is boring</p>
-            <h3>Queues, and maybe a trusted merge</h3>
-            <p><code>/automate</code> on a backlog, parked at the gate for a human. Add <code>--auto-merge</code> only on a path where a wrong merge is cheap to revert: dependency bumps, copy changes, generated files. Never on the surface you would not let a new hire merge alone.</p>
-          </div>
-        </article>
-      </div>
-    </div>
-
-    <div class="blk">
-      <h3>Managing it once it is running</h3>
-      <p class="note">A mill nobody inspects turns into a mill nobody trusts. These four are the operating loop.</p>
-      <div class="plays" style="margin-bottom:0">
-        <article style="--c:var(--indigo)">
-          <p class="why">Weekly · is it getting better</p>
-          <h3>/insights</h3>
-          <p>Local scoreboard: heal rate, review rounds, where sessions burn time. Rendered from your own logs, on your own machine. If the trend is flat, the brief is usually the problem, not the model.</p>
-        </article>
-        <article style="--c:var(--madder)">
-          <p class="why">When a PR churns</p>
-          <h3>/pr-postmortem</h3>
-          <p>Sorts every review round into a root cause and attributes it to a stage. Four rounds of the same nit means a missing house rule, not a bad reviewer.</p>
-        </article>
-        <article style="--c:var(--violet)">
-          <p class="why">When someone new arrives</p>
-          <h3>/handoff</h3>
-          <p>Decision, why, what was tried and rejected, current state, provenance, each with its own freshness. Two minutes to inherit context that would otherwise live in one person’s head.</p>
-        </article>
-        <article style="--c:var(--chartreuse)">
-          <p class="why">Monthly · keep what worked</p>
-          <h3>/dreaming + /rules</h3>
-          <p>Distil sessions into proposed lessons and harvested conventions, delivered as a pull request your team reviews like any other. Accept item by item. Nothing writes itself in.</p>
-        </article>
-      </div>
-    </div>
-
-    <h2 class="sec" id="roadmap">Roadmap — trust is earned, not scheduled</h2>
-    <div class="road">
-      <article class="mile">
-        <span class="when">Now · v15</span>
-        <div class="rail"><i class="dot" style="--c:var(--chartreuse)"></i></div>
-        <div class="body">
-          <p class="st" style="--c:var(--chartreuse);color:var(--chartreuse)">Shipped</p>
-          <h3>The mill is live</h3>
-          <p>Plan-first Launch Pad, parallel Supervisor, review-and-heal, stacked autonomous loops, automate queues, advisory Twin, dreaming, insights, house rules. You still merge.</p>
-        </div>
-      </article>
-      <article class="mile">
-        <span class="when">Next</span>
-        <div class="rail"><i class="dot" style="--c:var(--gold)"></i></div>
-        <div class="body">
-          <p class="st" style="color:var(--gold)">In the warp</p>
-          <h3>Ground-truth verification</h3>
-          <p>Run the software in the heal pass. Playwright for web apps. Headless loops against a corpus. A hard pass/fail — not a vibes score — before anything is allowed to gate.</p>
-        </div>
-      </article>
-      <article class="mile">
-        <span class="when">Then</span>
-        <div class="rail"><i class="dot" style="--c:var(--indigo)"></i></div>
-        <div class="body">
-          <p class="st" style="color:var(--indigo)">Evidence-gated</p>
-          <h3>Twin starts enforcing</h3>
-          <p>Flip advisory conformance to a real gate only after the benchmark has caught real regressions without a false-positive habit. No calendar flip.</p>
-        </div>
-      </article>
-      <article class="mile">
-        <span class="when">Later</span>
-        <div class="rail"><i class="dot" style="--c:var(--copper)"></i></div>
-        <div class="body">
-          <p class="st" style="color:var(--copper)">Four guardrails first</p>
-          <h3>A proactive mill</h3>
-          <p>A watcher that can open PRs unprompted — cadence expiry, per-run budget, circuit-breaker, heartbeat. Not started. Highest-risk rung. Intentionally last.</p>
-        </div>
-      </article>
-      <article class="mile">
-        <span class="when">North star</span>
-        <div class="rail"><i class="dot" style="--c:var(--violet)"></i></div>
-        <div class="body">
-          <p class="st" style="color:var(--violet)">Director model</p>
-          <h3>Point at the repo. Own this.</h3>
-          <p>You set intent and approve outcomes. Diff-review becomes optional because the mill already proved the behavior. Everyone else rents a coder who starts cold every morning.</p>
-          <img class="shot" src="assets/north-star.jpg" width="1600" height="900" loading="lazy" decoding="async"
-            alt="Tiny millwrights sitting with a finished glowing orb on a workbench, the mill behind them standing empty." />
-        </div>
-      </article>
-    </div>
-
-    <h2 class="sec" id="install">Install from GitHub</h2>
-    <div class="install-box">
-      <p class="warn">Source: github.com/vikashruhilgit/loomwright · marketplace id atelier · plugin id loomwright</p>
-      <p class="note">Loomwright is a Claude Code plugin. Pick the surface you type in. You need a git repo. You need <code>gh</code> authenticated if you want the mill to open pull requests.</p>
-      <div class="apps picks" role="tablist" aria-label="Install for which app">
-        <button type="button" aria-pressed="true" data-app="cli">Claude CLI</button>
-        <button type="button" aria-pressed="false" data-app="code">Claude Code</button>
-        <button type="button" aria-pressed="false" data-app="cursor">Cursor</button>
-        <button type="button" aria-pressed="false" data-app="desktop">Claude Desktop</button>
-      </div>
-      <div class="install-card" id="install-card" aria-live="polite">
-        <p class="tag">macOS, Linux, WSL — Terminal</p>
-        <h3>Claude Code CLI</h3>
-        <p>Use this when you type in Terminal, iTerm, Ghostty, or Cursor’s terminal panel. <code>claude</code> is a shell command. <code>/plugin</code> is not.</p>
-        <ol class="how">
-          <li>Install the Claude Code CLI from <a href="https://code.claude.com/docs/en/quickstart">code.claude.com</a> if <code>which claude</code> prints nothing. Reopen the terminal after install so PATH updates.</li>
-          <li>Paste the two commands below into the shell. First line registers the GitHub marketplace. Second line installs the plugin as <code>loomwright@atelier</code>.</li>
-          <li>Confirm with <code>claude plugin list</code>. You should see loomwright from marketplace atelier.</li>
-          <li><code>cd</code> into a git repo, then start a session with <code>claude</code>. If slash commands are missing, type <code>/reload-plugins</code> in that session.</li>
-        </ol>
-      </div>
-      <div class="copy-row">
-        <pre id="install-cmd">claude plugin marketplace add vikashruhilgit/loomwright
-claude plugin install loomwright@atelier</pre>
-        <button class="btn btn-solid" type="button" id="copy-btn">Copy commands</button>
-      </div>
-      <p class="note">After it lands, open the git repo you want to ship in, then:</p>
-      <pre class="cmd"><span class="c">/setup</span>
-<span class="c">/autonomous</span> <span class="g">"the next thing your users can feel"</span></pre>
-      <p class="note">Repo: <a href="https://github.com/vikashruhilgit/loomwright">github.com/vikashruhilgit/loomwright</a></p>
     </div>
 
     <footer>
       Loomwright is a plan-first mill by Vikash Ruhil · MIT
-      <span class="fine">14 agents · 21 commands · 41 skills · 24 hooks · v15.37.0. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
+      <span class="fine">14 agents · 21 commands · 41 skills · 24 hooks · v15.41. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
     </footer>
   </div>
-  <script>
-    (function millMotion() {
-      const laws = [...document.querySelectorAll(".laws .law")];
-      const lanes = [...document.querySelectorAll(".lanes button")];
-      const pin = (index) => {
-        const on = laws[index].getAttribute("aria-pressed") !== "true";
-        laws.forEach((el, i) => el.setAttribute("aria-pressed", i === index && on ? "true" : "false"));
-        lanes.forEach((el, i) => el.setAttribute("aria-pressed", i === index && on ? "true" : "false"));
-      };
-      laws.forEach((el, i) => el.addEventListener("click", () => pin(i)));
-      lanes.forEach((el, i) => el.addEventListener("click", () => pin(i)));
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      if (!("IntersectionObserver" in window)) return;
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => entry.target.classList.toggle("off-stage", !entry.isIntersecting));
-      }, { threshold: 0.12 });
-      document.querySelectorAll(".lanes, .laws, .road").forEach((el) => io.observe(el));
-    })();
-
-    const plays = {
-      new: {
-        tag: "Recommended first play",
-        title: "Ship one goal, stacked",
-        body: "Use /autonomous when you have one requirement and you want Launch Pad + Supervisor chained, with stacked PRs if it takes more than one pass.",
-        cmd: `<span class="c">/autonomous</span> <span class="g">"players can retry a daily challenge without losing the streak"</span>`
-      },
-      pr: {
-        tag: "Existing work",
-        title: "Heal an open pull request",
-        body: "Point /review-pr at any PR URL. Bounded review → fix → re-review. It pushes fixes. It never merges. Add --until-mergeable to drain bot review until READY.",
-        cmd: `<span class="c">/review-pr</span> <span class="g">https://github.com/you/repo/pull/42</span>`
-      },
-      queue: {
-        tag: "Many goals",
-        title: "Walk a backlog, one cloth at a time",
-        body: "/automate turns a prompt, folder, or _BACKLOG.md into a queue. Default cap is five processed items. Auto-merge is off.",
-        cmd: `<span class="c">/automate</span> <span class="g">"the remaining shop and league tickets"</span>\n<span class="c">/automate --folder</span> .supervisor/requirements`
-      },
-      stories: {
-        tag: "Before code",
-        title: "Write the problem as stories",
-        body: "Product Owner reads CLAUDE.md, checks overlap, and writes acceptance criteria. Use --brainstorm when the idea is still a fight.",
-        cmd: `<span class="c">/product-owner problem:</span> <span class="g">"players bounce after the first loss"</span> <span class="c">--brainstorm</span>`
-      },
-      attack: {
-        tag: "Before production",
-        title: "Red-team the risky surface",
-        body: "Independent adversarial audit. Use it on auth, billing, migrations, and anything that orchestrates other agents. Findings are advisory.",
-        cmd: `<span class="c">/red-team-reviewer</span>`
-      },
-      qa: {
-        tag: "User-visible flows",
-        title: "Strategy, then execution",
-        body: "QA Strategist classifies risk. QA Executor discovers the app, writes Playwright, and debates the gaps. Skip this on a comment-only change.",
-        cmd: `<span class="c">/qa-strategist</span> src/\n<span class="c">/qa-executor</span>`
-      },
-      lessons: {
-        tag: "After a week",
-        title: "Keep only what you accept",
-        body: "/dreaming proposes lessons from session logs. You accept item by item. Nothing auto-writes into CLAUDE.md.",
-        cmd: `<span class="c">/dreaming --sessions</span> 8\n<span class="c">/rules suggest</span>`
-      },
-      hand: {
-        tag: "Handoff",
-        title: "Two minutes to inherit the mill",
-        body: "/handoff is the per-item catch-up. /insights is the scoreboard. /obsidian is the vault you can actually browse.",
-        cmd: `<span class="c">/handoff</span>\n<span class="c">/insights</span>`
-      }
-    };
-
-    const card = document.getElementById("play-card");
-    document.querySelectorAll("#mill-picks button").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("#mill-picks button").forEach((b) => b.setAttribute("aria-pressed", "false"));
-        btn.setAttribute("aria-pressed", "true");
-        const p = plays[btn.dataset.play];
-        card.innerHTML = `<p class="tag">${p.tag}</p><h3>${p.title}</h3><p>${p.body}</p><pre class="cmd">${p.cmd}</pre>`;
-      });
-    });
-
-    const installs = {
-      cli: {
-        tag: "macOS, Linux, WSL — Terminal",
-        title: "Claude Code CLI",
-        html: `<p>Use this when you type in Terminal, iTerm, Ghostty, or Cursor’s terminal panel. <code>claude</code> is a shell command. <code>/plugin</code> is not.</p>
-          <ol class="how">
-            <li>Install the Claude Code CLI from <a href="https://code.claude.com/docs/en/quickstart">code.claude.com</a> if <code>which claude</code> prints nothing. Reopen the terminal after install so PATH updates.</li>
-            <li>Paste the two commands below into the shell. First line registers the GitHub marketplace. Second line installs the plugin as <code>loomwright@atelier</code>.</li>
-            <li>Confirm with <code>claude plugin list</code>. You should see loomwright from marketplace atelier.</li>
-            <li><code>cd</code> into a git repo, then start a session with <code>claude</code>. If slash commands are missing, type <code>/reload-plugins</code> in that session.</li>
-          </ol>`,
-        copy: "claude plugin marketplace add vikashruhilgit/loomwright\nclaude plugin install loomwright@atelier"
-      },
-      code: {
-        tag: "Interactive session — not zsh",
-        title: "Claude Code chat / TUI",
-        html: `<p>Type these in a Claude Code session: the <code>claude</code> TUI, the Claude Code IDE panel, or VS Code / JetBrains with the Claude Code extension. Do not type them in the system shell.</p>
-          <ol class="how">
-            <li>Open the git project you want to ship in. Start Claude Code there.</li>
-            <li>Type <code>/plugin marketplace add vikashruhilgit/loomwright</code> and submit. That only registers the catalog.</li>
-            <li>Type <code>/plugin install loomwright@atelier</code>. Pick user scope unless this repo should pin the plugin for the team.</li>
-            <li>Optional: type <code>/plugin</code> and open the Installed tab. If this session was already running, type <code>/reload-plugins</code>.</li>
-          </ol>`,
-        copy: "/plugin marketplace add vikashruhilgit/loomwright\n/plugin install loomwright@atelier"
-      },
-      cursor: {
-        tag: "Agent chat or Claude Code in Cursor",
-        title: "Cursor",
-        html: `<p>Loomwright is a Claude Code plugin, not a listing on cursor.com/marketplace. Install it as Claude Code tooling inside Cursor. Never paste <code>/plugin</code> into Cursor’s Terminal panel — zsh treats the leading slash as a path.</p>
-          <ol class="how">
-            <li><strong>Agent chat:</strong> open Agent (not Terminal). Type <code>/plugin marketplace add vikashruhilgit/loomwright</code>, then <code>/plugin install loomwright@atelier</code>.</li>
-            <li><strong>Claude Code in Cursor:</strong> install the Claude Code CLI or the Claude Code extension. In Cursor’s terminal run the two <code>claude plugin</code> commands from the Claude CLI tab, then start <code>claude</code> in the repo.</li>
-            <li>Reload the window or type <code>/reload-plugins</code> in the Claude Code session if <code>/setup</code> does not appear.</li>
-            <li><strong>Teams / Enterprise only:</strong> an admin can open Dashboard → Plugins → Import from Repo and paste <code>https://github.com/vikashruhilgit/loomwright</code>. Individuals should use steps 1 or 2. Native Cursor plugins and Claude Code plugins are different catalogs.</li>
-          </ol>`,
-        copy: "/plugin marketplace add vikashruhilgit/loomwright\n/plugin install loomwright@atelier"
-      },
-      desktop: {
-        tag: "Desktop chat and Cowork — paid plans",
-        title: "Claude Desktop",
-        html: `<p>Paid Claude (Pro, Max, Team, Enterprise). Skills can show up in Desktop chat. Hooks, sub-agents, git worktrees, and <code>/supervisor</code> are mill machinery — use Claude Code for the full mill.</p>
-          <ol class="how">
-            <li>Open Claude Desktop. If you use Cowork, switch to the Cowork tab first.</li>
-            <li>Left sidebar: <strong>Customize</strong> → <strong>Plugins</strong>.</li>
-            <li>Under Personal plugins, click <strong>+</strong> → <strong>Add marketplace</strong> → <strong>Add from a repository</strong>.</li>
-            <li>Enter <code>vikashruhilgit/loomwright</code> (or the full GitHub URL) and sync. If it fails, update the app from Help → Check for updates and retry.</li>
-            <li>Find <strong>loomwright</strong> in the list and click Install. Type <code>/</code> in a conversation to see the skills that loaded.</li>
-            <li>For <code>/setup</code>, stacked PRs, and worktrees, install via Claude CLI or Claude Code and run those commands there.</li>
-          </ol>`,
-        copy: "vikashruhilgit/loomwright"
-      }
-    };
-
-    const installCard = document.getElementById("install-card");
-    const installCmd = document.getElementById("install-cmd");
-    const copyBtn = document.getElementById("copy-btn");
-    let copyRestore = "Copy commands";
-
-    function showInstall(key) {
-      const app = installs[key];
-      installCard.innerHTML = `<p class="tag">${app.tag}</p><h3>${app.title}</h3>${app.html}`;
-      installCmd.textContent = app.copy;
-      copyRestore = key === "desktop" ? "Copy repo id" : "Copy commands";
-      copyBtn.textContent = copyRestore;
-    }
-
-    document.querySelectorAll(".apps button").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".apps button").forEach((b) => b.setAttribute("aria-pressed", "false"));
-        btn.setAttribute("aria-pressed", "true");
-        showInstall(btn.dataset.app);
-      });
-    });
-    showInstall("cli");
-
-    // ---- policy builder ----
-    const knobs = [...document.querySelectorAll("#knobs .knob")];
-    const policyJson = document.getElementById("policy-json");
-    const policyCmd = document.getElementById("policy-cmd");
-    const policyCopy = document.getElementById("policy-copy");
-
-    function renderPolicy() {
-      const cfg = {};
-      knobs.filter((k) => k.dataset.scope === "cfg")
-        .forEach((k) => { cfg[k.dataset.key] = k.dataset.value === "true"; });
-      policyJson.textContent = JSON.stringify(cfg, null, 2);
-
-      const val = (key) => knobs.find((k) => k.dataset.key === key).dataset.value;
-      const flags = [];
-      if (val("cost") === "cheap") flags.push("--cheap");
-      const w = val("workers");
-      if (w === "sequential") flags.push("--sequential");
-      else if (w !== "2") flags.push("--max-workers " + w);
-      const b = val("base");
-      if (b !== "main") flags.push("--base-branch " + b);
-      policyCmd.textContent = '/autonomous "the next thing your users can feel"'
-        + (flags.length ? " \\\n  " + flags.join(" ") : "");
-
-      knobs.forEach((k) => {
-        const on = k.dataset.value !== k.dataset.default;
-        k.dataset.active = String(k.dataset.scope === "cfg" ? k.dataset.value === "true" : on);
-        k.setAttribute("aria-pressed", String(k.dataset.active === "true"));
-        k.querySelector("i").textContent = k.dataset.value;
-      });
-    }
-
-    knobs.forEach((k) => {
-      k.addEventListener("click", () => {
-        if (k.dataset.cycle) {
-          const opts = k.dataset.cycle.split(",");
-          k.dataset.value = opts[(opts.indexOf(k.dataset.value) + 1) % opts.length];
-        } else {
-          k.dataset.value = k.dataset.value === "true" ? "false" : "true";
-        }
-        renderPolicy();
-      });
-    });
-    renderPolicy();
-
-    policyCopy.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(policyJson.textContent);
-        policyCopy.textContent = "Copied";
-        setTimeout(() => { policyCopy.textContent = "Copy config"; }, 1600);
-      } catch {
-        policyCopy.textContent = "Copy failed";
-      }
-    });
-
-    copyBtn.addEventListener("click", async () => {
-      const text = installCmd.textContent;
-      try {
-        await navigator.clipboard.writeText(text);
-        copyBtn.textContent = "Copied";
-        setTimeout(() => { copyBtn.textContent = copyRestore; }, 1600);
-      } catch {
-        copyBtn.textContent = "Copy failed";
-      }
-    });
-  </script>
+  <script src="site.js"></script>
 </body>
 </html>

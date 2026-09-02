@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Install Loomwright</title>
+  <meta name="description" content="Install the mill from GitHub into Claude CLI, Claude Code, Cursor, or Claude Desktop. Marketplace id atelier, plugin id loomwright." />
+  <meta name="theme-color" content="#F4EBDC" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <meta property="og:title" content="Install Loomwright" />
+  <meta property="og:description" content="Install the mill from GitHub into Claude CLI, Claude Code, Cursor, or Claude Desktop. Marketplace id atelier, plugin id loomwright." />
+  <meta property="og:image" content="https://vikashruhilgit.github.io/loomwright-site/assets/og.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Big+Shoulders+Display:wght@700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav>
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/icon-180.png" alt="" width="34" height="34" decoding="async" />
+        <span>Loomwright</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Problems</a>
+        <a href="mill.html">The mill</a>
+        <a href="guide.html">Guide</a>
+        <a class="btn btn-solid" href="install.html" style="padding:.7rem 1.1rem; font-size:.72rem" aria-current="page">Install</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap" id="main">
+    <article class="chapter" style="--c:var(--copper)">
+      <figure>
+        <img src="assets/mill-jobs.jpg" width="1400" height="788" decoding="async"
+          alt="Tiny millwrights at a brass job board, ready to feed work into four glass energy lanes once the mill is installed." />
+        <span class="gleam" aria-hidden="true"></span>
+      </figure>
+      <div class="copy">
+        <h2>Plug the mill into the app you type in</h2>
+        <p>Marketplace id <code>atelier</code>. Plugin id <code>loomwright</code>. You need a git repo. You need <code>gh</code> if you want the mill to open pull requests.</p>
+      </div>
+    </article>
+    <h2 class="sec" id="install">Install from GitHub</h2>
+    <div class="install-box">
+      <p class="warn">Source: github.com/vikashruhilgit/loomwright · marketplace id atelier · plugin id loomwright</p>
+      <p class="note">Loomwright is a Claude Code plugin. Pick the surface you type in. You need a git repo. You need <code>gh</code> authenticated if you want the mill to open pull requests.</p>
+      <div class="apps picks" role="tablist" aria-label="Install for which app">
+        <button type="button" aria-pressed="true" data-app="cli">Claude CLI</button>
+        <button type="button" aria-pressed="false" data-app="code">Claude Code</button>
+        <button type="button" aria-pressed="false" data-app="cursor">Cursor</button>
+        <button type="button" aria-pressed="false" data-app="desktop">Claude Desktop</button>
+      </div>
+      <div class="install-card" id="install-card" aria-live="polite">
+        <p class="tag">macOS, Linux, WSL — Terminal</p>
+        <h3>Claude Code CLI</h3>
+        <p>Use this when you type in Terminal, iTerm, Ghostty, or Cursor’s terminal panel. <code>claude</code> is a shell command. <code>/plugin</code> is not.</p>
+        <ol class="how">
+          <li>Install the Claude Code CLI from <a href="https://code.claude.com/docs/en/quickstart">code.claude.com</a> if <code>which claude</code> prints nothing. Reopen the terminal after install so PATH updates.</li>
+          <li>Paste the two commands below into the shell. First line registers the GitHub marketplace. Second line installs the plugin as <code>loomwright@atelier</code>.</li>
+          <li>Confirm with <code>claude plugin list</code>. You should see loomwright from marketplace atelier.</li>
+          <li><code>cd</code> into a git repo, then start a session with <code>claude</code>. If slash commands are missing, type <code>/reload-plugins</code> in that session.</li>
+        </ol>
+      </div>
+      <div class="copy-row">
+        <pre id="install-cmd">claude plugin marketplace add vikashruhilgit/loomwright
+claude plugin install loomwright@atelier</pre>
+        <button class="btn btn-solid" type="button" id="copy-btn">Copy commands</button>
+      </div>
+      <p class="note">After it lands, open the git repo you want to ship in, then:</p>
+      <pre class="cmd"><span class="c">/setup</span>
+<span class="c">/autonomous</span> <span class="g">"the next thing your users can feel"</span></pre>
+      <p class="note">Repo: <a href="https://github.com/vikashruhilgit/loomwright">github.com/vikashruhilgit/loomwright</a></p>
+    </div>
+    <footer>
+      Loomwright is a plan-first mill by Vikash Ruhil · MIT
+      <span class="fine">14 agents · 21 commands · 41 skills · 24 hooks · v15.41. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
+    </footer>
+  </div>
+  <script src="site.js"></script>
+</body>
+</html>

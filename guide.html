@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loomwright — first hour and team rollout</title>
+  <meta name="description" content="Install, /setup, pick a lane, stay for the gates. Then commit policy, house rules, and a trusted auto-merge path only where a wrong merge is cheap." />
+  <meta name="theme-color" content="#F4EBDC" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <meta property="og:title" content="Loomwright — first hour and team rollout" />
+  <meta property="og:description" content="Install, /setup, pick a lane, stay for the gates. Then commit policy, house rules, and a trusted auto-merge path only where a wrong merge is cheap." />
+  <meta property="og:image" content="https://vikashruhilgit.github.io/loomwright-site/assets/og.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Big+Shoulders+Display:wght@700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav>
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/icon-180.png" alt="" width="34" height="34" decoding="async" />
+        <span>Loomwright</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Problems</a>
+        <a href="mill.html">The mill</a>
+        <a href="guide.html" aria-current="page">Guide</a>
+        <a class="btn btn-solid" href="install.html" style="padding:.7rem 1.1rem; font-size:.72rem">Install</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap" id="main">
+    <p class="page-lede">First hour on the mill, then the settings that let a team walk away without a silent merge.</p>
+
+    <article class="chapter" style="--c:var(--indigo)">
+      <figure>
+        <img src="assets/guide-hour.jpg" width="1600" height="900" decoding="async"
+          alt="A millwright watches four glass lanes start to glow from a brass console, while a second hangs a helmet on a peg, ready to leave." />
+        <span class="gleam" aria-hidden="true"></span>
+      </figure>
+      <div class="copy">
+        <h2>Stay for the gates. Then you can walk away.</h2>
+        <p>Install, <code>/setup</code>, one real goal, sit through every human stop. After that the committed policy is what a teammate inherits.</p>
+      </div>
+    </article>
+
+    <h2 class="sec" id="guide">Guide — first hour on the mill</h2>
+    <div class="guide">
+      <article class="step" style="--c:var(--copper)">
+        <span class="n">01</span>
+        <div>
+          <h3>Install Loomwright</h3>
+          <p>Use the app you actually type in. <a href="install.html">Open the install steps</a>. Do not paste <code>/plugin</code> into zsh — that is a chat command, not a file path.</p>
+        </div>
+      </article>
+      <article class="step" style="--c:var(--gold)">
+        <span class="n">02</span>
+        <div>
+          <h3>See what is wired</h3>
+          <p><code>/setup</code> is a dashboard, not a wizard that overwrites you. Check observability, notifications, Twin, Beads, then turn on only what you want.</p>
+          <pre class="cmd"><span class="c">/setup</span></pre>
+        </div>
+      </article>
+      <article class="step" style="--c:var(--chartreuse)">
+        <span class="n">03</span>
+        <div>
+          <h3>Pick a lane</h3>
+          <p>One new goal: <code>/autonomous</code>. An existing PR: <code>/review-pr</code>. A pile of stories: <code>/automate</code>. Do not start all three at once.</p>
+          <pre class="cmd"><span class="c">/autonomous</span> <span class="g">"add a daily challenge that resets at midnight UTC"</span></pre>
+        </div>
+      </article>
+      <article class="step" style="--c:var(--teal)">
+        <span class="n">04</span>
+        <div>
+          <h3>Stay for the gates</h3>
+          <p>This is foreground-assisted, not fire-and-forget. Save or refine the brief. Answer rubric gates. Desktop banners fire when the mill needs you.</p>
+        </div>
+      </article>
+      <article class="step" style="--c:var(--indigo)">
+        <span class="n">05</span>
+        <div>
+          <h3>You merge</h3>
+          <p>A healed PR is still an open PR. Read the diff. Merge it. Then run <code>/dreaming</code> after a week so the mill keeps the lessons you actually want.</p>
+          <pre class="cmd"><span class="c">/review-pr</span> <span class="g">https://github.com/you/repo/pull/42</span>
+<span class="d"># bounded review → fix → re-review. Never merges.</span></pre>
+        </div>
+      </article>
+    </div>
+
+    <h2 class="sec" id="teams">Run it across a team</h2>
+    <figure class="hero-frame band">
+      <img src="assets/mill-row.jpg" width="2000" height="500" loading="lazy" decoding="async"
+        alt="Four brass-and-glass mills in a sunlit loft, each run by tiny millwrights, all driven by one overhead shaft." />
+      <figcaption class="hero-caption">Four machines · one drive shaft · one committed policy</figcaption>
+    </figure>
+    <p class="lede" style="max-width:50ch;margin-bottom:2rem">One person can hold a mill in their head. Four cannot. So the settings that matter are <em>committed</em>, the dangerous ones are <em>off</em>, and the ones that cost money are <em>a flag you passed on purpose</em>.</p>
+
+    <figure class="fig">
+      <img src="assets/control-plane.svg" width="1200" height="448" loading="lazy" decoding="async"
+        alt="Three planes of authority. Human authority — CLAUDE.md, approving the brief, the merge, every promotion — always wins. Committed policy — supervisor config, house rules, branch protection, base branch — binds every run and travels with the repo. Advisory signals — System Twin, lessons, red-team, project memory — can only propose upward through a human gate and never gate a merge." />
+      <figcaption>The rule that makes this safe to hand to a team: <b>advisory can propose, only a human can promote</b>, and only committed policy binds an unattended run.</figcaption>
+    </figure>
+
+    <div class="blk">
+      <h3>Write your policy down</h3>
+      <p class="note">Flags live in one person’s shell history. <code>.supervisor/config.json</code> is committed, reviewed, and applies to every run in the repo, including the unattended ones. Toggle the knobs to build yours.</p>
+      <div class="policy">
+        <div class="knobs" id="knobs">
+          <button class="knob" type="button" data-scope="cfg" data-key="auto_review" data-value="true" data-default="true" data-active="true" aria-pressed="true">
+            <span><b>auto_review</b><em>Drain bot review on the PR after a finished run. On by default; turning it off means no review pass runs at all.</em></span>
+            <i>true</i>
+          </button>
+          <button class="knob" type="button" data-scope="cfg" data-key="auto_until_mergeable" data-value="true" data-default="true" data-active="true" aria-pressed="true">
+            <span><b>auto_until_mergeable</b><em>Keep draining until the PR reads ready, instead of a single diff-only pass. Ready still means open.</em></span>
+            <i>true</i>
+          </button>
+          <button class="knob" type="button" data-scope="cfg" data-key="red_team_high_risk" data-value="false" data-default="false" data-active="false" aria-pressed="false">
+            <span><b>red_team_high_risk</b><em>Add an adversarial lens on high-risk diffs: auth, payments, migrations, workflows, agent prompts. Advisory: it never blocks the PR.</em></span>
+            <i>false</i>
+          </button>
+          <button class="knob" type="button" data-scope="cfg" data-key="multi_voter_heal" data-value="false" data-default="false" data-active="false" aria-pressed="false">
+            <span><b>multi_voter_heal</b><em>A second independent reviewer votes on which blocking findings actually get fixed. Costs more. Worth it on a shared trunk.</em></span>
+            <i>false</i>
+          </button>
+          <button class="knob" type="button" data-scope="run" data-key="cost" data-value="default" data-default="default" data-cycle="default,cheap" data-active="false" aria-pressed="false">
+            <span><b>--cheap</b><em>Cost profile for the whole chain. Use it on chores and long queues; leave it off on the diff you actually care about.</em></span>
+            <i>default</i>
+          </button>
+          <button class="knob" type="button" data-scope="run" data-key="workers" data-value="2" data-default="2" data-cycle="2,4,1,sequential" data-active="false" aria-pressed="false">
+            <span><b>--max-workers</b><em>Parallel worktrees. More is not faster once subtasks overlap on the same files; they queue behind each other anyway.</em></span>
+            <i>2</i>
+          </button>
+          <button class="knob" type="button" data-scope="run" data-key="base" data-value="main" data-default="main" data-cycle="main,development,trunk" data-active="false" aria-pressed="false">
+            <span><b>--base-branch</b><em>Your team’s real trunk. Get this wrong and the PR opens against a branch nobody merges.</em></span>
+            <i>main</i>
+          </button>
+        </div>
+        <div class="policy-out">
+          <p class="tag" style="margin-top:0">Commit this · .supervisor/config.json</p>
+          <pre id="policy-json">{}</pre>
+          <p class="tag">Pass this · per run</p>
+          <pre id="policy-cmd">/autonomous "…"</pre>
+          <button class="btn btn-ghost" type="button" id="policy-copy">Copy config</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <h3>The one place a merge can happen</h3>
+      <p class="note">Every other surface — <code>/supervisor</code>, <code>/review-pr</code>, the heal loop — terminates with the PR still open. Auto-merge exists in exactly one place, is off unless you pass <code>--auto-merge</code>, and needs all five of these to hold. Anything it cannot read counts as a failure.</p>
+      <figure class="fig" style="margin-bottom:0">
+        <img src="assets/merge-gate.svg" width="1200" height="430" loading="lazy" decoding="async"
+          alt="The five-condition trusted auto-merge gate: the review drain returned READY and not under the severity floor; the head SHA is unchanged and the base is still main; review decision is not blocking and no human thread is unresolved; the branch has enforceable protection; required checks are green and the rubric is satisfied. Any false or unreadable condition parks the PR and notifies instead of merging." />
+        <figcaption>Condition four is the one teams forget: <b>a branch with no enforceable protection will not auto-merge</b> unless you explicitly say you trust it.</figcaption>
+      </figure>
+    </div>
+
+    <div class="blk">
+      <h3>What leaves the building</h3>
+      <p class="note">The usual first question from anyone who has to sign off on this. The mill reads your repo, your history, and your logs from where they already are. Three things can go outward, and all three are off until someone turns them on.</p>
+      <figure class="fig" style="margin-bottom:0">
+        <img src="assets/data-boundary.svg" width="1200" height="448" loading="lazy" decoding="async"
+          alt="Boundary diagram. Staying local: session logs and supervisor state, project memory and System Twin, the insights dashboard, the Obsidian vault, and the Langfuse and OTel observability stack running in Docker on your machine. Crossing by default: branches, commits and pull requests to your own git remote, and prompts to Claude exactly as any Claude Code session sends them. Opt-in only: GitHub-issue telemetry, gate webhooks to a URL you set, and version-controlling memory stores behind a consent step." />
+        <figcaption>The observability module points Claude Code’s own OpenTelemetry at <b>a collector running on your machine</b>. The plugin emits no spans of its own.</figcaption>
+      </figure>
+    </div>
+
+    <div class="blk">
+      <h3>A rollout that survives contact</h3>
+      <p class="note">Do not hand a team <code>/automate --auto-merge</code> in week one. Earn each rung.</p>
+      <div class="road">
+        <article class="mile">
+          <span class="when">Week 1 · one person</span>
+          <div class="rail"><i class="dot" style="--c:var(--copper)"></i></div>
+          <div class="body">
+            <p class="st" style="color:var(--copper)">Prove it on your own branch</p>
+            <h3>One goal, watched end to end</h3>
+            <p>Run <code>/setup</code>, then one <code>/autonomous</code> on real but unglamorous work. Sit through every gate. You are calibrating how good the brief has to be, not measuring throughput.</p>
+          </div>
+        </article>
+        <article class="mile">
+          <span class="when">Week 2 · the repo</span>
+          <div class="rail"><i class="dot" style="--c:var(--gold)"></i></div>
+          <div class="body">
+            <p class="st" style="color:var(--gold)">Commit the policy</p>
+            <h3>Rules and config, in the repo</h3>
+            <p>Seed <code>/rules</code> so a worker reads your conventions while writing, not after review catches them. Commit <code>.supervisor/config.json</code>. Set the real <code>--base-branch</code>. Now a second person gets your setup by cloning.</p>
+          </div>
+        </article>
+        <article class="mile">
+          <span class="when">Month 2 · the team</span>
+          <div class="rail"><i class="dot" style="--c:var(--teal)"></i></div>
+          <div class="body">
+            <p class="st" style="color:var(--teal)">Make the trunk defensible</p>
+            <h3>Protection, review, and a scoreboard</h3>
+            <p>Turn on branch protection with a required check. Turn on <code>red_team_high_risk</code> if you touch auth, money, or migrations. Run <code>/insights</code> weekly and <code>/pr-postmortem</code> on the PRs that took four review rounds.</p>
+          </div>
+        </article>
+        <article class="mile">
+          <span class="when">Only then</span>
+          <div class="rail"><i class="dot" style="--c:var(--madder)"></i></div>
+          <div class="body">
+            <p class="st" style="color:var(--madder)">And only where it is boring</p>
+            <h3>Queues, and maybe a trusted merge</h3>
+            <p><code>/automate</code> on a backlog, parked at the gate for a human. Add <code>--auto-merge</code> only on a path where a wrong merge is cheap to revert: dependency bumps, copy changes, generated files. Never on the surface you would not let a new hire merge alone.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="blk">
+      <h3>Managing it once it is running</h3>
+      <p class="note">A mill nobody inspects turns into a mill nobody trusts. These four are the operating loop.</p>
+      <div class="plays" style="margin-bottom:0">
+        <article style="--c:var(--indigo)">
+          <p class="why">Weekly · is it getting better</p>
+          <h3>/insights</h3>
+          <p>Local scoreboard: heal rate, review rounds, where sessions burn time. Rendered from your own logs, on your own machine. If the trend is flat, the brief is usually the problem, not the model.</p>
+        </article>
+        <article style="--c:var(--madder)">
+          <p class="why">When a PR churns</p>
+          <h3>/pr-postmortem</h3>
+          <p>Sorts every review round into a root cause and attributes it to a stage. Four rounds of the same nit means a missing house rule, not a bad reviewer.</p>
+        </article>
+        <article style="--c:var(--violet)">
+          <p class="why">When someone new arrives</p>
+          <h3>/handoff</h3>
+          <p>Decision, why, what was tried and rejected, current state, provenance, each with its own freshness. Two minutes to inherit context that would otherwise live in one person’s head.</p>
+        </article>
+        <article style="--c:var(--chartreuse)">
+          <p class="why">Monthly · keep what worked</p>
+          <h3>/dreaming + /rules</h3>
+          <p>Distil sessions into proposed lessons and harvested conventions, delivered as a pull request your team reviews like any other. Accept item by item. Nothing writes itself in.</p>
+        </article>
+      </div>
+    </div>
+
+    <h2 class="sec" id="roadmap">Roadmap — trust is earned, not scheduled</h2>
+    <div class="road">
+      <article class="mile">
+        <span class="when">Now · v15</span>
+        <div class="rail"><i class="dot" style="--c:var(--chartreuse)"></i></div>
+        <div class="body">
+          <p class="st" style="--c:var(--chartreuse);color:var(--chartreuse)">Shipped</p>
+          <h3>The mill is live</h3>
+          <p>Plan-first Launch Pad, parallel Supervisor, review-and-heal, stacked autonomous loops, automate queues, advisory Twin, dreaming, insights, house rules. You still merge.</p>
+        </div>
+      </article>
+      <article class="mile">
+        <span class="when">Next</span>
+        <div class="rail"><i class="dot" style="--c:var(--gold)"></i></div>
+        <div class="body">
+          <p class="st" style="color:var(--gold)">In the warp</p>
+          <h3>Ground-truth verification</h3>
+          <p>Run the software in the heal pass. Playwright for web apps. Headless loops against a corpus. A hard pass/fail — not a vibes score — before anything is allowed to gate.</p>
+        </div>
+      </article>
+      <article class="mile">
+        <span class="when">Then</span>
+        <div class="rail"><i class="dot" style="--c:var(--indigo)"></i></div>
+        <div class="body">
+          <p class="st" style="color:var(--indigo)">Evidence-gated</p>
+          <h3>Twin starts enforcing</h3>
+          <p>Flip advisory conformance to a real gate only after the benchmark has caught real regressions without a false-positive habit. No calendar flip.</p>
+        </div>
+      </article>
+      <article class="mile">
+        <span class="when">Later</span>
+        <div class="rail"><i class="dot" style="--c:var(--copper)"></i></div>
+        <div class="body">
+          <p class="st" style="color:var(--copper)">Four guardrails first</p>
+          <h3>A proactive mill</h3>
+          <p>A watcher that can open PRs unprompted — cadence expiry, per-run budget, circuit-breaker, heartbeat. Not started. Highest-risk rung. Intentionally last.</p>
+        </div>
+      </article>
+      <article class="mile">
+        <span class="when">North star</span>
+        <div class="rail"><i class="dot" style="--c:var(--violet)"></i></div>
+        <div class="body">
+          <p class="st" style="color:var(--violet)">Director model</p>
+          <h3>Point at the repo. Own this.</h3>
+          <p>You set intent and approve outcomes. Diff-review becomes optional because the mill already proved the behavior. Everyone else rents a coder who starts cold every morning.</p>
+          <img class="shot" src="assets/north-star.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="Tiny millwrights sitting with a finished glowing orb on a workbench, the mill behind them standing empty." />
+        </div>
+      </article>
+    </div>
+
+
+    <footer>
+      Loomwright is a plan-first mill by Vikash Ruhil · MIT
+      <span class="fine">14 agents · 21 commands · 41 skills · 24 hooks · v15.41. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
+    </footer>
+  </div>
+  <script src="site.js"></script>
+</body>
+</html>

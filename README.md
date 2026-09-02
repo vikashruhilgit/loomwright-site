@@ -1,10 +1,15 @@
 # Loomwright site
 
-Public landing page for Loomwright — the plan-first mill that weaves a goal into a reviewed pull request.
+Public landing for Loomwright — a messy goal in, a reviewed pull request out. You only show up when it actually needs you.
 
 **Live:** https://vikashruhilgit.github.io/loomwright-site/
 
-Same craft as [Block Paradise](https://vikashruhilgit.github.io/): one static page, dark mill, no build step.
+Static HTML on GitHub Pages. No build step.
+
+- `index.html` — four problems the mill solves, image-led
+- `mill.html` — four laws, pipeline, plays
+- `guide.html` — first hour, policy, rollout, roadmap
+- `install.html` — CLI, Claude Code, Cursor, Desktop
 
 ## Preview locally
 
@@ -13,5 +18,3 @@ python3 -m http.server 4173
 ```
 
 Open http://127.0.0.1:4173/
-
-Relative asset paths also work if this folder is copied to `vikashruhilgit.github.io/loomwright/`.

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loomwright — the mill</title>
+  <meta name="description" content="Four laws, the pipeline, and the plays. Plan first. Parallel worktrees. A human still merges unless you opt into a trusted automate path." />
+  <meta name="theme-color" content="#F4EBDC" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <meta property="og:title" content="Loomwright — the mill" />
+  <meta property="og:description" content="Four laws, the pipeline, and the plays. Plan first. Parallel worktrees. A human still merges unless you opt into a trusted automate path." />
+  <meta property="og:image" content="https://vikashruhilgit.github.io/loomwright-site/assets/og.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Big+Shoulders+Display:wght@700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <nav>
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/icon-180.png" alt="" width="34" height="34" decoding="async" />
+        <span>Loomwright</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Problems</a>
+        <a href="mill.html" aria-current="page">The mill</a>
+        <a href="guide.html">Guide</a>
+        <a class="btn btn-solid" href="install.html" style="padding:.7rem 1.1rem; font-size:.72rem">Install</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap" id="main">
+    <p class="page-lede">The machine, not the pitch. A messy goal becomes a reviewed pull request. You only show up when it actually needs you.</p>
+
+    <article class="chapter" style="--c:var(--copper)">
+      <figure>
+        <img src="assets/mill-jobs.jpg" width="1400" height="788" decoding="async"
+          alt="Tiny millwrights work a brass job board of hanging paper tickets, feeding chosen work into four glass energy lanes." />
+        <span class="gleam" aria-hidden="true"></span>
+      </figure>
+      <div class="copy">
+        <h2>Click a lane. The mill pins that station.</h2>
+        <p>Four laws, then a play. The stills are the same mill as the problems: plan, isolate, park at the gate, learn only what you accept.</p>
+      </div>
+    </article>
+
+    <div class="lanes" role="group" aria-label="Four mill lanes, one for each law">
+      <button type="button" class="lane" style="--c:var(--madder)" aria-pressed="false" aria-label="Highlight law 1: Plan before a file moves"><span></span></button>
+      <button type="button" class="lane" style="--c:var(--chartreuse)" aria-pressed="false" aria-label="Highlight law 2: Parallel work, sequential merge"><span></span></button>
+      <button type="button" class="lane" style="--c:var(--indigo)" aria-pressed="false" aria-label="Highlight law 3: Review, then you merge"><span></span></button>
+      <button type="button" class="lane" style="--c:var(--copper)" aria-pressed="false" aria-label="Highlight law 4: It gets smarter. It never self-trusts"><span></span></button>
+    </div>
+
+    <h2 class="sec">Four laws of the mill</h2>
+    <ul class="laws visual">
+      <li style="--c:var(--madder)">
+        <figure>
+          <img src="assets/problem-plan.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="Millwrights untangle glowing blue fibers, then pin the work onto a blank brass clipboard while the file drawers stay closed." />
+          <span class="gleam" aria-hidden="true"></span>
+        </figure>
+        <button type="button" class="law" style="--c:var(--madder)" aria-pressed="false" aria-labelledby="law-1-title" aria-describedby="law-1-copy">
+          <span class="no" aria-hidden="true"></span>
+          <span>
+            <span class="law-title" id="law-1-title">Plan before a file moves</span>
+            <span class="law-copy" id="law-1-copy">Launch Pad turns a messy goal into a reviewed brief (feasibility, file impact, subtasks) before Supervisor touches the repo.</span>
+          </span>
+        </button>
+      </li>
+      <li style="--c:var(--chartreuse)">
+        <figure>
+          <img src="assets/problem-lanes.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="Four isolated glass energy lanes in copper, chartreuse, teal, and violet merging in order into one golden stream." />
+          <span class="gleam" aria-hidden="true"></span>
+        </figure>
+        <button type="button" class="law" style="--c:var(--chartreuse)" aria-pressed="false" aria-labelledby="law-2-title" aria-describedby="law-2-copy">
+          <span class="no" aria-hidden="true"></span>
+          <span>
+            <span class="law-title" id="law-2-title">Parallel work, sequential merge</span>
+            <span class="law-copy" id="law-2-copy">Workers run in git worktrees. Overlapping files wait. Merges are ordered. You do not get a pile of conflicting branches.</span>
+          </span>
+        </button>
+      </li>
+      <li style="--c:var(--indigo)">
+        <figure>
+          <img src="assets/problem-gate.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="A brass review gate holds a glowing orb. A millwright rings a bell. An empty stool shows the human has stepped away." />
+          <span class="gleam" aria-hidden="true"></span>
+        </figure>
+        <button type="button" class="law" style="--c:var(--indigo)" aria-pressed="false" aria-labelledby="law-3-title" aria-describedby="law-3-copy">
+          <span class="no" aria-hidden="true"></span>
+          <span>
+            <span class="law-title" id="law-3-title">Review, then you merge</span>
+            <span class="law-copy" id="law-3-copy">Code review, optional red-team, dual-agent QA, and a self-heal pass on the PR. Loomwright never auto-merges unless you opt in on a trusted path.</span>
+          </span>
+        </button>
+      </li>
+      <li style="--c:var(--copper)">
+        <figure>
+          <img src="assets/problem-learn.jpg" width="1600" height="900" loading="lazy" decoding="async"
+            alt="Millwrights pin lesson cards to a brass rail. A large unused brass stamp waits for a human to accept what stays." />
+          <span class="gleam" aria-hidden="true"></span>
+        </figure>
+        <button type="button" class="law" style="--c:var(--copper)" aria-pressed="false" aria-labelledby="law-4-title" aria-describedby="law-4-copy">
+          <span class="no" aria-hidden="true"></span>
+          <span>
+            <span class="law-title" id="law-4-title">It gets smarter. It never self-trusts</span>
+            <span class="law-copy" id="law-4-copy">Lessons, house rules, and the System Twin are advisory and human-gated. CLAUDE.md stays the authority. Memory cannot promote itself.</span>
+          </span>
+        </button>
+      </li>
+    </ul>
+
+    <h2 class="sec">One goal, five stations, three human gates</h2>
+    <figure class="fig">
+      <div class="pipe-art">
+        <img src="assets/pipeline.jpg" width="1600" height="900" loading="lazy" decoding="async"
+          alt="Tiny alien millwrights run a bright invention left to right: they untangle a request, align it into a brief, ride four isolated worktree lanes, merge in order, scan at a review gate, and stop at an open pull request." />
+        <svg class="pipe-labels" viewBox="0 0 1600 900" aria-hidden="true" font-family="'Azeret Mono',ui-monospace,Menlo,monospace">
+          <g fill="none" stroke="rgba(28,31,42,.18)" stroke-width="1">
+            <path d="M155 718 v28"/><path d="M430 718 v28"/><path d="M790 718 v28"/><path d="M1165 718 v28"/><path d="M1448 718 v28"/>
+          </g>
+          <g letter-spacing=".18em" font-size="12">
+            <text x="155" y="774" text-anchor="middle" fill="#7A4310">00</text>
+            <text x="430" y="774" text-anchor="middle" fill="#E8893A">01</text>
+            <text x="790" y="774" text-anchor="middle" fill="#3A7A14">02</text>
+            <text x="1165" y="774" text-anchor="middle" fill="#1A8A82">03</text>
+            <text x="1448" y="774" text-anchor="middle" fill="#3D5FCC">04</text>
+          </g>
+          <g fill="#1C1F2A" font-size="20" font-weight="600" letter-spacing=".02em">
+            <text x="155" y="804" text-anchor="middle">A raw goal</text>
+            <text x="430" y="804" text-anchor="middle">Launch Pad</text>
+            <text x="790" y="804" text-anchor="middle">Supervisor</text>
+            <text x="1165" y="804" text-anchor="middle">Review &amp; heal</text>
+            <text x="1448" y="804" text-anchor="middle">An open PR</text>
+          </g>
+          <g fill="#5C574C" font-size="13" letter-spacing=".03em">
+            <text x="155" y="828" text-anchor="middle">One sentence. Messy is fine.</text>
+            <text x="430" y="828" text-anchor="middle">Feasibility → a reviewed brief.</text>
+            <text x="790" y="828" text-anchor="middle">Four worktrees. Ordered merge.</text>
+            <text x="1165" y="828" text-anchor="middle">Findings get flicked upstream.</text>
+            <text x="1448" y="828" text-anchor="middle">Healed is still open.</text>
+          </g>
+          <g fill="#A67C12">
+            <path d="M404 848 l9 9 -9 9 -9 -9 z"/>
+            <text x="422" y="862" font-size="11" letter-spacing=".14em">HUMAN GATE · approve the brief</text>
+            <path d="M1090 848 l9 9 -9 9 -9 -9 z"/>
+            <text x="1108" y="862" font-size="11" letter-spacing=".14em">HUMAN GATE · answer the rubric</text>
+            <path d="M1378 848 l9 9 -9 9 -9 -9 z"/>
+            <text x="1396" y="862" font-size="11" letter-spacing=".14em">HUMAN GATE · you merge</text>
+          </g>
+        </svg>
+      </div>
+      <ol class="pipe-legend">
+        <li><b>00</b><div><strong>A raw goal</strong><span>One sentence. Messy is fine.</span></div></li>
+        <li><b>01</b><div><strong>Launch Pad</strong><span>Feasibility → a reviewed brief.</span><span class="g">Human gate · approve the brief</span></div></li>
+        <li><b>02</b><div><strong>Supervisor</strong><span>Four worktrees. Ordered merge.</span></div></li>
+        <li><b>03</b><div><strong>Review &amp; heal</strong><span>Findings get flicked upstream.</span><span class="g">Human gate · answer the rubric</span></div></li>
+        <li><b>04</b><div><strong>An open PR</strong><span>Healed is still open.</span><span class="g">Human gate · you merge</span></div></li>
+      </ol>
+      <figcaption>Read left to right. The <b>gold markers are the three places the mill stops and waits for a person</b> — approving the brief, answering the rubric, and merging.</figcaption>
+    </figure>
+
+    <h2 class="sec">Command mill — say what you want</h2>
+    <div class="picks" id="mill-picks" role="tablist" aria-label="Choose a job">
+      <button type="button" aria-pressed="true" data-play="new">Ship a feature</button>
+      <button type="button" aria-pressed="false" data-play="pr">Heal an open PR</button>
+      <button type="button" aria-pressed="false" data-play="queue">Clear a backlog</button>
+      <button type="button" aria-pressed="false" data-play="stories">Write stories first</button>
+      <button type="button" aria-pressed="false" data-play="attack">Red-team before prod</button>
+      <button type="button" aria-pressed="false" data-play="qa">Plan then test</button>
+      <button type="button" aria-pressed="false" data-play="lessons">Keep last week</button>
+      <button type="button" aria-pressed="false" data-play="hand">Catch a teammate up</button>
+    </div>
+    <div class="play-card" id="play-card" aria-live="polite">
+      <p class="tag">Recommended first play</p>
+      <h3>Ship one goal, stacked</h3>
+      <p>Use <code>/autonomous</code> when you have one requirement and you want Launch Pad + Supervisor chained, with stacked PRs if it takes more than one pass.</p>
+      <pre class="cmd"><span class="c">/autonomous</span> <span class="g">"players can retry a daily challenge without losing the streak"</span></pre>
+    </div>
+
+    <h2 class="sec" id="plays">What else the mill is for</h2>
+    <p class="lede" style="max-width:46ch;margin-bottom:1.6rem">Highly recommended once the first PR lands. These are the plays that make Loomwright more than a task runner.</p>
+    <div class="plays">
+      <article style="--c:var(--copper)">
+        <p class="why">Overnight a queue</p>
+        <h3>/automate</h3>
+        <p>Turn a prompt, a folder of stories, or a backlog doc into a queue. Each item runs autonomous → review drain. Auto-merge stays off unless you pass a trusted gate.</p>
+      </article>
+      <article style="--c:var(--madder)">
+        <p class="why">Attack the merge</p>
+        <h3>/red-team-reviewer</h3>
+        <p>Adversarial pass on auth, payments, migrations, hooks, and agent prompts. Advisory. It finds the failure class before production does.</p>
+      </article>
+      <article style="--c:var(--teal)">
+        <p class="why">Test like a team</p>
+        <h3>/qa-strategist → /qa-executor</h3>
+        <p>Risk map first, then Playwright generation with a debate loop. Use this on anything a user can click — not on a one-line typo fix.</p>
+      </article>
+      <article style="--c:var(--gold)">
+        <p class="why">Write the problem</p>
+        <h3>/product-owner</h3>
+        <p>Messy idea in, stories with acceptance criteria out. Add <code>--brainstorm</code> when the team is arguing and you need five expert lenses to fight it out.</p>
+      </article>
+      <article style="--c:var(--indigo)">
+        <p class="why">Compound the craft</p>
+        <h3>/dreaming + /rules</h3>
+        <p>Distill session logs into lessons you accept one by one. Encode house rules so workers read them while doing the work, not only on review.</p>
+      </article>
+      <article style="--c:var(--violet)">
+        <p class="why">Inherit the mill</p>
+        <h3>/handoff + /insights</h3>
+        <p>Two-minute catch-up for a teammate. A local scoreboard of heal rate, Twin growth, and whether last week actually got better.</p>
+      </article>
+      <article style="--c:var(--chartreuse)">
+        <p class="why">See the blast radius</p>
+        <h3>System Twin</h3>
+        <p>Per-subsystem contracts, hash-chained provenance, blast-radius at plan time. Advisory today. The north star is a mill that already knows this repo.</p>
+      </article>
+      <article style="--c:#FF6BC1">
+        <p class="why">Keep the graph</p>
+        <h3>/obsidian</h3>
+        <p>One-way projection of runs, Twin contracts, and lessons into a vault you own. Nothing leaves the machine. The vault never becomes the engine.</p>
+      </article>
+    </div>
+
+
+    <footer>
+      Loomwright is a plan-first mill by Vikash Ruhil · MIT
+      <span class="fine">14 agents · 21 commands · 41 skills · 24 hooks · v15.41. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
+    </footer>
+  </div>
+  <script src="site.js"></script>
+</body>
+</html>
