@@ -284,3 +284,54 @@
       }, { threshold: 0.28 });
       nodes.forEach((el) => io.observe(el));
     })();
+
+    (function shareMill() {
+      const buttons = [...document.querySelectorAll("[data-share]")];
+      if (!buttons.length) return;
+      const origin = "https://vikashruhilgit.github.io/loomwright-site";
+      const shareUrl = () => {
+        const here = new URL(location.href);
+        if (here.hostname === "127.0.0.1" || here.hostname === "localhost") {
+          const file = here.pathname.split("/").pop() || "index.html";
+          const path = !file || file === "index.html" ? "/" : "/" + file;
+          return origin + path + here.hash;
+        }
+        here.search = "";
+        return here.toString();
+      };
+      const payload = () => ({
+        title: document.title,
+        text: "A messy goal in. A reviewed pull request out. You only show up when it actually needs you.",
+        url: shareUrl()
+      });
+      buttons.forEach((btn) => {
+        const label = btn.textContent;
+        btn.addEventListener("click", async () => {
+          const data = payload();
+          try {
+            if (navigator.share) {
+              await navigator.share(data);
+              return;
+            }
+          } catch (err) {
+            if (err && err.name === "AbortError") return;
+          }
+          let copied = false;
+          try {
+            await navigator.clipboard.writeText(data.url);
+            copied = true;
+          } catch {
+            const ta = document.createElement("textarea");
+            ta.value = data.url;
+            ta.setAttribute("readonly", "");
+            ta.style.cssText = "position:fixed;left:-9999px";
+            document.body.appendChild(ta);
+            ta.select();
+            copied = document.execCommand("copy");
+            ta.remove();
+          }
+          btn.textContent = copied ? "Link copied" : "Copy failed";
+          setTimeout(() => { btn.textContent = label; }, 1600);
+        });
+      });
+    })();
