@@ -37,9 +37,9 @@
       box-shadow:0 4px 10px rgba(44,36,24,.12)}
     .brand span{font-family:var(--display); font-size:1.15rem; letter-spacing:.04em; text-transform:uppercase; font-weight:800}
     .nav-links{display:flex; gap:1.3rem; align-items:center; flex-wrap:wrap}
-    .nav-links a, .nav-links .share{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+    .nav-links a:not(.btn), .nav-links .share{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
       color:var(--dim); text-decoration:none}
-    .nav-links a:hover,.nav-links a:focus-visible,.nav-links .share:hover,.nav-links .share:focus-visible{color:var(--copper-deep)}
+    .nav-links a:not(.btn):hover,.nav-links a:not(.btn):focus-visible,.nav-links .share:hover,.nav-links .share:focus-visible{color:var(--copper-deep)}
     .nav-links a:focus-visible,.nav-links .share:focus-visible{outline:2px solid var(--indigo); outline-offset:4px}
     .nav-links .share{background:none; border:0; padding:0; cursor:pointer}
 
@@ -51,7 +51,7 @@
     .lede em{font-style:italic; color:var(--text)}
 
     .invention{position:relative; z-index:1; margin:0 0 2.4rem}
-    .invention-shot{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover;
+    .invention-shot{display:block; width:100%; height:auto; aspect-ratio:16/9; max-height:60vh; object-fit:cover;
       object-position:center 42%; background:#F7F1E4}
     .plaque{
       position:relative; z-index:2; margin:-5.5rem auto 0; max-width:68rem; padding:0 1.5rem;
@@ -360,7 +360,7 @@
     }
   
 
-    .nav-links a[aria-current="page"]{color:var(--copper-deep)}
+    .nav-links a:not(.btn)[aria-current="page"]{color:var(--copper-deep)}
     .page-lede{font-size:clamp(1.2rem,2.6vw,1.55rem); max-width:42ch; margin:2.2rem 0 1.6rem; color:var(--text)}
     .chapters{margin:0 0 clamp(2.4rem,7vw,4.5rem)}
     .chapter{margin:0 0 clamp(2.2rem,6vw,3.6rem); --c:var(--copper); scroll-margin-top:5.6rem}
