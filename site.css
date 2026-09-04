@@ -42,6 +42,7 @@
     .nav-links a:not(.btn):hover,.nav-links a:not(.btn):focus-visible,.nav-links .share:hover,.nav-links .share:focus-visible{color:var(--copper-deep)}
     .nav-links a:focus-visible,.nav-links .share:focus-visible{outline:2px solid var(--indigo); outline-offset:4px}
     .nav-links .share{background:none; border:0; padding:0; cursor:pointer}
+    .nav-links .btn{padding:.7rem 1.1rem; font-size:.72rem}
 
     h1{font-family:var(--display); font-weight:800; font-size:clamp(3.2rem,10vw,7rem); line-height:.82;
       letter-spacing:-.03em; margin:0 0 1.1rem; text-transform:uppercase}
@@ -352,6 +353,24 @@
       .mile .when{grid-column:2; padding-top:0}
       .rail{grid-row:span 2}
       .chapter:nth-child(even){margin-left:0}
+    }
+
+    /* Touch comfort: nav links render ~20px tall, well under the 44px minimum. */
+    @media (max-width:860px){
+      .nav-links a, .nav-links .share{min-height:44px; min-width:44px; padding-inline:.3rem;
+        display:inline-flex; align-items:center; justify-content:center}
+    }
+    /* The single row needs ~744px of the 768px tablet width, so anything narrower wrapped
+       the Install button onto its own line: 141px at 640px, 155px at 375px, and sticky, so it
+       ate that on every scroll. Below the tablet breakpoint use two deliberate rows and let
+       the bar scroll away. Measured, not guessed - 620px was too low and still wrapped at 640. */
+    @media (max-width:767px){
+      nav{position:static}
+      .nav-inner{flex-wrap:wrap; row-gap:.2rem; column-gap:.8rem; padding:.7rem 1.1rem}
+      .brand{flex:1 1 100%}
+      .nav-links{width:100%; justify-content:space-between; flex-wrap:nowrap; gap:.3rem}
+      .nav-links a:not(.btn), .nav-links .share{font-size:.64rem; letter-spacing:.05em}
+      .nav-links .btn{padding:.5rem .75rem; font-size:.64rem}
     }
     @media (prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
