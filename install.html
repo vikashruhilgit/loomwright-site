@@ -45,13 +45,13 @@
       </figure>
       <div class="copy">
         <h2>Plug the mill into the app you type in</h2>
-        <p>Marketplace id <code>atelier</code>. Plugin id <code>loomwright</code>. You need a git repo. You need <code>gh</code> if you want the mill to open pull requests.</p>
+        <p>Loomwright is a Claude Code plugin. Marketplace id <code>atelier</code>. Plugin id <code>loomwright</code>. You need a git repo. You need <code>gh</code> signed in (<code>gh auth status</code>) only if you want the mill to open pull requests.</p>
       </div>
     </article>
     <h2 class="sec" id="install">Install from GitHub</h2>
     <div class="install-box">
       <p class="warn">Source: github.com/vikashruhilgit/loomwright · marketplace id atelier · plugin id loomwright</p>
-      <p class="note">Loomwright is a Claude Code plugin. Pick the surface you type in. You need a git repo. You need <code>gh</code> authenticated if you want the mill to open pull requests.</p>
+      <p class="note">Loomwright is a Claude Code plugin. Pick the surface you type in. You need a git repo. <code>gh</code> is optional — sign in (<code>gh auth status</code>) only if you want the mill to open pull requests.</p>
       <div class="apps picks" role="tablist" aria-label="Install for which app">
         <button type="button" aria-pressed="true" data-app="cli">Claude CLI</button>
         <button type="button" aria-pressed="false" data-app="code">Claude Code</button>
@@ -65,7 +65,7 @@
         <ol class="how">
           <li>Install the Claude Code CLI from <a href="https://code.claude.com/docs/en/quickstart">code.claude.com</a> if <code>which claude</code> prints nothing. Reopen the terminal after install so PATH updates.</li>
           <li>Paste the two commands below into the shell. First line registers the GitHub marketplace. Second line installs the plugin as <code>loomwright@atelier</code>.</li>
-          <li>Confirm with <code>claude plugin list</code>. You should see loomwright from marketplace atelier.</li>
+          <li>Confirm with <code>claude plugin list</code>. You should see <code>loomwright@atelier</code> with <code>Status: ✔ enabled</code>.</li>
           <li><code>cd</code> into a git repo, then start a session with <code>claude</code>. If slash commands are missing, type <code>/reload-plugins</code> in that session.</li>
         </ol>
       </div>
@@ -77,11 +77,12 @@ claude plugin install loomwright@atelier</pre>
       <p class="note">After it lands, open the git repo you want to ship in, then:</p>
       <pre class="cmd"><span class="c">/setup</span>
 <span class="c">/autonomous</span> <span class="g">"the next thing your users can feel"</span></pre>
+      <p class="note"><strong>Done when:</strong> <code>/setup</code> prints a module-status table, one row per optional module — nothing there is required. <code>/autonomous</code> asks a few discovery questions, saves a brief under <code>.supervisor/jobs/pending/</code>, does the work in git worktrees, and ends with an <code>AUTONOMOUS_RUN</code> summary and a pull request left open on your remote. It never merges on its own.</p>
       <p class="note">Repo: <a href="https://github.com/vikashruhilgit/loomwright">github.com/vikashruhilgit/loomwright</a></p>
     </div>
     <footer>
       Loomwright is a plan-first mill by Vikash Ruhil · MIT
-      <span class="fine">14 agents · 21 commands · 41 skills · 24 hooks. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
+      <span class="fine">14 agents · 23 commands · 41 skills · 36 hooks. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
     </footer>
   </div>
   <script src="site.js"></script>

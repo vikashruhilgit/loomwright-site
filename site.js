@@ -129,7 +129,7 @@
           <ol class="how">
             <li>Install the Claude Code CLI from <a href="https://code.claude.com/docs/en/quickstart">code.claude.com</a> if <code>which claude</code> prints nothing. Reopen the terminal after install so PATH updates.</li>
             <li>Paste the two commands below into the shell. First line registers the GitHub marketplace. Second line installs the plugin as <code>loomwright@atelier</code>.</li>
-            <li>Confirm with <code>claude plugin list</code>. You should see loomwright from marketplace atelier.</li>
+            <li>Confirm with <code>claude plugin list</code>. You should see <code>loomwright@atelier</code> with <code>Status: ✔ enabled</code>.</li>
             <li><code>cd</code> into a git repo, then start a session with <code>claude</code>. If slash commands are missing, type <code>/reload-plugins</code> in that session.</li>
           </ol>`,
         copy: "claude plugin marketplace add vikashruhilgit/loomwright\nclaude plugin install loomwright@atelier"
