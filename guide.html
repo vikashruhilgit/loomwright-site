@@ -154,11 +154,11 @@
 
     <div class="blk">
       <h3>The one place a merge can happen</h3>
-      <p class="note">Every other surface — <code>/supervisor</code>, <code>/review-pr</code>, the heal loop — terminates with the PR still open. Auto-merge exists in exactly one place, is off unless you pass <code>--auto-merge</code>, and needs all five of these to hold. Anything it cannot read counts as a failure.</p>
+      <p class="note">Every other surface — <code>/supervisor</code>, <code>/review-pr</code>, the heal loop — terminates with the PR still open. Auto-merge exists in exactly one place, is off unless you pass <code>--auto-merge</code>, and needs all six of these to hold. The sixth re-classifies the PR head with <code>classify-risk.sh</code> and parks any high-risk or unclassifiable diff with no override. Anything it cannot read counts as a failure.</p>
       <figure class="fig" style="margin-bottom:0">
         <img src="assets/merge-gate.svg" width="1200" height="430" loading="lazy" decoding="async"
-          alt="The five-condition trusted auto-merge gate: the review drain returned READY and not under the severity floor; the head SHA is unchanged and the base is still main; review decision is not blocking and no human thread is unresolved; the branch has enforceable protection; required checks are green and the rubric is satisfied. Any false or unreadable condition parks the PR and notifies instead of merging." />
-        <figcaption>Condition four is the one teams forget: <b>a branch with no enforceable protection will not auto-merge</b> unless you explicitly say you trust it.</figcaption>
+          alt="The six-condition fail-closed trusted auto-merge gate: the review drain returned READY and not under the severity floor; the head SHA is unchanged and the base is still main; review decision is not blocking and no human thread is unresolved; the branch has enforceable protection; required checks are green and the rubric is satisfied; classify-risk.sh re-classifies the PR head and parks any high-risk or unclassifiable diff with no override. Any false or unreadable condition parks the PR and notifies instead of merging." />
+        <figcaption>Condition four is the one teams forget: <b>a branch with no enforceable protection will not auto-merge</b> unless you explicitly say you trust it. Condition six has no escape hatch: <b>a high-risk or unclassifiable diff always parks</b>.</figcaption>
       </figure>
     </div>
 
@@ -296,7 +296,7 @@
 
     <footer>
       Loomwright is a plan-first mill by Vikash Ruhil · MIT
-      <span class="fine">14 agents · 23 commands · 41 skills · 36 hooks. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
+      <span class="fine">14 agents · 24 commands · 42 skills · 36 hooks. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
     </footer>
   </div>
   <script src="site.js"></script>
