@@ -20,7 +20,7 @@ Loomwright is a Claude Code plugin that runs Launch Pad (brief), Supervisor (par
 
 ## Positioning
 
-Plan first, parallel work with ordered merge, never silently merge unless the user opts into a five-condition trusted automate path. Marketplace id `atelier`, plugin id `loomwright`.
+Plan first, parallel work with ordered merge, never silently merge unless the user opts into a six-condition fail-closed trusted automate path. Marketplace id `atelier`, plugin id `loomwright`.
 
 ## Operating Context
 
@@ -28,9 +28,9 @@ Installed from GitHub (`vikashruhilgit/loomwright`) into Claude CLI, Claude Code
 
 ## Capabilities and Constraints
 
-- 14 agent roles, 23 slash commands, 41 skills, 36 hooks
+- 14 agent roles, 24 slash commands, 42 skills, 36 hooks
 - CLAUDE.md is authority; Twin, lessons, and memory are advisory and human-gated
-- Auto-merge only via `/automate --auto-merge`, opt-in, default off
+- Auto-merge only via `/automate --auto-merge`, opt-in, default off, six-condition fail-closed gate (sixth condition: `classify-risk.sh`; high-risk or unclassifiable diffs park with no override)
 - Not on Anthropic’s official marketplace; add the GitHub marketplace first
 - `/plugin` is a chat command, not a shell path
 

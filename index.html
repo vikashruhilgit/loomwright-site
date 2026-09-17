@@ -58,8 +58,8 @@
         </div>
         <ul class="stamps" aria-label="What ships today">
           <li><b>14</b> agent roles</li>
-          <li><b>23</b> slash commands</li>
-          <li><b>41</b> skills</li>
+          <li><b>24</b> slash commands</li>
+          <li><b>42</b> skills</li>
           <li><b>36</b> quality hooks</li>
           <li>never silently merges</li>
         </ul>
@@ -109,7 +109,7 @@
         </figure>
         <div class="copy">
           <h2>You cannot walk away, and you also cannot trust auto-merge</h2>
-          <p>Queue the work with <code>/automate</code>. Default: it parks a reviewed PR and tells you if a human is required. Desktop banners are on; <code>--notify</code> adds webhooks. Pass <code>--auto-merge</code> and it squash-merges only when the five-condition trusted gate holds. <code>--trust-unprotected</code> is the explicit escape hatch. Anything unreadable parks. It does not silently ship.</p>
+          <p>Queue the work with <code>/automate</code>. Default: it parks a reviewed PR and tells you if a human is required. Desktop banners are on; <code>--notify</code> adds webhooks. Pass <code>--auto-merge</code> and it squash-merges only when the six-condition fail-closed trusted gate holds. The sixth condition re-classifies the PR head with <code>classify-risk.sh</code>; a high-risk or unclassifiable diff always parks, with no override. <code>--trust-unprotected</code> is the explicit escape hatch for an unprotected branch. Anything unreadable parks. It does not silently ship.</p>
           <pre class="cmd"><span class="c">/automate</span> <span class="g">"the remaining shop tickets"</span> <span class="c">--auto-merge</span></pre>
         </div>
       </article>
@@ -144,7 +144,7 @@
 
     <footer>
       Loomwright is a plan-first mill by Vikash Ruhil · MIT
-      <span class="fine">14 agents · 23 commands · 41 skills · 36 hooks. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
+      <span class="fine">14 agents · 24 commands · 42 skills · 36 hooks. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
     </footer>
   </div>
   <script src="site.js"></script>

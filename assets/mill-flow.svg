@@ -111,5 +111,5 @@
   </g>
 
   <rect x="32" y="410" width="1137" height="34" fill="#1C1F2A" stroke="rgba(240,230,212,.08)"/>
-  <text x="48" y="432" font-size="11.5" letter-spacing=".10em" fill="#9B9588">NEVER SILENTLY MERGES — the only sanctioned auto-merge is the 5-condition trusted gate in <tspan fill="#E8893A">/automate --auto-merge</tspan>, opt-in and off by default.</text>
+  <text x="48" y="432" font-size="11.5" letter-spacing=".10em" fill="#9B9588">NEVER SILENTLY MERGES — the only sanctioned auto-merge is the 6-condition fail-closed trusted gate in <tspan fill="#E8893A">/automate --auto-merge</tspan>, opt-in and off by default.</text>
 </svg>
