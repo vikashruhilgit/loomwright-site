@@ -28,7 +28,7 @@ Installed from GitHub (`vikashruhilgit/loomwright`) into Claude CLI, Claude Code
 
 ## Capabilities and Constraints
 
-- 14 agent roles, 24 slash commands, 42 skills, 36 hooks
+- 14 agent roles, 24 slash commands, 42 skills, 39 hooks
 - CLAUDE.md is authority; Twin, lessons, and memory are advisory and human-gated
 - Auto-merge only via `/automate --auto-merge`, opt-in, default off, six-condition fail-closed gate (sixth condition: `classify-risk.sh`; high-risk or unclassifiable diffs park with no override)
 - Not on Anthropic’s official marketplace; add the GitHub marketplace first
