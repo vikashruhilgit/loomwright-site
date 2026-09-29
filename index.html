@@ -109,7 +109,7 @@
         </figure>
         <div class="copy">
           <h2>You cannot walk away, and you also cannot trust auto-merge</h2>
-          <p>Queue the work with <code>/automate</code>. Default: it parks a reviewed PR and tells you if a human is required. Desktop banners are on; <code>--notify</code> adds webhooks. Pass <code>--auto-merge</code> and it squash-merges only when the six-condition fail-closed trusted gate holds. The sixth condition re-classifies the PR head with <code>classify-risk.sh</code>; a high-risk or unclassifiable diff always parks, with no override. <code>--trust-unprotected</code> is the explicit escape hatch for an unprotected branch. Anything unreadable parks. It does not silently ship.</p>
+          <p>Queue the work with <code>/automate</code>. Default: it parks a reviewed PR and tells you if a human is required. Desktop banners are on; <code>--notify</code> adds webhooks. Pass <code>--auto-merge</code> and it squash-merges only when the seven-condition fail-closed trusted gate holds. The sixth condition re-classifies the PR head with <code>classify-risk.sh</code>; a high-risk or unclassifiable diff always parks, with no override. The seventh is the rules gate: <code>rules-gate-verdict.sh</code> parks a failing, unresolved, unstamped, or unreadable stamped gate-countable must-rule check, with no override. <code>--trust-unprotected</code> is the explicit escape hatch for an unprotected branch. Anything unreadable parks. It does not silently ship.</p>
           <pre class="cmd"><span class="c">/automate</span> <span class="g">"the remaining shop tickets"</span> <span class="c">--auto-merge</span></pre>
         </div>
       </article>
@@ -143,7 +143,7 @@
     </div>
 
     <footer>
-      Loomwright is a plan-first mill by Vikash Ruhil · MIT
+      Loomwright is a plan-first mill by Vikash Ruhil · PolyForm Shield 1.0.0
       <span class="fine">14 agents · 24 commands · 42 skills · 43 hooks. Project memory and the System Twin stay advisory and subordinate to CLAUDE.md. Every promotion is human-gated. The mill does not merge unless you opt in on a trusted automate path.</span>
     </footer>
   </div>

@@ -20,7 +20,7 @@ Loomwright is a Claude Code plugin that runs Launch Pad (brief), Supervisor (par
 
 ## Positioning
 
-Plan first, parallel work with ordered merge, never silently merge unless the user opts into a six-condition fail-closed trusted automate path. Marketplace id `atelier`, plugin id `loomwright`.
+Plan first, parallel work with ordered merge, never silently merge unless the user opts into a seven-condition fail-closed trusted automate path. Marketplace id `atelier`, plugin id `loomwright`.
 
 ## Operating Context
 
@@ -30,13 +30,13 @@ Installed from GitHub (`vikashruhilgit/loomwright`) into Claude CLI, Claude Code
 
 - 14 agent roles, 24 slash commands, 42 skills, 43 hooks
 - CLAUDE.md is authority; Twin, lessons, and memory are advisory and human-gated
-- Auto-merge only via `/automate --auto-merge`, opt-in, default off, six-condition fail-closed gate (sixth condition: `classify-risk.sh`; high-risk or unclassifiable diffs park with no override)
+- Auto-merge only via `/automate --auto-merge`, opt-in, default off, seven-condition fail-closed gate (sixth condition: `classify-risk.sh`; high-risk or unclassifiable diffs park with no override; seventh condition: `rules-gate-verdict.sh`; a failing, unresolved, unstamped, or unreadable stamped gate-countable must-rule check parks, with no override)
 - Not on Anthropic’s official marketplace; add the GitHub marketplace first
 - `/plugin` is a chat command, not a shell path
 
 ## Brand Commitments
 
-- Name: Loomwright (Vikash Ruhil, MIT)
+- Name: Loomwright (Vikash Ruhil, PolyForm Shield License 1.0.0)
 - Binding visual: sunlit inventor’s loft with tiny visored millwrights and a brass-and-glass pipeline (user-approved still). Bright theme. Out-of-the-box invention, not a dark code editor.
 - Metaphor: mill / warp / weft / cloth = workers / review / PR — keep the product language, not the previous night-mill look.
 
