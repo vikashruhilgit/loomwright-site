@@ -31,7 +31,7 @@ The four capability counts are still hand-maintained. On a plugin release, check
 Verify with:
 
 ```bash
-grep -rn '14 agents\|<b>14</b>' --include='*.html' --include='*.md' .
+grep -rn '12 agents\|<b>12</b>' --include='*.html' --include='*.md' .
 ```
 
 ## Preview locally
