@@ -91,12 +91,6 @@
         body: "Independent adversarial audit. Use it on auth, billing, migrations, and anything that orchestrates other agents. Findings are advisory.",
         cmd: `<span class="c">/red-team-reviewer</span>`
       },
-      qa: {
-        tag: "User-visible flows",
-        title: "Strategy, then execution",
-        body: "QA Strategist classifies risk. QA Executor discovers the app, writes Playwright, and debates the gaps. Skip this on a comment-only change.",
-        cmd: `<span class="c">/qa-strategist</span> src/\n<span class="c">/qa-executor</span>`
-      },
       lessons: {
         tag: "After a week",
         title: "Keep only what you accept",
